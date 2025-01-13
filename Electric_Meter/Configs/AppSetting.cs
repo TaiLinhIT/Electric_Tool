@@ -16,5 +16,6 @@ namespace Electric_Meter.Configs
         public string CurrentArea { get; set; }
         public string Port { get; set; }
         public int Baudrate { get; set; }
+        public int TotalMachine { get; set; }
     }
 }

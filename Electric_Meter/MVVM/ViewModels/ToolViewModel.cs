@@ -442,7 +442,7 @@ namespace Electric_Meter.MVVM.ViewModels
             while (true)
             {
                 
-                for (int address = 1; address <= 12; address++)
+                for (int address = 1; address <= _appSetting.TotalMachine; address++)
                 {
                     var tasks = new List<Task>();
 

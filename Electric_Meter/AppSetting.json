@@ -22,7 +22,8 @@
     "CurrentArea": "VB2",
     "Port": "COM4",
     "Baudrate": 1200,
-    "TotalMachine": 12
+    "TotalMachine": 25
+
 
   }
 }

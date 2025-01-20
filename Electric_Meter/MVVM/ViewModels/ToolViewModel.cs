@@ -398,39 +398,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
 
 
-        public void Run(string area, List<int> addresses)
-        {
-            if (area != _appSetting.CurrentArea)
-            {
-                MessageBox.Show($"Area {area} does not match the current area.");
-                return;
-            }
-
-            var tasks = new List<Task>();
-            for (int i = 1; i <= 12; i++) // 3 Task song song
-            {
-                int taskId = i; // Cần lưu trữ taskId để tránh capture biến
-                tasks.Add(Task.Run(() =>
-                {
-                    while (true)
-                    {
-                        foreach (var request in _appSetting.Requests)
-                        {
-                            string requestName = request.Key;
-                            string requestHex = request.Value;
-
-                            // Gửi request
-                            //SendRequest(requestName, requestHex, taskId);
-
-                            // Chờ trước khi gửi request tiếp theo
-                            Thread.Sleep(_appSetting.TimeSaveToDataBase * 100);
-                        }
-                    }
-                }));
-            }
-
-            Task.WhenAll(tasks); // Đảm bảo tất cả Task được thực thi
-        }
+        
 
 
         private static readonly object lockObject = new object();
@@ -493,8 +461,12 @@ namespace Electric_Meter.MVVM.ViewModels
                 // Chuyển address từ hệ 10 sang hex
                 string addressHex = _service.ConvertToHex(address);
 
+                if (addressHex.Length == 1)
+                {
+                    addressHex = "0" + addressHex;
+                }
                 // Thêm "0" + address vào đầu chuỗi request
-                string requestString = "0" + addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
+                string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
 
                 // Tính CRC và thêm vào cuối chuỗi
                 string CRCString = CRC.CalculateCRC(requestString);

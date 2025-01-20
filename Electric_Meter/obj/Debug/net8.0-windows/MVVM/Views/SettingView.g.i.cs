@@ -100,7 +100,7 @@ namespace Electric_Meter.MVVM.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Electric_Meter;V1.0.0.0;component/mvvm/views/settingview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Electric_Meter;component/mvvm/views/settingview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\MVVM\Views\SettingView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Electric_Meter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c194a2c6ff385d7292aa8923dc8a3e8c09718845")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+526be9cbfed199a921f6bb66074fdd2467b968c7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Electric_Meter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Electric_Meter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

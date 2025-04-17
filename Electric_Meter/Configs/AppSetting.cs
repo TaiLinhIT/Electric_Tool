@@ -17,5 +17,6 @@ namespace Electric_Meter.Configs
         public string Port { get; set; }
         public int Baudrate { get; set; }
         public int TotalMachine { get; set; }
+        public List<string> AutoActions { get; set; }
     }
 }

@@ -559,3 +559,4 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\refint\Ele
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.pdb
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.genruntimeconfig.cache
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\ref\Electric_Meter.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Assets\electric.ico

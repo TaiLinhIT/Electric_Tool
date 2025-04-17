@@ -79,7 +79,7 @@ namespace Electric_Meter.MVVM.ViewModels
             AddMachineCommand = new RelayCommand(ExecuteAddMachineCommand, CanAddMachine);
             EditMachineCommand = new RelayCommand(ExecuteEditMachineCommand, CanEditMachine);
             DeleteMachineCommand = new RelayCommand(ExecuteDeleteMachineCommand, CanDeleteMachine);
-
+            //_toolViewModel.Start();//tự động chạy app
         }
         #region Command
         public ICommand ConnectCommand { get; set; }

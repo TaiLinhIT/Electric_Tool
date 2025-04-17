@@ -65,6 +65,8 @@ namespace Electric_Meter.MVVM.ViewModels
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
 
             LoadDefaultMachine();
+            _toolViewModel.Start();
+
 
         }
         private Dictionary<string, string> _currentLanguage;

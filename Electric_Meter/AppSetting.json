@@ -22,8 +22,11 @@
     "CurrentArea": "VB2",
     "Port": "COM4",
     "Baudrate": 1200,
-    "TotalMachine": 25
-
+    "TotalMachine": 25,
+    "AutoActions": [
+      "Connect",
+      "ClickBtn"
+    ]
 
   }
 }

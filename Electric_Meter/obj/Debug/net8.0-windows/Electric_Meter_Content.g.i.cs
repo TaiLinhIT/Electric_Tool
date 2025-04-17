@@ -9,5 +9,6 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("appsetting.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/electric.ico")]
 
 

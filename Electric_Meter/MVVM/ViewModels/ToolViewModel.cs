@@ -218,11 +218,11 @@ namespace Electric_Meter.MVVM.ViewModels
                     switch (requestName)
                     {
                         case var name when name.StartsWith("U"): // Điện áp
-                            actualValue = rawValue * 2; // Nhân với 2 nếu cần
+                            actualValue = rawValue / 10.0f; // Chia cho 10
                             break;
 
                         case var name when name.StartsWith("Exp") || name.StartsWith("Imp"): // Công suất hoặc năng lượng
-                            actualValue = rawValue * 20.0f;
+                            actualValue = rawValue / 10.0f;
                             break;
 
                         case var name when name.StartsWith("I"): // Dòng điện
@@ -230,7 +230,7 @@ namespace Electric_Meter.MVVM.ViewModels
                             break;
 
                         case var name when name.StartsWith("P"): // Công suất tức thời
-                            actualValue = (rawValue * 2) / 1000.0f;
+                            actualValue = rawValue / 10.0f;
                             break;
                         default:
                             Tool.Log($"Unknown request type for {requestName} at address {address}.");
@@ -238,7 +238,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     }
 
                     // Làm tròn và lưu dữ liệu
-                    actualValue = Math.Round(actualValue, 4);
+                    actualValue = Math.Round(actualValue, 2);
                     lock (lockObject)
                     {
                         if (!receivedDataByAddress.ContainsKey(address))

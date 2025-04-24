@@ -258,8 +258,10 @@ namespace Electric_Meter.MVVM.ViewModels
                     }
 
                     int address = buffer[0];
+
                     // Lặp qua các activeRequests để tìm đúng request
                     var matchedRequest = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{address}_"));
+
                     if (activeRequests.Count == 0)
                     {
                         Tool.Log("⚠️ activeRequests hiện đang trống.");
@@ -286,12 +288,15 @@ namespace Electric_Meter.MVVM.ViewModels
                         string requestName = matchedRequest.Value;
                         string requestKey = matchedRequest.Key;
 
-                        // Tránh xử lý trùng
+                        // Tránh xử lý trùng trong cùng một lần nhận
                         if (processedRequests.Contains(requestKey))
                         {
                             Tool.Log($"Data for {requestName} at address {address} already processed. Skipping...");
                             return;
                         }
+
+                        // Đánh dấu là đã xử lý
+                        processedRequests.Add(requestKey);
 
                         // Hủy timeout nếu có
                         if (responseTimeouts.ContainsKey(address.ToString()))
@@ -301,9 +306,12 @@ namespace Electric_Meter.MVVM.ViewModels
                         }
 
                         activeRequests.Remove(requestKey);
-                        processedRequests.Add(requestKey);
 
+                        // Gọi hàm xử lý
                         ParseAndStoreReceivedData(buffer, requestName, address);
+
+                        // ❗️XÓA KEY để lần sau vẫn xử lý được
+                        processedRequests.Remove(requestKey);
                     }
                     else
                     {
@@ -320,91 +328,75 @@ namespace Electric_Meter.MVVM.ViewModels
             }
         }
 
+
         #endregion
         #region Dịch dữ liệu
         private void ParseAndStoreReceivedData(byte[] data, string requestName, int address)
         {
             try
             {
-                // Kiểm tra độ dài tối thiểu của dữ liệu
                 if (data.Length >= 9)
                 {
                     int dataByteCount = data[2];
                     if (dataByteCount != 4 || data.Length < 5 + dataByteCount)
                     {
-                        Tool.Log($"Invalid data for {requestName} at address {address}: insufficient length.");
+                        Tool.Log($"❌ Invalid data for {requestName} at address {address}: insufficient length.");
                         return;
                     }
 
-                    // Lấy 4 byte dữ liệu (giả sử float)
+                    // Giải mã giá trị float
                     byte[] floatBytes = new byte[4];
                     Array.Copy(data, 3, floatBytes, 0, 4);
                     Array.Reverse(floatBytes); // Đảo byte nếu cần
 
-                    // Chuyển thành giá trị thực
                     float rawValue = BitConverter.ToSingle(floatBytes, 0);
                     double actualValue;
 
-                    // Xử lý tùy thuộc vào requestName
-                    switch (requestName)
+                    // Phân loại theo tên
+                    if (requestName.StartsWith("U") || requestName.StartsWith("Exp") || requestName.StartsWith("Imp") || requestName.StartsWith("P"))
+                        actualValue = rawValue / 10.0;
+                    else if (requestName.StartsWith("I"))
+                        actualValue = rawValue / 1000.0;
+                    else
                     {
-                        case var name when name.StartsWith("U"): // Điện áp
-                            actualValue = rawValue / 10.0f; // Chia cho 10
-                            break;
-
-                        case var name when name.StartsWith("Exp") || name.StartsWith("Imp"): // Công suất hoặc năng lượng
-                            actualValue = rawValue / 10.0f;
-                            break;
-
-                        case var name when name.StartsWith("I"): // Dòng điện
-                            actualValue = rawValue / 1000.0f; // Chia cho 1000
-                            break;
-
-                        case var name when name.StartsWith("P"): // Công suất tức thời
-                            actualValue = rawValue / 10.0f;
-                            break;
-                        default:
-                            Tool.Log($"Unknown request type for {requestName} at address {address}.");
-                            return;
+                        Tool.Log($"⚠️ Unknown request type for {requestName} at address {address}.");
+                        return;
                     }
 
-                    // Làm tròn và lưu dữ liệu
                     actualValue = Math.Round(actualValue, 2);
+
                     lock (lockObject)
                     {
                         if (!receivedDataByAddress.ContainsKey(address))
                             receivedDataByAddress[address] = new Dictionary<string, double>();
 
                         receivedDataByAddress[address][requestName] = actualValue;
-                    }
 
-                    Tool.Log($"✅ Nhận {requestName} = {actualValue} tại địa chỉ {address}");
+                        Tool.Log($"✅ Nhận {requestName} = {actualValue} tại địa chỉ {address}. Hiện có {receivedDataByAddress[address].Count}/{_appSetting.Requests.Count}");
 
-                    lock (lockObject)
-                    {
-                        // Đủ dữ liệu thì lưu
+                        // ✅ Kiểm tra đủ số lượng request
                         if (receivedDataByAddress[address].Count == _appSetting.Requests.Count)
                         {
-                            Tool.Log($"📥 Đã nhận đủ dữ liệu tại địa chỉ {address}, tiến hành lưu...");
+                            Tool.Log($"📦 Đã đủ {_appSetting.Requests.Count} trường dữ liệu tại địa chỉ {address}, tiến hành lưu vào DB...");
 
+                            // Gọi hàm lưu trong background
                             _ = Task.Run(async () =>
                             {
                                 try
                                 {
                                     await SaveAllData(address);
 
-                                    // Sau khi lưu thì dọn dữ liệu tạm
                                     lock (lockObject)
                                     {
                                         receivedDataByAddress[address].Clear();
                                         processedRequests.RemoveWhere(k => k.StartsWith($"{address}_"));
                                     }
 
-                                    Tool.Log($"✅ Lưu dữ liệu thành công cho địa chỉ {address}!");
+                                    Tool.Log($"✅ Lưu thành công dữ liệu cho địa chỉ {address}");
                                 }
                                 catch (Exception ex)
                                 {
-                                    Tool.Log($"❌ Lỗi khi lưu dữ liệu cho {address}: {ex.Message}");
+                                    Tool.Log($"❌ Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
                                 }
                             });
                         }
@@ -412,14 +404,13 @@ namespace Electric_Meter.MVVM.ViewModels
                 }
                 else
                 {
-                    Tool.Log($"Incomplete data for {requestName} at address {address}.");
+                    Tool.Log($"❌ Incomplete data for {requestName} at address {address}.");
                 }
             }
             catch (Exception ex)
             {
-                Tool.Log($"Raw data bytes: {BitConverter.ToString(data)}");
-
-                Tool.Log($"Error parsing data for {requestName} at address {address}: {ex.Message}");
+                Tool.Log($"❌ Lỗi khi phân tích dữ liệu {requestName} tại địa chỉ {address}: {ex.Message}");
+                Tool.Log($"Dữ liệu gốc: {BitConverter.ToString(data)}");
             }
         }
 

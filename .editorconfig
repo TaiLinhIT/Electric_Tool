@@ -1,0 +1,68 @@
+# Top-most EditorConfig file
+root = true
+
+###########################################################
+# Các thiết lập chung áp dụng cho tất cả file
+###########################################################
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+###########################################################
+# Thiết lập riêng cho C# file
+###########################################################
+
+[*.cs]
+
+# Cách viết using
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = true
+
+# Dấu ngoặc {} luôn phải xuống dòng
+csharp_new_line_before_open_brace = all
+
+# Bắt buộc dùng var khi kiểu rõ ràng
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = false:suggestion
+
+# Tên biến/private field nên bắt đầu bằng "_"
+dotnet_naming_rule.private_fields_should_have_underscore.severity = suggestion
+dotnet_naming_rule.private_fields_should_have_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_should_have_underscore.style = prefix_underscore
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.accessibility = private
+
+dotnet_naming_style.prefix_underscore.required_prefix = _
+dotnet_naming_style.prefix_underscore.capitalization = camel_case
+
+# Đặt tên class, method, property PascalCase
+dotnet_naming_rule.members_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.members_should_be_pascal_case.symbols = pascal_case_members
+dotnet_naming_rule.members_should_be_pascal_case.style = pascal_case_style
+
+dotnet_naming_symbols.pascal_case_members.applicable_kinds = property, method, class, interface
+dotnet_naming_symbols.pascal_case_members.applicable_accessibilities = public, internal, protected, private
+dotnet_naming_symbols.pascal_case_members.required_modifiers = *
+
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+# XML comment cho public API
+dotnet_diagnostic.SA1600.severity = warning
+
+# Prefix "this." cho member
+dotnet_diagnostic.SA1101.severity = warning
+
+# Phân tách bằng dòng trắng
+dotnet_diagnostic.SA1516.severity = warning
+
+# Không dùng field public
+dotnet_diagnostic.SA1401.severity = warning
+
+# Dùng alias kiểu built-in (int thay vì Int32)
+dotnet_diagnostic.SA1121.severity = warning

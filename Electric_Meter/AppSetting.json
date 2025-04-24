@@ -3,7 +3,7 @@
     "ConnectString": "Server=10.30.201.201;Database=PowerTempWatch;User ID=sa;Password=greenland@VN;TrustServerCertificate=True;MultipleActiveResultSets=True;",
     "TimeReloadData": 10, //second
     "TimeSaveToDataBase": 300, //second
-    "TimeSendRequest": 200,
+    "TimeSendRequest": 5,
     "Requests": {
       "Ua": "03 20 06 00 02",
       "Ub": "03 20 08 00 02",

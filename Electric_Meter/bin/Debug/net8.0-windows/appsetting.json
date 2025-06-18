@@ -20,7 +20,7 @@
 
     },
     "CurrentArea": "VB2",
-    "Port": "COM4",
+    "Port": "COM3",
     "Baudrate": 1200,
     "TotalMachine": 25,
     "AutoActions": [

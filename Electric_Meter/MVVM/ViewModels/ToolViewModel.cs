@@ -354,7 +354,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
                     // Phân loại theo tên
                     if (requestName.StartsWith("U") || requestName.StartsWith("Exp") || requestName.StartsWith("Imp") || requestName.StartsWith("P"))
-                        actualValue = rawValue * 200.0; //actualValue = rawValue / 10.0;
+                        actualValue = rawValue * 20.0; //actualValue = rawValue / 10.0;
                     else if (requestName.StartsWith("I"))
                         actualValue = rawValue / 1000.0;
                     else

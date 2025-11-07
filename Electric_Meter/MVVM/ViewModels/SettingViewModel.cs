@@ -1,4 +1,4 @@
-﻿using Electric_Meter.Core;
+using Electric_Meter.Core;
 using Electric_Meter.Models;
 using System;
 using System.Collections.Generic;

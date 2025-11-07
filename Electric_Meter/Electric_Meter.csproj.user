@@ -21,9 +21,6 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\Views\SettingView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="MVVM\Views\ToolView.xaml">
       <SubType>Designer</SubType>
     </Page>

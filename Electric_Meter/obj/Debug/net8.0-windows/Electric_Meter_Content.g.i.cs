@@ -10,5 +10,10 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("appsetting.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/electric.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/activetype.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/controlcode.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/devices.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/dv_machine.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/sensortype.json")]
 
 

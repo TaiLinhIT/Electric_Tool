@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,15 +23,6 @@ namespace Electric_Meter.MVVM.Views
         public SettingView()
         {
             InitializeComponent();
-        }
-
-        private void txb_address_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !IsTextNumeric(e.Text);
-        }
-        private static bool IsTextNumeric(string text)
-        {
-            return int.TryParse(text, out _);
         }
     }
 }

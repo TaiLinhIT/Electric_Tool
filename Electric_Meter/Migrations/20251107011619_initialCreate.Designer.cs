@@ -4,6 +4,7 @@ using Electric_Meter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Electric_Meter.Migrations
 {
     [DbContext(typeof(PowerTempWatchContext))]
-    partial class PowerTempWatchContextModelSnapshot : ModelSnapshot
+    [Migration("20251107011619_initialCreate")]
+    partial class initialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,23 +226,6 @@ namespace Electric_Meter.Migrations
                     b.HasKey("logid");
 
                     b.ToTable("SensorData");
-                });
-
-            modelBuilder.Entity("Electric_Meter.Models.SensorType", b =>
-                {
-                    b.Property<int>("typeid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("typeid"));
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("typeid");
-
-                    b.ToTable("SensorType");
                 });
 
             modelBuilder.Entity("Electric_Meter.Models.devices", b =>

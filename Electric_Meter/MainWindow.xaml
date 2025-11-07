@@ -1,192 +1,141 @@
-﻿<Window x:Class="Electric_Meter.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:Electric_Meter.MVVM.ViewModels" 
-        xmlns:views="clr-namespace:Electric_Meter.MVVM.Views" 
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
- 
-        mc:Ignorable="d"
-        xmlns:models="clr-namespace:Electric_Meter.Models"
-        Title="MainWindow" d:Height="550" Width="800"
-        WindowState="{Binding MainWindowState, Mode=TwoWay}">
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </Window.Resources>
+<UserControl x:Class="Electric_Meter.MVVM.Views.SettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="900" Height="650"
+             Background="#FFF">
 
+    <Grid Margin="10">
 
-    <Grid>
+        <!-- 2 cột: trái (form + bảng), phải (nút chức năng) -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="133*"/>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="56*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="180" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height=" auto"/>
-            <!-- Allow flexible height for content -->
-        </Grid.RowDefinitions>
 
-        <Border CornerRadius="20" Grid.Row="0" Grid.ColumnSpan="3">
-            <Grid Grid.Row="0" Background="LightGreen" Grid.ColumnSpan="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding Path=DeviceConfig.NameStyle, StringFormat='Name style: {0}'}" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
-                <TextBlock Grid.Column="1" Text="{Binding Path=DeviceConfig.Max, StringFormat='Max: {0}'}" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
-                <TextBlock Grid.Column="2" Text="{Binding Path=DeviceConfig.Min, StringFormat='Min: {0}'}" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
-                <TextBlock Grid.Column="3" Text="{Binding Path=DeviceConfig.Baudrate, StringFormat='Baudrate: {0}'}" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
-                <TextBlock Grid.Column="4" Text="{Binding Path=DeviceConfig.Port, StringFormat='Port: {0}'}" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
-                <TextBlock Grid.Column="5" Margin="0 0 10 0" Text="{Binding CurrentFactory, StringFormat='Factory: {0}'}" 
-            HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
-            </Grid>
-        </Border>
-        <!-- Settings and Help Button Row -->
-        <Border Grid.Row="1" BorderThickness="0 1 0 0" BorderBrush="Gray" Grid.ColumnSpan="3" Margin="0,0,0,3">
-            <Grid Background="gray">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Margin="5 0 5 0" Content="{Binding SettingCommandText}" Command="{Binding SettingCommand}" />
-                <Button Grid.Column="1" Content="{Binding HelpCommandText}" Command="{Binding DataFormCommand}" />
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0 0 27 0" >Select Language:</TextBlock>
-                <ComboBox Text="Select Language:"
-                      SelectedValue="{Binding SelectedLanguage, Mode=TwoWay}" 
-                      IsEditable="False"
-                      
-                      SelectedValuePath="Tag"
-                      Grid.Column="3"
-                      >
-                    <ComboBoxItem Content="English" Tag="en" />
-                    <ComboBoxItem Content="Tiếng Việt" Tag="vi" />
-                    <ComboBoxItem Content="中文" Tag="cn" />
-                    <ComboBoxItem Content="ខ្មែរ" Tag="km" />
-                </ComboBox>
-            </Grid>
-        </Border>
-        <Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="Gray" Grid.ColumnSpan="3">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="170"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <!-- Left Menu -->
-                <Grid Grid.Column="0">
-                    <Border BorderThickness="0 0 1 0" BorderBrush="Gray">
-                        <Grid VerticalAlignment="Stretch" Margin="0,0,-1,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="500"/>
-                            </Grid.RowDefinitions>
+        <!-- =================== PHẦN TRÁI =================== -->
+        <Grid Grid.Column="0">
 
-                            <!-- Header Menu -->
-                            <TextBlock Grid.Row="0" Text="MENU" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                       FontSize="18" Margin="10 10" Foreground="#a3a3a3" FontWeight="Bold"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- form -->
+                <RowDefinition Height="10"/>
+                <!-- khoảng cách -->
+                <RowDefinition Height="*"/>
+                <!-- bảng -->
+            </Grid.RowDefinitions>
 
-                            <!-- Scrollable Menu Items -->
-                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                                <ItemsControl ItemsSource="{Binding Machines}" >
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Margin="0 0 0 10">
-                                                <!-- Machine Button -->
-                                                <Button Height="40" FontSize="15" Content="{Binding Name}" Margin="10,0">
-                                                    <Button.Style>
-                                                        <Style TargetType="Button">
-                                                            <Setter Property="Background" Value="LightGreen" />
-                                                            <Setter Property="Foreground" Value="White" />
-                                                            <Setter Property="FontWeight" Value="Bold" />
-                                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                                            <Setter Property="Cursor" Value="Hand" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding LineCode}" Value="H">
-                                                                    <Setter Property="Background" Value="Red" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding LineCode}" Value="C">
-                                                                    <Setter Property="Background" Value="LightBlue" />
-                                                                </DataTrigger>
-                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter Property="Background" Value="#FF88C0D0"/>
-                                                                </Trigger>
-                                                                <Trigger Property="IsPressed" Value="True">
-                                                                    <Setter Property="Background" Value="#FF5E81AC"/>
-                                                                </Trigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Button.Style>
-                                                    <Button.InputBindings>
-                                                        <MouseBinding Gesture="RightClick" 
-                        Command="{Binding DataContext.OpenSettingCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                        CommandParameter="{Binding}" />
-                                                    </Button.InputBindings>
-                                                </Button>
+            <!-- ========== FORM NHẬP THÔNG TIN ========== -->
+            <Border Background="#F9F9F9" CornerRadius="6" Padding="15" BorderBrush="#DDD" BorderThickness="1">
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
 
-                                                <!-- Line Button -->
-                                                <Button Height="35" FontSize="15" Background="Aqua" 
-                        Command="{Binding DataContext.OpenToolCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                        CommandParameter="{Binding}" Margin="20,0,0,0">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Thành Hình " />
-                                                        <TextBlock Text="{Binding Line}" />
-                                                    </StackPanel>
-                                                </Button>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                
-                            </ScrollViewer>
-
-                        </Grid>
-                    </Border>
-                </Grid>
-
-                <!-- Center Content Area -->
-                <Grid Grid.Column="1" Margin="10,10,0,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-                    <ContentControl Grid.Row="0" Content="{Binding CurrentViewModel}" 
-                                    Margin="0,0,0,243">
-                        <ContentControl.Resources>
-                            <!-- DataTemplate for SettingViewModel -->
-                            <DataTemplate DataType="{x:Type vm:SettingViewModel}">
-                                <views:SettingView/>
-                            </DataTemplate>
 
-                            <!-- DataTemplate for ToolViewModel -->
-                            <DataTemplate DataType="{x:Type vm:ToolViewModel}">
-                                <views:ToolView/>
-                            </DataTemplate>
+                    <!-- Address -->
+                    <TextBlock Text="Address:" Grid.Row="0" Grid.Column="0"
+                               VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"
+                             Text="{Binding AddressMachine, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center" Height="28"/>
 
+                    <!-- Machine Name -->
+                    <TextBlock Text="Machine Name:" Grid.Row="0" Grid.Column="2"
+                               VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBox Grid.Row="0" Grid.Column="3"
+                             Text="{Binding NameMachine, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center" Height="28"/>
 
-                            <!-- DataTemplate for FactoryViewModel -->
+                    <!-- Baudrate -->
+                    <TextBlock Text="Baudrate:" Grid.Row="1" Grid.Column="0"
+                               VerticalAlignment="Center" FontWeight="Bold"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1"
+                              ItemsSource="{Binding LstBaudrate}"
+                              SelectedItem="{Binding SelectedBaudrate, UpdateSourceTrigger=PropertyChanged}"
+                              Height="28"/>
 
-                        </ContentControl.Resources>
-                    </ContentControl>
+                    <!-- Port -->
+                    <TextBlock Text="Port:" Grid.Row="1" Grid.Column="2"
+                               VerticalAlignment="Center" FontWeight="Bold"/>
+                    <ComboBox Grid.Row="1" Grid.Column="3"
+                              ItemsSource="{Binding ListPost}"
+                              SelectedItem="{Binding SelectedPort, UpdateSourceTrigger=PropertyChanged}"
+                              Height="28"/>
 
+                    <!-- Thành hình -->
+                    <TextBlock Text="Thành hình:" Grid.Row="2" Grid.Column="0"
+                               VerticalAlignment="Center" FontWeight="Bold"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1"
+                              ItemsSource="{Binding LstAssemblings}"
+                              DisplayMemberPath="value"
+                              SelectedValuePath="key"
+                              SelectedItem="{Binding SelectedAssembling, UpdateSourceTrigger=PropertyChanged}"
+                              Height="28"/>
                 </Grid>
+            </Border>
 
-                <!-- Right Content Area -->
+            <!-- ========== BẢNG DANH SÁCH ========== -->
+            <DataGrid Grid.Row="2"
+                      ItemsSource="{Binding MachineList}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedMachine}"
+                      HeadersVisibility="Column"
+                      BorderThickness="1"
+                      BorderBrush="#CCC"
+                      RowHeight="32"
+                      Margin="0,5,0,0">
 
-            </Grid>
-        </Border>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                    <DataGridTextColumn Header="Machine Name" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Baudrate" Binding="{Binding Baudrate}" Width="*"/>
+                    <DataGridTextColumn Header="Port" Binding="{Binding Port}" Width="*"/>
+                    <DataGridTextColumn Header="Thành hình" Binding="{Binding Assembling}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!-- =================== PHẦN PHẢI (NÚT CHỨC NĂNG) =================== -->
+        <StackPanel Grid.Column="1"
+            Orientation="Vertical"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Margin="10,15,0,0">
+
+            <Button Content="Thêm"
+            Width="140" Height="40"
+            Background="#27AE60" Foreground="White" FontWeight="Bold"
+            Command="{Binding AddMachineCommand}"
+            Margin="0,0,0,10"/>
+
+            <Button Content="Sửa"
+            Width="140" Height="40"
+            Background="#F39C12" Foreground="White" FontWeight="Bold"
+            Command="{Binding EditMachineCommand}"
+            IsEnabled="{Binding IsEnableBtnEditMachine}"
+            Margin="0,0,0,10"/>
+
+            <Button Content="Xóa"
+            Width="140" Height="40"
+            Background="#E74C3C" Foreground="White" FontWeight="Bold"
+            Command="{Binding DeleteMachineCommand}"
+            Margin="0,0,0,10"/>
+
+        </StackPanel>
+
     </Grid>
-</Window>
+</UserControl>

@@ -1,27 +1,44 @@
-﻿using Electric_Meter.MVVM.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Windows;
+
+using Electric_Meter.Services;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Electric_Meter
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private IServiceProvider _serviceProvider;
-        protected override void OnStartup(StartupEventArgs e)
+
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            // Khởi tạo Startup
-            var startup = new Startup();
-            _serviceProvider = startup.ServiceProvider;
+            try
+            {
+                // 1️⃣ Khởi tạo Startup để lấy ServiceProvider
+                var startup = new Startup();
+                _serviceProvider = startup.ServiceProvider;
 
-            // Khởi tạo MainWindow với DI
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+                // 2️⃣ Tạo scope và chạy DatabaseSeeder
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService<DatabaseSeeder>();
+                    if (seeder != null)
+                    {
+                        await seeder.SeedAsync(); // chạy seed khi khởi động app
+                    }
+                }
+
+                // 3️⃣ Mở MainWindow sau khi seed xong
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                mainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"❌ Lỗi khi khởi động ứng dụng:\n{ex.Message}", "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown();
+            }
         }
-    }   
+    }
 }

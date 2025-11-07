@@ -11,6 +11,13 @@
 
   <ItemGroup>
     <None Remove="appsetting.json" />
+    <None Remove="Assets\pause.png" />
+    <None Remove="Assets\play.png" />
+    <None Remove="SeedData\activeType.json" />
+    <None Remove="SeedData\controlCode.json" />
+    <None Remove="SeedData\devices.json" />
+    <None Remove="SeedData\dv_Machine.json" />
+    <None Remove="SeedData\sensorType.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +26,21 @@
     </Content>
     <Content Include="Assets\electric.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SeedData\activeType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SeedData\controlCode.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SeedData\devices.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SeedData\dv_Machine.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SeedData\sensorType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -43,6 +65,15 @@
 
   <ItemGroup>
     <Folder Include="Constants\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\pause.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\play.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

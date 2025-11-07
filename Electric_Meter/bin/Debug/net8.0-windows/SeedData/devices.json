@@ -1,0 +1,254 @@
+[
+    {
+        
+        "Name": "Line A",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line B",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line C",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line D",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line A01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line A02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line A03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line A04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line A05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line A06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line A07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line A08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line B01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line B02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line B03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line B04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line B05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line B06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line B07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line B08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line C01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line C02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line C03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line C04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line C05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line C06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line C07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line C08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line D01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line D02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line D03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line D04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line D05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line D06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+        
+        "Name": "Line D07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    },
+    {
+       
+        "Name": "Line D08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1
+    }
+]

@@ -1,4 +1,4 @@
-﻿using Electric_Meter.Configs;
+using Electric_Meter.Configs;
 using Electric_Meter.MVVM.ViewModels;
 using System.Text;
 using System.Windows;
@@ -22,6 +22,14 @@ namespace Electric_Meter
         public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            Loaded += (sender, args) =>
+            {
+                Wpf.Ui.Appearance.SystemThemeWatcher.Watch(
+                    this,                                    // Window class
+                    Wpf.Ui.Controls.WindowBackdropType.Mica, // Background type
+                    true                                     // Whether to change accents automatically
+                );
+            };
             DataContext = viewModel;
         }
     }

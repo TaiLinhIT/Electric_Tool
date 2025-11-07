@@ -138,7 +138,7 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                await _serialLock.WaitAsync(); // 👈 Chỉ 1 máy được gửi tại 1 thời điểm
+                await _serialLock.WaitAsync(); //Chỉ 1 máy được gửi tại 1 thời điểm
 
                 // B1: Thêm vào activeRequests
                 string requestKey = $"{address}_{requestName}";
@@ -146,7 +146,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 {
                     activeRequests[requestKey] = requestName;
 
-                    // ⏳ Thiết lập timeout nếu cần
+                    //Thiết lập timeout nếu cần
                     var cts = new CancellationTokenSource();
                     responseTimeouts[address.ToString()] = cts;
                     _ = StartResponseTimeoutAsync(address.ToString(), cts.Token);
@@ -161,17 +161,17 @@ namespace Electric_Meter.MVVM.ViewModels
 
                 // B3: Gửi
                 _mySerialPort.Write(requestString);
-                Tool.Log($"📤 Máy {address} gửi {requestName}: {requestString}");
+                //Tool.Log($"Máy {address} gửi {requestName}: {requestString}");
 
                 await Task.Delay(1000); // Chờ thiết bị phản hồi
             }
             catch (Exception ex)
             {
-                Tool.Log($"❌ Lỗi gửi request {requestName}: {ex.Message}");
+                Tool.Log($"Lỗi gửi request {requestName}: {ex.Message}");
             }
             finally
             {
-                _serialLock.Release(); // 👈 Giải phóng cho máy khác gửi
+                _serialLock.Release(); //Giải phóng cho máy khác gửi
             }
         }
         private async Task StartResponseTimeoutAsync(string addressKey, CancellationToken cancellationToken)
@@ -185,7 +185,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 // Nếu không bị hủy, nghĩa là timeout xảy ra
                 if (activeRequests.Keys.Any(k => k.StartsWith($"{addressKey}_")))
                 {
-                    Tool.Log($"⏱️ Timeout: Không nhận được phản hồi từ máy có địa chỉ {addressKey} sau {timeoutSeconds} giây.");
+                    //Tool.Log($"Timeout: Không nhận được phản hồi từ máy có địa chỉ {addressKey} sau {timeoutSeconds} giây.");
                     activeRequests = activeRequests
                         .Where(kvp => !kvp.Key.StartsWith($"{addressKey}_"))
                         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -193,12 +193,12 @@ namespace Electric_Meter.MVVM.ViewModels
             }
             catch (TaskCanceledException)
             {
-                // ✅ Bị huỷ đúng cách do có phản hồi đến
-                Tool.Log($"🟢 Máy {addressKey} đã phản hồi đúng hạn.");
+                // Bị huỷ đúng cách do có phản hồi đến
+                Tool.Log($"Máy {addressKey} đã phản hồi đúng hạn.");
             }
             catch (Exception ex)
             {
-                Tool.Log($"❌ Lỗi khi xử lý timeout cho địa chỉ {addressKey}: {ex.Message}");
+                Tool.Log($"Lỗi khi xử lý timeout cho địa chỉ {addressKey}: {ex.Message}");
             }
         }
         public async Task SendRequestsToAllAddressesAsync()
@@ -213,16 +213,16 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             while (true)
             {
-                Tool.Log($"🔄 Máy {address}: Bắt đầu gửi dữ liệu");
+                //Tool.Log($"Máy {address}: Bắt đầu gửi dữ liệu");
 
                 foreach (var request in _appSetting.Requests)
                 {
                     string requestName = $"{request.Key}_Address_{address}";
                     await SendRequestAsync(requestName, request.Value, address);
-                    await Task.Delay(5000);
+                    await Task.Delay(10000);
                 }
 
-                Tool.Log($"✅ Máy {address}: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...");
+                Tool.Log($"Máy {address}: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...");
                 await Task.Delay(TimeSpan.FromMinutes(_appSetting.TimeSendRequest)); // Hoặc dùng _appSetting.TimeReloadData
             }
         }
@@ -264,24 +264,24 @@ namespace Electric_Meter.MVVM.ViewModels
 
                     if (activeRequests.Count == 0)
                     {
-                        Tool.Log("⚠️ activeRequests hiện đang trống.");
+                        //Tool.Log("ActiveRequests hiện đang trống.");
                     }
-                    else
-                    {
-                        Tool.Log("📋 Danh sách activeRequests:");
-                        foreach (var kvp in activeRequests)
-                        {
-                            Tool.Log($"🔑 Key = {kvp.Key}, Value = {kvp.Value}");
-                        }
-                    }
+                    //else
+                    //{
+                    //    //Tool.Log("Danh sách activeRequests:");
+                    //    foreach (var kvp in activeRequests)
+                    //    {
+                    //        Tool.Log($"Key = {kvp.Key}, Value = {kvp.Value}");
+                    //    }
+                    //}
 
-                    Tool.Log("Danh sách activeRequests hiện tại:");
-                    foreach (var kvp in activeRequests)
-                    {
-                        Tool.Log($"  Key = {kvp.Key}, Value = {kvp.Value}");
-                    }
+                    //Tool.Log("Danh sách activeRequests hiện tại:");
+                    //foreach (var kvp in activeRequests)
+                    //{
+                    //    Tool.Log($"  Key = {kvp.Key}, Value = {kvp.Value}");
+                    //}
 
-                    Tool.Log($"Matched request: Key = {matchedRequest.Key}, Value = {matchedRequest.Value}");
+                    //Tool.Log($"Matched request: Key = {matchedRequest.Key}, Value = {matchedRequest.Value}");
 
                     if (!string.IsNullOrEmpty(matchedRequest.Key))
                     {
@@ -310,7 +310,7 @@ namespace Electric_Meter.MVVM.ViewModels
                         // Gọi hàm xử lý
                         ParseAndStoreReceivedData(buffer, requestName, address);
 
-                        // ❗️XÓA KEY để lần sau vẫn xử lý được
+                        // XÓA KEY để lần sau vẫn xử lý được
                         processedRequests.Remove(requestKey);
                     }
                     else
@@ -340,7 +340,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     int dataByteCount = data[2];
                     if (dataByteCount != 4 || data.Length < 5 + dataByteCount)
                     {
-                        Tool.Log($"❌ Invalid data for {requestName} at address {address}: insufficient length.");
+                        Tool.Log($"Invalid data for {requestName} at address {address}: insufficient length.");
                         return;
                     }
 
@@ -359,7 +359,7 @@ namespace Electric_Meter.MVVM.ViewModels
                         actualValue = rawValue / 1000.0;
                     else
                     {
-                        Tool.Log($"⚠️ Unknown request type for {requestName} at address {address}.");
+                        Tool.Log($"Unknown request type for {requestName} at address {address}.");
                         return;
                     }
 
@@ -372,12 +372,12 @@ namespace Electric_Meter.MVVM.ViewModels
 
                         receivedDataByAddress[address][requestName] = actualValue;
 
-                        Tool.Log($"✅ Nhận {requestName} = {actualValue} tại địa chỉ {address}. Hiện có {receivedDataByAddress[address].Count}/{_appSetting.Requests.Count}");
+                        //Tool.Log($"Nhận {requestName} = {actualValue} tại địa chỉ {address}. Hiện có {receivedDataByAddress[address].Count}/{_appSetting.Requests.Count}");
 
-                        // ✅ Kiểm tra đủ số lượng request
+                        // Kiểm tra đủ số lượng request
                         if (receivedDataByAddress[address].Count == _appSetting.Requests.Count)
                         {
-                            Tool.Log($"📦 Đã đủ {_appSetting.Requests.Count} trường dữ liệu tại địa chỉ {address}, tiến hành lưu vào DB...");
+                            //Tool.Log($"Đã đủ {_appSetting.Requests.Count} trường dữ liệu tại địa chỉ {address}, tiến hành lưu vào DB...");
 
                             // Gọi hàm lưu trong background
                             _ = Task.Run(async () =>
@@ -392,11 +392,11 @@ namespace Electric_Meter.MVVM.ViewModels
                                         processedRequests.RemoveWhere(k => k.StartsWith($"{address}_"));
                                     }
 
-                                    Tool.Log($"✅ Lưu thành công dữ liệu cho địa chỉ {address}");
+                                    Tool.Log($"Lưu thành công dữ liệu cho địa chỉ {address}");
                                 }
                                 catch (Exception ex)
                                 {
-                                    Tool.Log($"❌ Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
+                                    Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
                                 }
                             });
                         }
@@ -404,12 +404,12 @@ namespace Electric_Meter.MVVM.ViewModels
                 }
                 else
                 {
-                    Tool.Log($"❌ Incomplete data for {requestName} at address {address}.");
+                    Tool.Log($"Incomplete data for {requestName} at address {address}.");
                 }
             }
             catch (Exception ex)
             {
-                Tool.Log($"❌ Lỗi khi phân tích dữ liệu {requestName} tại địa chỉ {address}: {ex.Message}");
+                Tool.Log($"Lỗi khi phân tích dữ liệu {requestName} tại địa chỉ {address}: {ex.Message}");
                 Tool.Log($"Dữ liệu gốc: {BitConverter.ToString(data)}");
             }
         }
@@ -430,22 +430,22 @@ namespace Electric_Meter.MVVM.ViewModels
             {
                 if (_timers.ContainsKey(address))
                 {
-                    Tool.Log($"⚠️ Timer cho địa chỉ {address} đã tồn tại, không tạo lại.");
+                    Tool.Log($"Timer cho địa chỉ {address} đã tồn tại, không tạo lại.");
                     return;
                 }
 
-                Tool.Log($"🕒 Khởi tạo timer lưu dữ liệu cho địa chỉ {address} mỗi {saveInterval / 1000} giây.");
+                //Tool.Log($"Khởi tạo timer lưu dữ liệu cho địa chỉ {address} mỗi {saveInterval / 1000} giây.");
 
                 var timer = new Timer(async _ =>
                 {
                     try
                     {
-                        Tool.Log($"📝 Bắt đầu lưu dữ liệu cho địa chỉ {address}...");
+                        Tool.Log($"Bắt đầu lưu dữ liệu cho địa chỉ {address}...");
                         await SaveAllData(address);
                     }
                     catch (Exception ex)
                     {
-                        Tool.Log($"❌ Lỗi trong timer của địa chỉ {address}: {ex.Message}");
+                        Tool.Log($"Lỗi trong timer của địa chỉ {address}: {ex.Message}");
                     }
                 }, null, 0, saveInterval);
 
@@ -469,7 +469,7 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                Tool.Log($"📥 Đang chuẩn bị lấy dữ liệu đã nhận cho địa chỉ {address}...");
+                //Tool.Log($"Đang chuẩn bị lấy dữ liệu đã nhận cho địa chỉ {address}...");
 
                 Dictionary<string, double> dataForAddress;
 
@@ -477,83 +477,100 @@ namespace Electric_Meter.MVVM.ViewModels
                 {
                     if (!receivedDataByAddress.TryGetValue(address, out dataForAddress))
                     {
-                        Tool.Log($"❌ Không tìm thấy dữ liệu cho địa chỉ {address}.");
+                        Tool.Log($"Không tìm thấy dữ liệu cho địa chỉ {address}.");
                         return;
                     }
 
                     if (dataForAddress.Count < 12)
                     {
-                        Tool.Log($"⚠️ Dữ liệu không đủ trường cần thiết cho địa chỉ {address}. Đã nhận {dataForAddress.Count} trường.");
+                        //Tool.Log($"Dữ liệu không đủ trường cần thiết cho địa chỉ {address}. Đã nhận {dataForAddress.Count} trường.");
                         return;
                     }
                 }
 
-                Tool.Log($"🔍 Đang tìm IdMachine tương ứng với địa chỉ {address}...");
+                //Tool.Log($"Đang tìm IdMachine tương ứng với địa chỉ {address}...");
 
-                int idMachine = await _context.machines
-                    .Where(m => m.Address == address)
-                    .Select(m => m.Id)
-                    .FirstOrDefaultAsync();
-
-                if (idMachine == 0)
+                var device = _appSetting.devices.FirstOrDefault(m => m.address == address);
+                if (device == null)
                 {
-                    Tool.Log($"❌ Không tìm thấy IdMachine với địa chỉ {address}");
+                    Tool.Log($"Không tìm thấy IdMachine với địa chỉ {address}");
                     return;
                 }
 
-                Tool.Log($"✅ Tìm thấy IdMachine = {idMachine} cho địa chỉ {address}");
-
-                var lastRecord = await _context.DvElectricDataTemps
-                    .Where(d => d.IdMachine == idMachine)
-                    .OrderByDescending(d => d.UploadDate)
-                    .FirstOrDefaultAsync();
+                int idMachine = device.devid;
+                //Tool.Log($"Tìm thấy IdMachine = {idMachine} cho địa chỉ {address}");
 
                 var now = DateTime.Now;
 
-                if (lastRecord != null)
+                // 1. Chuẩn bị giá trị cần lưu
+                var valuesToSave = new Dictionary<string, double?>
                 {
-                    var timeDiff = now - lastRecord.UploadDate;
-                    if (timeDiff.Value.TotalSeconds < 10)
+                    { "Ub", GetValueWithAddressSuffix(dataForAddress, "Ub", address) },
+                    { "Uc", GetValueWithAddressSuffix(dataForAddress, "Uc", address) },
+                    { "Ia", GetValueWithAddressSuffix(dataForAddress, "Ia", address) },
+                    { "Ib", GetValueWithAddressSuffix(dataForAddress, "Ib", address) },
+                    { "Ic", GetValueWithAddressSuffix(dataForAddress, "Ic", address) },
+                    { "Pt", GetValueWithAddressSuffix(dataForAddress, "Pt", address) },
+                    { "Pa", GetValueWithAddressSuffix(dataForAddress, "Pa", address) },
+                    { "Pb", GetValueWithAddressSuffix(dataForAddress, "Pb", address) },
+                    { "Pc", GetValueWithAddressSuffix(dataForAddress, "Pc", address) },
+                    { "Exp", GetValueWithAddressSuffix(dataForAddress, "Exp", address) },
+                    { "Imp", GetValueWithAddressSuffix(dataForAddress, "Imp", address) }
+                };
+
+                // 2. Lấy danh sách control code theo devid
+                var controlCodes = await _context.controlcodes
+                    .Where(c => c.devid == idMachine)
+                    .ToListAsync();
+
+                int savedCount = 0;
+
+                foreach (var item in valuesToSave)
+                {
+                    if (!item.Value.HasValue) continue;
+
+                    var code = controlCodes.FirstOrDefault(c => c.name == item.Key);
+                    if ((code.name == "Imp" && item.Value.Value < 0) || (code.name == "Exp" && item.Value.Value < 0))
                     {
-                        Tool.Log($"⚠️ Dữ liệu cho địa chỉ {address} mới thêm gần đây ({timeDiff.Value.TotalSeconds:0}s). Không lưu.");
-                        return;
+                        Tool.Log($"⚠ Giá trị {item.Key} không hợp lệ (âm) cho địa chỉ {address}. Bỏ qua lưu trữ.");
+                        continue; // Bỏ qua nếu giá trị âm
+                    }
+
+                    if (code != null)
+                    {
+
+                        var sensorData = new SensorData
+                        {
+                            devid = idMachine,
+                            codeid = code.codeid,
+                            value = item.Value.Value,
+                            day = now
+                        };
+                        //Tool.Log($"→ Đang lưu: devid={sensorData.devid}, codeid={sensorData.codeid}, value={sensorData.value}, day={sensorData.day}");
+
+                        // Gọi và kiểm tra kết quả lưu
+                        bool isSaved = await _service.InsertToSensorDataAsync(sensorData);
+                        if (isSaved)
+                        {
+                            savedCount++;
+                        }
                     }
                 }
 
-                var newRecord = new DvElectricDataTemp
+                // Logging kết quả
+                if (savedCount == 0)
                 {
-                    IdMachine = idMachine,
-                    Ia = GetValueWithAddressSuffix(dataForAddress, "Ia", address),
-                    Ib = GetValueWithAddressSuffix(dataForAddress, "Ib", address),
-                    Ic = GetValueWithAddressSuffix(dataForAddress, "Ic", address),
-                    Pt = GetValueWithAddressSuffix(dataForAddress, "Pt", address),
-                    Pa = GetValueWithAddressSuffix(dataForAddress, "Pa", address),
-                    Pb = GetValueWithAddressSuffix(dataForAddress, "Pb", address),
-                    Pc = GetValueWithAddressSuffix(dataForAddress, "Pc", address),
-                    Ua = GetValueWithAddressSuffix(dataForAddress, "Ua", address),
-                    Ub = GetValueWithAddressSuffix(dataForAddress, "Ub", address),
-                    Uc = GetValueWithAddressSuffix(dataForAddress, "Uc", address),
-                    Exp = GetValueWithAddressSuffix(dataForAddress, "Exp", address),
-                    Imp = GetValueWithAddressSuffix(dataForAddress, "Imp", address),
-                    TotalElectric = (GetValueWithAddressSuffix(dataForAddress, "Exp", address) ?? 0) +
-                                    (GetValueWithAddressSuffix(dataForAddress, "Imp", address) ?? 0),
-                    UploadDate = now
-                };
-
-                Tool.Log($"📊 Dữ liệu mới đã được tạo cho địa chỉ {address}");
-
-                await _service.InsertToElectricDataTempAsync(newRecord);
-
-                lock (lockObject)
+                    Tool.Log($"⚠ Không có bản ghi nào được lưu vào bảng SensorData cho địa chỉ {address}.");
+                }
+                else
                 {
-                    receivedDataByAddress.Remove(address); // hoặc .Clear() nếu muốn giữ lại key
+                    Tool.Log($"→ Đã lưu {savedCount} bản ghi vào bảng SensorData cho địa chỉ {address}.");
                 }
 
-                Tool.Log($"✅ Dữ liệu đã được lưu vào DB cho địa chỉ {address} lúc {now:HH:mm:ss}.");
             }
             catch (Exception ex)
             {
-                Tool.Log($"❌ Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
+                Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
             }
         }
 

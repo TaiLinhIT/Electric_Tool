@@ -1,15 +1,11 @@
-﻿using Electric_Meter.Interfaces;
+using System.Windows;
+
+using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Electric_Meter.Services
 {
@@ -53,13 +49,13 @@ namespace Electric_Meter.Services
                 MessageBox.Show(ex.Message);
                 return 0;
             }
-            
+
 
         }
 
         public async Task<List<DvElectricDataTemp>> GetListDataAsync(int address)
         {
-            using(var scope = _scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
                 try
@@ -86,7 +82,7 @@ namespace Electric_Meter.Services
 
         public async Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp)
         {
-            using(var scope = _scopeFactory.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
                 await _semaphore.WaitAsync();
@@ -107,6 +103,9 @@ namespace Electric_Meter.Services
 
             }
         }
+
+
+
 
 
 
@@ -145,6 +144,38 @@ namespace Electric_Meter.Services
             }
             return bytes;
         }
+
+        public async Task<bool> InsertToSensorDataAsync(SensorData data)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                await _semaphore.WaitAsync();
+
+                try
+                {
+                    await dbContext.sensorDatas.AddAsync(data);
+                    var result = await dbContext.SaveChangesAsync();
+
+                    Tool.Log($"→ SaveChangesAsync: {result} record(s) affected for codeid {data.codeid}");
+                    return result > 0;
+                }
+                catch (Exception ex)
+                {
+                    Tool.Log($"Lỗi khi lưu SensorData (codeid {data.codeid}): {ex.Message}");
+                    if (ex.InnerException != null)
+                    {
+                        Tool.Log($"→ Chi tiết lỗi bên trong: {ex.InnerException.Message}");
+                    }
+                    return false;
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
+            }
+        }
+
 
     }
 

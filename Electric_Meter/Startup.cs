@@ -1,4 +1,4 @@
-﻿using Electric_Meter.Configs;
+using Electric_Meter.Configs;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;

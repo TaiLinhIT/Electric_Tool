@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Electric_Meter.Configs
 {
     public class AppSetting
@@ -18,5 +12,6 @@ namespace Electric_Meter.Configs
         public int Baudrate { get; set; }
         public int TotalMachine { get; set; }
         public List<string> AutoActions { get; set; }
+        public List<DeviceConf> devices { get; set; } // Danh sách các mã điều khiển
     }
 }

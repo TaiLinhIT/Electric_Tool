@@ -22,6 +22,72 @@ namespace Electric_Meter.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Electric_Meter.Models.ActiveType", b =>
+                {
+                    b.Property<int>("activeid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("activeid"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("activeid");
+
+                    b.ToTable("ActiveType");
+                });
+
+            modelBuilder.Entity("Electric_Meter.Models.Controlcode", b =>
+                {
+                    b.Property<int>("codeid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("codeid"));
+
+                    b.Property<int>("activeid")
+                        .HasColumnType("int");
+
+                    b.Property<string>("code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("codetypeid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("devid")
+                        .HasColumnType("int");
+
+                    b.Property<double>("factor")
+                        .HasColumnType("float");
+
+                    b.Property<decimal?>("high")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ifcal")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ifshow")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("low")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("typeid")
+                        .HasColumnType("int");
+
+                    b.HasKey("codeid");
+
+                    b.ToTable("controlcode");
+                });
+
             modelBuilder.Entity("Electric_Meter.Models.DvElectricDataTemp", b =>
                 {
                     b.Property<int>("Id")
@@ -132,6 +198,57 @@ namespace Electric_Meter.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dv_Machine");
+                });
+
+            modelBuilder.Entity("Electric_Meter.Models.SensorData", b =>
+                {
+                    b.Property<int>("logid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("logid"));
+
+                    b.Property<int>("codeid")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("day")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("devid")
+                        .HasColumnType("int");
+
+                    b.Property<double>("value")
+                        .HasColumnType("float");
+
+                    b.HasKey("logid");
+
+                    b.ToTable("SensorData");
+                });
+
+            modelBuilder.Entity("Electric_Meter.Models.devices", b =>
+                {
+                    b.Property<int>("devid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("devid"));
+
+                    b.Property<int>("activeid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ifshow")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("typeid")
+                        .HasColumnType("int");
+
+                    b.HasKey("devid");
+
+                    b.ToTable("devices");
                 });
 #pragma warning restore 612, 618
         }

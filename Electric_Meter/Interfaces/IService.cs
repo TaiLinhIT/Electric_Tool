@@ -1,10 +1,4 @@
-﻿using Electric_Meter.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using System.Text;
-using System.Threading.Tasks;
+using Electric_Meter.Models;
 
 namespace Electric_Meter.Interfaces
 {
@@ -15,5 +9,6 @@ namespace Electric_Meter.Interfaces
         Task<int> EditToMachine(Machine machine);
         Task<int> DeleteToMachine(Machine machine);
         Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp);
+        Task<bool> InsertToSensorDataAsync(SensorData data);
     }
 }

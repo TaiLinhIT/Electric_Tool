@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\
+E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\
 Electric_Meter
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-D:\Linh\Project\Electric_Tool\Electric_Meter\App.xaml
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+E:\MyProject\Electric_Tool\Electric_Meter\App.xaml
 3-1312955169
 2481489524
 3353270464
-239-25905365
+239-245032846
 MainWindow.xaml;MVVM\Views\SettingView.xaml;MVVM\Views\ToolView.xaml;
 
 False

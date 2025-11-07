@@ -1,4 +1,4 @@
-﻿using Electric_Meter.Configs;
+using Electric_Meter.Configs;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;
@@ -28,6 +28,9 @@ namespace Electric_Meter
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
+
+            //Tự động migrate sau khi ServiceProvider build xong
+            ApplyMigrations();
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -64,6 +67,22 @@ namespace Electric_Meter
 
             //Đăng ký MySerialPort
             services.AddSingleton<MySerialPortService>();
+        }
+        private void ApplyMigrations()
+        {
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+
+                //Tự động tạo Database và apply migration
+                if (db.Database.GetPendingMigrations().Any())
+                {
+                    db.Database.Migrate();
+                }
+
+
+                //(Tùy chọn) Seed dữ liệu mẫu
+            }
         }
 
         

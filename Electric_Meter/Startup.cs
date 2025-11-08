@@ -1,6 +1,7 @@
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;
+using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
 
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,9 @@ namespace Electric_Meter
 
             // UI (MainWindow)
             services.AddSingleton<MainWindow>();
+
+            // UI (SettingView)
+            services.AddSingleton<SettingView>();
         }
 
         /// <summary>

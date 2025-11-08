@@ -10,25 +10,19 @@
 
     <Grid Margin="10">
 
-        <!-- 2 cột: trái (form + bảng), phải (nút chức năng) -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="180" />
         </Grid.ColumnDefinitions>
 
-        <!-- =================== PHẦN TRÁI =================== -->
         <Grid Grid.Column="0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- form -->
                 <RowDefinition Height="10"/>
-                <!-- khoảng cách -->
                 <RowDefinition Height="*"/>
-                <!-- bảng -->
             </Grid.RowDefinitions>
 
-            <!-- ========== FORM NHẬP THÔNG TIN ========== -->
             <Border Background="#F9F9F9" CornerRadius="6" Padding="15" BorderBrush="#DDD" BorderThickness="1">
                 <Grid Margin="0,5">
                     <Grid.ColumnDefinitions>
@@ -42,58 +36,63 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Address -->
                     <TextBlock Text="Address:" Grid.Row="0" Grid.Column="0"
-                               VerticalAlignment="Center" FontWeight="Bold"/>
+                               VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1"
                              Text="{Binding AddressMachine, UpdateSourceTrigger=PropertyChanged}"
                              VerticalAlignment="Center" Height="28"/>
 
-                    <!-- Machine Name -->
                     <TextBlock Text="Machine Name:" Grid.Row="0" Grid.Column="2"
-                               VerticalAlignment="Center" FontWeight="Bold"/>
+                               VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
                     <TextBox Grid.Row="0" Grid.Column="3"
                              Text="{Binding NameMachine, UpdateSourceTrigger=PropertyChanged}"
                              VerticalAlignment="Center" Height="28"/>
 
-                    <!-- Baudrate -->
                     <TextBlock Text="Baudrate:" Grid.Row="1" Grid.Column="0"
-                               VerticalAlignment="Center" FontWeight="Bold"/>
+                               VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <ComboBox Grid.Row="1" Grid.Column="1"
                               ItemsSource="{Binding LstBaudrate}"
                               SelectedItem="{Binding SelectedBaudrate, UpdateSourceTrigger=PropertyChanged}"
                               Height="28"/>
 
-                    <!-- Port -->
                     <TextBlock Text="Port:" Grid.Row="1" Grid.Column="2"
-                               VerticalAlignment="Center" FontWeight="Bold"/>
+                               VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
                     <ComboBox Grid.Row="1" Grid.Column="3"
                               ItemsSource="{Binding ListPost}"
                               SelectedItem="{Binding SelectedPort, UpdateSourceTrigger=PropertyChanged}"
                               Height="28"/>
 
-                    <!-- Thành hình -->
                     <TextBlock Text="Thành hình:" Grid.Row="2" Grid.Column="0"
-                               VerticalAlignment="Center" FontWeight="Bold"/>
+                               VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <ComboBox Grid.Row="2" Grid.Column="1"
                               ItemsSource="{Binding LstAssemblings}"
                               DisplayMemberPath="value"
                               SelectedValuePath="key"
                               SelectedItem="{Binding SelectedAssembling, UpdateSourceTrigger=PropertyChanged}"
                               Height="28"/>
+
+                    <TextBlock Text="Type:" Grid.Row="2" Grid.Column="2"
+                               VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
+                    <ComboBox Grid.Row="2" Grid.Column="3"
+                              SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
+                              Height="28">
+                        <ComboBoxItem Content="Hot"/>
+                        <ComboBoxItem Content="Cold"/>
+                    </ComboBox>
+
                 </Grid>
             </Border>
 
-            <!-- ========== BẢNG DANH SÁCH ========== -->
             <DataGrid Grid.Row="2"
-                      ItemsSource="{Binding MachineList}"
-                      AutoGenerateColumns="False"
+                      ItemsSource="{Binding DeviceList, UpdateSourceTrigger=PropertyChanged}"
+                      AutoGenerateColumns="True"
                       IsReadOnly="True"
                       CanUserAddRows="False"
                       SelectionMode="Single"
-                      SelectedItem="{Binding SelectedMachine}"
+                      SelectedItem="{Binding SelectedDevice, UpdateSourceTrigger=PropertyChanged}"
                       HeadersVisibility="Column"
                       BorderThickness="1"
                       BorderBrush="#CCC"
@@ -101,33 +100,31 @@
                       Margin="0,5,0,0">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
-                    <DataGridTextColumn Header="Machine Name" Binding="{Binding Name}" Width="*"/>
-                    <DataGridTextColumn Header="Baudrate" Binding="{Binding Baudrate}" Width="*"/>
-                    <DataGridTextColumn Header="Port" Binding="{Binding Port}" Width="*"/>
-                    <DataGridTextColumn Header="Thành hình" Binding="{Binding Assembling}" Width="*"/>
+                    <DataGridTextColumn Header="Address" Binding="{Binding address}" Width="*"/>
+                    <DataGridTextColumn Header="Machine Name" Binding="{Binding name}" Width="*"/>
+                    <DataGridTextColumn Header="Baudrate" Binding="{Binding baudrate}" Width="*"/>
+                    <DataGridTextColumn Header="Port" Binding="{Binding port}" Width="*"/>
+                    <DataGridTextColumn Header="Thành hình" Binding="{Binding activeid}" Width="*"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding ifshow}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
 
-        <!-- =================== PHẦN PHẢI (NÚT CHỨC NĂNG) =================== -->
         <StackPanel Grid.Column="1"
                     Orientation="Vertical"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Margin="10,15,0,0"
-                    >
+                    Margin="10,15,0,0">
 
             <Button Content="Thêm"
                     Width="140" Height="40"
                     Background="#27AE60" Foreground="White" FontWeight="Bold"
-                    Command="{Binding AddMachineCommand}"/>
-
+                    Command="{Binding AddMachineCommand}" Margin="0,0,0,10"/>
             <Button Content="Sửa"
                     Width="140" Height="40"
                     Background="#F39C12" Foreground="White" FontWeight="Bold"
                     Command="{Binding EditMachineCommand}"
-                    IsEnabled="{Binding IsEnableBtnEditMachine}"/>
+                    IsEnabled="{Binding IsEnableBtnEditMachine}" Margin="0,0,0,10"/>
 
             <Button Content="Xóa"
                     Width="140" Height="40"

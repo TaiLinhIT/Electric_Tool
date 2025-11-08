@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace Electric_Meter.Models;
 
 public partial class PowerTempWatchContext : DbContext
 {
-    
+
 
     public PowerTempWatchContext(DbContextOptions<PowerTempWatchContext> options)
         : base(options)
@@ -17,7 +16,7 @@ public partial class PowerTempWatchContext : DbContext
     public DbSet<DvFactoryAssembling> dvFactoryAssemblings { get; set; }
     public DbSet<ActiveType> activeTypes { get; set; }
     public DbSet<Controlcode> controlcodes { get; set; }
-    public DbSet<devices> devices { get; set; }
+    public DbSet<Device> devices { get; set; }
     public DbSet<SensorData> sensorDatas { get; set; }
     public DbSet<SensorType> sensorTypes { get; set; }
 

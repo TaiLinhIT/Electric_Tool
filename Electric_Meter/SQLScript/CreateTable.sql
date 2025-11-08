@@ -76,7 +76,7 @@ INSERT INTO [dbo].[dv_Machine]
            ,[Address]
            ,[LineCode])
 VALUES
-    -- Nhóm A
+    -- Nh贸m A
     ('COM4', 'Machine 1', 'A', 1200, 1, 'H'),
     ('COM4', 'Machine 2', 'A', 1200, 2, 'H'),
     ('COM4', 'Machine 3', 'A', 1200, 3, 'H'),
@@ -86,7 +86,7 @@ VALUES
     ('COM4', 'Machine 7', 'A', 1200, 7, 'H'),
     ('COM4', 'Machine 8', 'A', 1200, 8, 'H'),
 
-    -- Nhóm B
+    -- Nh贸m B
     ('COM4', 'Machine 9', 'B', 1200, 9, 'H'),
     ('COM4', 'Machine 10', 'B', 1200, 10, 'H'),
     ('COM4', 'Machine 11', 'B', 1200, 11, 'H'),
@@ -96,7 +96,7 @@ VALUES
     ('COM4', 'Machine 15', 'B', 1200, 15, 'H'),
     ('COM4', 'Machine 16', 'B', 1200, 16, 'H'),
 
-    -- Nhóm C
+    -- Nh贸m C
     ('COM4', 'Machine 17', 'C', 1200, 17, 'H'),
     ('COM4', 'Machine 18', 'C', 1200, 18, 'H'),
     ('COM4', 'Machine 19', 'C', 1200, 19, 'H'),
@@ -106,7 +106,7 @@ VALUES
     ('COM4', 'Machine 23', 'C', 1200, 23, 'H'),
     ('COM4', 'Machine 24', 'C', 1200, 24, 'H'),
 
-    -- Nhóm D
+    -- Nh贸m D
     ('COM4', 'Machine 25', 'D', 1200, 25, 'H'),
     ('COM4', 'Machine 26', 'D', 1200, 26, 'H'),
     ('COM4', 'Machine 27', 'D', 1200, 27, 'H'),

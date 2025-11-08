@@ -253,10 +253,20 @@ namespace Electric_Meter.Migrations
                     b.Property<int>("activeid")
                         .HasColumnType("int");
 
+                    b.Property<int>("address")
+                        .HasColumnType("int");
+
+                    b.Property<int>("baudrate")
+                        .HasColumnType("int");
+
                     b.Property<int>("ifshow")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("port")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

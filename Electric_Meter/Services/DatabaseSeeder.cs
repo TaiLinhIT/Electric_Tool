@@ -78,15 +78,15 @@ namespace Electric_Meter.Services
         }
         private async Task SeedDevicesAsync()
         {
-            if (!await _context.Set<devices>().AnyAsync())
+            if (!await _context.Set<Device>().AnyAsync())
             {
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "SeedData", "devices.json");
                 if (File.Exists(path))
                 {
-                    var data = JsonConvert.DeserializeObject<List<devices>>(await File.ReadAllTextAsync(path));
+                    var data = JsonConvert.DeserializeObject<List<Device>>(await File.ReadAllTextAsync(path));
                     if (data != null)
                     {
-                        _context.Set<devices>().AddRange(data);
+                        _context.Set<Device>().AddRange(data);
                         await _context.SaveChangesAsync();
                     }
                 }

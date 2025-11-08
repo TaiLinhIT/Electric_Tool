@@ -10,5 +10,6 @@ namespace Electric_Meter.Interfaces
         Task<int> DeleteToMachine(Machine machine);
         Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp);
         Task<bool> InsertToSensorDataAsync(SensorData data);
+        List<Device> GetDevicesList();
     }
 }

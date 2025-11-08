@@ -1,7 +1,7 @@
 {
     "AppSettings": {
         //"ConnectString": "Server=FLP-YTJ-07;Database=PowerTempWatch;TrustServerCertificate=True;MultipleActiveResultSets=True;",
-        "ConnectString": "Data Source=ADMIN-PC\\ANTHONYNGUYEN;Initial Catalog=PowerTempWatch;Integrated Security=True;Trust Server Certificate=True;",
+        "ConnectString": "Data Source=FLP-YTJ-07;Initial Catalog=PowerTempWatch;Integrated Security=True;Trust Server Certificate=True;",
         "TimeReloadData": 10, //second
         "TimeSaveToDataBase": 300, //second
         "TimeSendRequest": 5,

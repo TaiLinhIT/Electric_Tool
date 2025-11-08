@@ -1,45 +1,46 @@
-using Electric_Meter.Configs;
-using Electric_Meter.Core;
-using Electric_Meter.Interfaces;
-using Electric_Meter.Models;
-using Electric_Meter.Services;
-using Electric_Meter.Utilities;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+
+using Electric_Meter.Configs;
+using Electric_Meter.Core;
+using Electric_Meter.Models;
+using Electric_Meter.Services;
+
+using Newtonsoft.Json;
+
 using Machine = Electric_Meter.Models.Machine;
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    public class MainViewModel : BaseViewModel, INotifyPropertyChanged
+    public class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
-        private readonly SettingViewModel _settingViewModel;
+
         private readonly AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
-        private readonly ToolViewModel _toolViewModel;
         private readonly LanguageService _languageService;
+        // Các ViewModel con
+        public SettingViewModel SettingVM { get; }
+        public ToolViewModel ToolVM { get; }
+
+
+        // Navigation Command
+        public ICommand NavigateCommand { get; }
         // Constructor
         public MainViewModel(SettingViewModel settingViewModel, ToolViewModel toolViewModel, AppSetting appSetting, PowerTempWatchContext powerTempWatchContext)
         {
             _context = powerTempWatchContext;
-            _settingViewModel = settingViewModel;
-            _toolViewModel = toolViewModel;
-            CurrentViewModel = _settingViewModel;
+            SettingVM = settingViewModel;
+            ToolVM = toolViewModel;
+            CurrentViewModel = SettingVM;
 
             // Listen to the NewButtonCreated event from SettingViewModel
-            _settingViewModel.NewButtonCreated += OnNewButtonCreated;
+            SettingVM.NewButtonCreated += OnNewButtonCreated;
 
             Machines = new ObservableCollection<Machine>();
 
@@ -48,14 +49,14 @@ namespace Electric_Meter.MVVM.ViewModels
 
             //Hiển thị DeviceConfig
             DeviceConfig = new DeviceConfig();
-            
+
 
             // Lệnh mở SettingView
             SettingCommand = new RelayCommand(ExecuteSettingForm);
 
 
             // Đăng ký sự kiện
-            _settingViewModel.OnMachineLoadDefault += LoadDefaultMachine;
+            SettingVM.OnMachineLoadDefault += LoadDefaultMachine;
             //Khai báo Language Service
             _languageService = new LanguageService();
             UpdateTexts();
@@ -65,7 +66,7 @@ namespace Electric_Meter.MVVM.ViewModels
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
 
             LoadDefaultMachine();
-            _toolViewModel.Start();
+            ToolVM.Start();
 
 
         }
@@ -89,18 +90,18 @@ namespace Electric_Meter.MVVM.ViewModels
             SettingCommandText = _languageService.GetString("Settings");
             HelpCommandText = _languageService.GetString("Helps");
             MenuCommandText = _languageService.GetString("Menu");
-            
+
 
             //SettingViewModel
-            _settingViewModel.NameMachineCommandText = _languageService.GetString("Name");
-            _settingViewModel.ConnectCommandText = _languageService.GetString("Connect");
-            _settingViewModel.BaudrateMachineCommandText = _languageService.GetString("Baudrate");
-            _settingViewModel.PortMachineCommandText = _languageService.GetString("Port");
-            _settingViewModel.AddressMachineCommandText = _languageService.GetString("Address");
-            _settingViewModel.AddMachineCommandText = _languageService.GetString("Add Machine");
-            _settingViewModel.EditMachineCommandText = _languageService.GetString("Edit Machine");
-            _settingViewModel.DeleteMachineCommandText = _languageService.GetString("Delete Machine");
-            
+            SettingVM.NameMachineCommandText = _languageService.GetString("Name");
+            SettingVM.ConnectCommandText = _languageService.GetString("Connect");
+            SettingVM.BaudrateMachineCommandText = _languageService.GetString("Baudrate");
+            SettingVM.PortMachineCommandText = _languageService.GetString("Port");
+            SettingVM.AddressMachineCommandText = _languageService.GetString("Address");
+            SettingVM.AddMachineCommandText = _languageService.GetString("Add Machine");
+            SettingVM.EditMachineCommandText = _languageService.GetString("Edit Machine");
+            SettingVM.DeleteMachineCommandText = _languageService.GetString("Delete Machine");
+
 
 
 
@@ -109,17 +110,17 @@ namespace Electric_Meter.MVVM.ViewModels
             OnPropertyChanged(nameof(MenuCommandText));
             OnPropertyChanged(nameof(AssemblingText));
 
-            OnPropertyChanged(nameof(_settingViewModel.NameMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.ConnectCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.AddressMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.AddMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.EditMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.DeleteMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.BaudrateMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.PortMachineCommandText));
-            OnPropertyChanged(nameof(_settingViewModel.NameMachineCommandText));
-            
-            
+            OnPropertyChanged(nameof(SettingVM.NameMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.ConnectCommandText));
+            OnPropertyChanged(nameof(SettingVM.AddressMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.AddMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.EditMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.DeleteMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.BaudrateMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.PortMachineCommandText));
+            OnPropertyChanged(nameof(SettingVM.NameMachineCommandText));
+
+
         }
         private void ChangeLanguage(object languageCode)
         {
@@ -133,6 +134,13 @@ namespace Electric_Meter.MVVM.ViewModels
         public ICommand SettingCommand { get; set; }
 
         #region Entity
+
+        private UserControl _currentView;
+        public UserControl CurrentView
+        {
+            get => _currentView;
+            set => SetProperty(ref _currentView, value);
+        }
 
         private string _selectedLanguage;
         public string SelectedLanguage
@@ -186,11 +194,13 @@ namespace Electric_Meter.MVVM.ViewModels
 
         private void ExecuteSettingForm(object parameter)
         {
-            CurrentViewModel = _settingViewModel;  // Switch to the SettingViewModel
+            CurrentViewModel = SettingVM;  // Switch to the SettingViewModel
         }
         #endregion
 
         #region ObservableCollection for Machines
+        public ObservableCollection<object> NavigationItems { get; set; }
+        public ObservableCollection<object> FooterNavigationItems { get; set; }
         private ObservableCollection<Machine> _machines;
         public ObservableCollection<Machine> Machines
         {
@@ -243,10 +253,10 @@ namespace Electric_Meter.MVVM.ViewModels
             }
 
             // Quay lại MainView nếu cần
-            
+
         }
         #endregion
-        
+
         #region Mouse Click Event Commands
         public ICommand OpenSettingCommand => new RelayCommand(parameter =>
         {
@@ -265,27 +275,27 @@ namespace Electric_Meter.MVVM.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 // Truyền dữ liệu từ Machine sang SettingViewModel
-                _settingViewModel.SelectedMachine = machine;
-                _settingViewModel.SelectedBaudrate = machine.Baudrate; // Ví dụ thuộc tính Baudrate
-                if (_settingViewModel.SelectedAssembling == null)
+                SettingVM.SelectedMachine = machine;
+                SettingVM.SelectedBaudrate = machine.Baudrate; // Ví dụ thuộc tính Baudrate
+                if (SettingVM.SelectedAssembling == null)
                 {
-                    _settingViewModel.SelectedAssembling = new KeyValue(); // Khởi tạo mới
+                    SettingVM.SelectedAssembling = new KeyValue(); // Khởi tạo mới
                 }
-                
 
-                _settingViewModel.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
-                _settingViewModel.SelectedPort = machine.Port;
-                _settingViewModel.NameMachine = machine.Name;
-                _settingViewModel.AddressMachine = machine.Address.ToString();
-                _settingViewModel.SelectedAssembling.key = machine.Line;
-                _settingViewModel.SelectedAssembling.value = _settingViewModel.LstAssemblings.Where(x => x.key == machine.Line).Select(x => x.value).ToString();
-                
-                _settingViewModel.IsEnabledBtnAddMachine = false;
-                _settingViewModel.IsEnableBtnEditMachine = true;
+
+                SettingVM.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
+                SettingVM.SelectedPort = machine.Port;
+                SettingVM.NameMachine = machine.Name;
+                SettingVM.AddressMachine = machine.Address.ToString();
+                SettingVM.SelectedAssembling.key = machine.Line;
+                SettingVM.SelectedAssembling.value = SettingVM.LstAssemblings.Where(x => x.key == machine.Line).Select(x => x.value).ToString();
+
+                SettingVM.IsEnabledBtnAddMachine = false;
+                SettingVM.IsEnableBtnEditMachine = true;
 
 
                 // Chuyển sang SettingView
-                CurrentViewModel = _settingViewModel;
+                CurrentViewModel = SettingVM;
             }
         });
 
@@ -304,7 +314,7 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             if (parameter is Machine machine)
             {
-                _toolViewModel.AddressCurrent = machine.Address;
+                ToolVM.AddressCurrent = machine.Address;
                 //// Kiểm tra xem địa chỉ đã có trong danh sách hay chưa
                 //if (!_addressTasks.ContainsKey(machine.Address))
                 //{
@@ -316,8 +326,8 @@ namespace Electric_Meter.MVVM.ViewModels
                 //    try
                 //    {
                 //        // Chuyển Address thành danh sách
-                        
-                        
+
+
                 //    }
                 //    catch (OperationCanceledException ex)
                 //    {
@@ -331,9 +341,9 @@ namespace Electric_Meter.MVVM.ViewModels
                 //}
 
                 // Thiết lập máy và chuyển ViewModel
-                _toolViewModel.IdMachine = machine.Id;
-                CurrentViewModel = _toolViewModel;
-                _toolViewModel.StartTimer();
+                ToolVM.IdMachine = machine.Id;
+                CurrentViewModel = ToolVM;
+                ToolVM.StartTimer();
             }
         });
 
@@ -357,9 +367,9 @@ namespace Electric_Meter.MVVM.ViewModels
             if (message != null)
             {
                 DeviceConfig = message;
-                _toolViewModel.Port = message.Port;
-                _toolViewModel.Baudrate = message.Baudrate;
-                //_toolViewModel.Address = message.AddressMachine;
+                ToolVM.Port = message.Port;
+                ToolVM.Baudrate = message.Baudrate;
+                //ToolVM.Address = message.AddressMachine;
 
             }
         }

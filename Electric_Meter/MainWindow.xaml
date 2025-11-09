@@ -27,97 +27,11 @@
 
     <!-- ================= Main Grid ================= -->
     <Grid>
-        <ui:NavigationView x:Name="RootNavigation"
-                   PaneDisplayMode="Left"
-                   OpenPaneLength="200"
-                   IsBackButtonVisible="Collapsed"
-                   IsPaneToggleVisible="True"
-                   Background="#1C1C1C">
+        
+        <ui:NavigationView
+        x:Name="RootNavigationView"
+        MenuItemsSource="{Binding MenuItems}"
+        FooterMenuItemsSource="{Binding FooterMenuItems}" />
 
-            <!-- Header -->
-            <ui:NavigationView.Header>
-                <Grid Height="50" Margin="15,0">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
-
-                        <!-- Language Selection -->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                            <TextBlock Text="Language:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <ComboBox Width="100" Height="30" SelectedValue="{Binding SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Tag">
-                                <ComboBoxItem Content="English" Tag="en"/>
-                                <ComboBoxItem Content="Tiếng Việt" Tag="vi"/>
-                                <ComboBoxItem Content="中文" Tag="cn"/>
-                                <ComboBoxItem Content="ខ្មែរ" Tag="km"/>
-                            </ComboBox>
-                        </StackPanel>
-
-                        <!-- Port Selection -->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                            <TextBlock Text="Port:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <ComboBox Width="100" Height="30" ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}"/>
-                        </StackPanel>
-
-                        <!-- Baudrate Selection -->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                            <TextBlock Text="Baudrate:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <ComboBox Width="100" Height="30" ItemsSource="{Binding AvailableBaudrates}" SelectedItem="{Binding SelectedBaudrate}"/>
-                        </StackPanel>
-
-                        <!-- Connect / Disconnect Button -->
-                        <ui:Button Width="40" Height="40" Margin="10,0" Appearance="Primary"
-                                   Command="{Binding ToggleConnectionCommand}" VerticalAlignment="Center">
-                            <ui:Button.Content>
-                                <Image Source="pack://application:,,,/Assets/play.png" Width="20" Height="20"/>
-                            </ui:Button.Content>
-                            <ui:Button.Style>
-                                <Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                            <Setter Property="ui:Button.Content">
-                                                <Setter.Value>
-                                                    <Image Source="pack://application:,,,/Assets/pause.png" Width="20" Height="20"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="Appearance" Value="Caution"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ui:Button.Style>
-                        </ui:Button>
-
-                    </StackPanel>
-                </Grid>
-            </ui:NavigationView.Header>
-
-            <!-- Menu Items -->
-            <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="Dashboard"
-                                       Command="{Binding NavigateCommand}"
-                                       CommandParameter="{Binding SettingVM}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Home24"/>
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-
-                <ui:NavigationViewItem Content="Data Analysis"
-                                       Command="{Binding NavigateCommand}"
-                                       CommandParameter="{Binding ToolVM}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="DataHistogram24"/>
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-            </ui:NavigationView.MenuItems>
-
-            <!-- Footer Menu -->
-            <ui:NavigationView.FooterMenuItems>
-                <ui:NavigationViewItem Content="Settings"
-                                       Command="{Binding NavigateCommand}"
-                                       CommandParameter="{Binding SettingVM}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Settings24"/>
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-            </ui:NavigationView.FooterMenuItems>
-
-        </ui:NavigationView>
     </Grid>
 </Window>

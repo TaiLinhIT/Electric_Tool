@@ -1,13 +1,10 @@
-﻿using Electric_Meter.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    public class MenuItemViewModel :BaseViewModel
+    public class MenuItemViewModel : ObservableObject
     {
 
         private string _displayName;

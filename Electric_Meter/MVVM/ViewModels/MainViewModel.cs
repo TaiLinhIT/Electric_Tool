@@ -1,98 +1,291 @@
+
+using System.Collections.Generic; // Thêm
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Threading; // Thêm
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input; // Cung cấp RelayCommand mới
 
 using Electric_Meter.Configs;
-using Electric_Meter.Core;
 using Electric_Meter.Models;
+using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
 
 using Newtonsoft.Json;
+
+using Wpf.Ui;
+using Wpf.Ui.Controls;
+using Wpf.Ui.Controls.Interfaces;
 
 using Machine = Electric_Meter.Models.Machine;
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    public class MainViewModel : ObservableObject, INotifyPropertyChanged
+    // Bắt buộc phải là partial class để Source Generator hoạt động
+    public partial class MainViewModel : ObservableObject
     {
+        #region [ Fields (Private data) - Observable Properties ]
 
+       
+
+        [ObservableProperty]
+        private string _currentFactory;
+
+        [ObservableProperty]
+        private ObservableCollection<Machine> _machines;
+
+        [ObservableProperty]
+        private ICollection<object> _MenuItems; // Đổi tên từ NavigationItems
+
+        [ObservableProperty]
+        private ICollection<object> _FooterMenuItems; // Đổi tên từ FooterNavigationItems
+
+        
+        private readonly INavigationService _navigationService;
+
+        // ✅ THÊM: IPageService (Cần thiết cho Wpf.Ui)
+        private readonly IPageService _pageService;
+
+
+
+        // --- CÁC TRƯỜNG KHÁC (Không cần chuyển đổi) ---
         private readonly AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
         private readonly LanguageService _languageService;
-        // Các ViewModel con
+        private Dictionary<string, string> _currentLanguage;
+
+        // Quản lý task cho từng địa chỉ máy
+        private readonly Dictionary<int, CancellationTokenSource> _addressTasks = new();
+        private readonly List<int> _selectedAddresses = new();
+
+        #endregion
+
+        #region [ Fields (Private data) - Custom Properties ]
+        private string _selectedLanguage;
+        private string _assemblingText;
+        #endregion
+
+        #region [ Constructor ]
+        public MainViewModel(
+            SettingViewModel settingViewModel,
+            ToolViewModel toolViewModel,
+            AppSetting appSetting,
+            PowerTempWatchContext powerTempWatchContext)
+        {
+            // Inject các phụ thuộc
+            _context = powerTempWatchContext;
+            SettingVM = settingViewModel;
+            ToolVM = toolViewModel;
+            _appSetting = appSetting;
+            // Khởi tạo Commands thủ công, sử dụng namespace đầy đủ để giải quyết lỗi mơ hồ
+            NavigateCommand = new RelayCommand<object>(OnNavigate);
+            SettingCommand = new RelayCommand<object>(ExecuteSettingForm);
+            ChangeLanguageCommand = new RelayCommand<object>(ChangeLanguage);
+
+            //CurrentViewModel = SettingVM;
+
+            // Lắng nghe event từ SettingVM
+            SettingVM.NewButtonCreated += OnNewButtonCreated;
+            SettingVM.OnMachineLoadDefault += LoadDefaultMachine;
+
+            // Tạo collection rỗng ban đầu
+            Machines = new ObservableCollection<Machine>();
+            CurrentFactory = _appSetting.CurrentArea;
+
+            // Khởi tạo service ngôn ngữ
+            _languageService = new LanguageService();
+            UpdateTexts();
+            LoadLanguage("en");
+
+            // Tải dữ liệu ban đầu
+            LoadDefaultMachine();
+            InitializeNavigationItems();
+
+            // Khởi động ToolVM
+            ToolVM.Start();
+            MenuItems = new ObservableCollection<object>
+            {
+                new NavigationViewItem("Home", SymbolRegular.Home24, typeof(SettingView)),
+                new NavigationViewItem("Data", SymbolRegular.DataHistogram24, typeof(ToolView))
+            };
+
+                FooterMenuItems = new ObservableCollection<object>
+            {
+                new NavigationViewItem("Settings", SymbolRegular.Settings24, typeof(SettingView))
+            };
+        }
+        #endregion
+        private void InitializeNavigationItems()
+        {
+            // Sử dụng các View/Page Type của bạn (Giả định SettingView, ToolView là các Page)
+            NavMenuItems = new ObservableCollection<object>
+            {
+                new NavigationViewItem()
+                {
+                    Content = "Dashboard",
+                    Icon = new SymbolIcon(SymbolRegular.Home24),
+                    TargetPageType = typeof(SettingView) // Dashboard (Giả định là SettingView của bạn)
+                },
+                new NavigationViewItem()
+                {
+                    Content = "Data Analysis",
+                    Icon = new SymbolIcon(SymbolRegular.DataHistogram24),
+                    TargetPageType = typeof(ToolView)
+                }
+            };
+
+            NavFooterMenuItems = new ObservableCollection<object>
+            {
+                new NavigationViewItem()
+                {
+                    Content = "Settings",
+                    Icon = new SymbolIcon(SymbolRegular.Settings24),
+                    TargetPageType = typeof(SettingView)
+                }
+            };
+        }
+
+        #region [ Properties (Public for UI Binding) ]
+
+        // Text UI (Cần OnPropertyChanged thủ công trong UpdateTexts)
+        public string SettingCommandText { get; private set; }
+        public string HelpCommandText { get; private set; }
+        public string MenuCommandText { get; private set; }
+
+        // ViewModels con
         public SettingViewModel SettingVM { get; }
         public ToolViewModel ToolVM { get; }
 
 
-        // Navigation Command
-        public ICommand NavigateCommand { get; }
-        // Constructor
-        public MainViewModel(SettingViewModel settingViewModel, ToolViewModel toolViewModel, AppSetting appSetting, PowerTempWatchContext powerTempWatchContext)
+        // Ngôn ngữ đang chọn (Giữ lại setter tùy chỉnh)
+        public string SelectedLanguage
         {
-            _context = powerTempWatchContext;
-            SettingVM = settingViewModel;
-            ToolVM = toolViewModel;
-            CurrentViewModel = SettingVM;
-
-            // Listen to the NewButtonCreated event from SettingViewModel
-            SettingVM.NewButtonCreated += OnNewButtonCreated;
-
-            Machines = new ObservableCollection<Machine>();
-
-            _appSetting = appSetting;
-            CurrentFactory = _appSetting.CurrentArea;
-
-            //Hiển thị DeviceConfig
-            DeviceConfig = new DeviceConfig();
-
-
-            // Lệnh mở SettingView
-            SettingCommand = new RelayCommand(ExecuteSettingForm);
-
-
-            // Đăng ký sự kiện
-            SettingVM.OnMachineLoadDefault += LoadDefaultMachine;
-            //Khai báo Language Service
-            _languageService = new LanguageService();
-            UpdateTexts();
-            LoadLanguage("en"); // Mặc định là tiếng Anh
-
-
-            ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
-
-            LoadDefaultMachine();
-            ToolVM.Start();
-
-
-        }
-        private Dictionary<string, string> _currentLanguage;
-        public ICommand ChangeLanguageCommand { get; }
-        public void LoadLanguage(string languageCode)
-        {
-            string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"Languages/{languageCode}.json");
-            if (File.Exists(filePath))
+            get => _selectedLanguage;
+            set
             {
-                var jsonData = File.ReadAllText(filePath);
-                _currentLanguage = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonData);
-                OnPropertyChanged(""); // Thông báo tất cả các thuộc tính thay đổi để cập nhật UI
+                if (SetProperty(ref _selectedLanguage, value))
+                {
+                    _languageService.ChangeLanguage(_selectedLanguage);
+                    UpdateTexts();
+                }
             }
         }
-        public string SettingCommandText { get; private set; }
-        public string HelpCommandText { get; private set; }
-        public string MenuCommandText { get; private set; }
+
+        // Văn bản cho dây chuyền sản xuất (Giữ lại setter tùy chỉnh)
+        public string AssemblingText
+        {
+            get => _assemblingText;
+            set
+            {
+                if (SetProperty(ref _assemblingText, value))
+                {
+                    UpdateMachineButtonTexts();
+                }
+            }
+        }
+
+        public List<int> SelectedAddresses => _selectedAddresses;
+
+        #endregion
+
+        #region [ Commands ]
+        // Các Command khởi tạo thủ công
+        public ICommand NavigateCommand { get; }
+        public ICommand ChangeLanguageCommand { get; }
+        public ICommand SettingCommand { get; set; }
+
+        // Commands được tạo tự động bởi [RelayCommand]
+
+        [RelayCommand]
+        private void OpenSetting(Machine machine)
+        {
+            if (machine is null)
+                return;
+
+            var result = MessageBox.Show(
+                $"Bạn có muốn mở SettingView cho máy {machine.Name} không?",
+                "Xác nhận", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result != System.Windows.MessageBoxResult.Yes) return;
+
+            // Truyền dữ liệu sang SettingVM
+            SettingVM.SelectedMachine = machine;
+            SettingVM.SelectedBaudrate = machine.Baudrate;
+            SettingVM.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
+            SettingVM.SelectedPort = machine.Port;
+            SettingVM.NameMachine = machine.Name;
+            SettingVM.AddressMachine = machine.Address.ToString();
+
+            // Gán giá trị cho Assembling 
+            if (SettingVM.SelectedAssembling == null)
+                // Giả định KeyValue là một model có sẵn. 
+                // Nếu nó nằm trong Electric_Meter.Core, bạn cần đảm bảo namespace đó được using
+                SettingVM.SelectedAssembling = new KeyValue();
+
+            SettingVM.SelectedAssembling.key = machine.Line;
+            SettingVM.SelectedAssembling.value = SettingVM.LstAssemblings
+                .FirstOrDefault(x => x.key == machine.Line)?.value;
+
+            SettingVM.IsEnabledBtnAddMachine = false;
+            SettingVM.IsEnableBtnEditMachine = true;
+
+            //CurrentViewModel = SettingVM;
+            _navigationService?.Navigate(typeof(SettingView));
+        }
+
+        [RelayCommand]
+        private void OpenTool(Machine machine)
+        {
+            if (machine is null)
+                return;
+
+            ToolVM.AddressCurrent = machine.Address;
+            ToolVM.IdMachine = machine.Id;
+            ToolVM.StartTimer();
+            _navigationService?.Navigate(typeof(ToolView));
+        }
+
+        #endregion
+
+        #region [ Command Methods ]
+        private void OnNavigate(object parameter)
+        {
+            if (parameter is SettingViewModel)
+            {
+                _navigationService?.Navigate(typeof(SettingView));
+            }
+            else if (parameter is ToolViewModel)
+            {
+                _navigationService?.Navigate(typeof(ToolView));
+            }
+        }
+
+        private void ExecuteSettingForm(object parameter)
+        {
+            _navigationService?.Navigate(typeof(SettingView));
+        }
+
+        private void ChangeLanguage(object languageCode)
+        {
+            if (languageCode is string code)
+                LoadLanguage(code);
+        }
+        #endregion
+
+        #region [ Language & Text Update ]
         private void UpdateTexts()
         {
             SettingCommandText = _languageService.GetString("Settings");
             HelpCommandText = _languageService.GetString("Helps");
             MenuCommandText = _languageService.GetString("Menu");
 
-
-            //SettingViewModel
+            // Cập nhật text cho SettingVM
             SettingVM.NameMachineCommandText = _languageService.GetString("Name");
             SettingVM.ConnectCommandText = _languageService.GetString("Connect");
             SettingVM.BaudrateMachineCommandText = _languageService.GetString("Baudrate");
@@ -102,285 +295,50 @@ namespace Electric_Meter.MVVM.ViewModels
             SettingVM.EditMachineCommandText = _languageService.GetString("Edit Machine");
             SettingVM.DeleteMachineCommandText = _languageService.GetString("Delete Machine");
 
-
-
-
+            // Cập nhật UI
             OnPropertyChanged(nameof(SettingCommandText));
             OnPropertyChanged(nameof(HelpCommandText));
             OnPropertyChanged(nameof(MenuCommandText));
-            OnPropertyChanged(nameof(AssemblingText));
-
-            OnPropertyChanged(nameof(SettingVM.NameMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.ConnectCommandText));
-            OnPropertyChanged(nameof(SettingVM.AddressMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.AddMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.EditMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.DeleteMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.BaudrateMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.PortMachineCommandText));
-            OnPropertyChanged(nameof(SettingVM.NameMachineCommandText));
-
-
         }
-        private void ChangeLanguage(object languageCode)
+
+        public void LoadLanguage(string languageCode)
         {
-            if (languageCode is string code)
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), $"Languages/{languageCode}.json");
+            if (File.Exists(filePath))
             {
-                LoadLanguage(code);
-            }
-        }
-
-        // Commands
-        public ICommand SettingCommand { get; set; }
-
-        #region Entity
-
-        private UserControl _currentView;
-        public UserControl CurrentView
-        {
-            get => _currentView;
-            set => SetProperty(ref _currentView, value);
-        }
-
-        private string _selectedLanguage;
-        public string SelectedLanguage
-        {
-            get => _selectedLanguage;
-            set
-            {
-                if (_selectedLanguage != value)
-                {
-                    _selectedLanguage = value;
-                    OnPropertyChanged(nameof(SelectedLanguage));
-                    _languageService.ChangeLanguage(_selectedLanguage);
-                    UpdateTexts(); // Cập nhật lại văn bản
-                }
-            }
-        }
-
-        private string _assemblingText;
-        public string AssemblingText
-        {
-            get => _assemblingText;
-            set
-            {
-                _assemblingText = value;
-                OnPropertyChanged(nameof(AssemblingText));
-                UpdateMachineButtonTexts();  // Gọi hàm cập nhật button khi AssemblingText thay đổi
-            }
-        }
-
-        // Hàm để cập nhật lại text của các button
-        private void UpdateMachineButtonTexts()
-        {
-            foreach (var button in Machines)
-            {
-                AssemblingText = AssemblingText + " " + button.Line;  // Cập nhật nội dung button
-            }
-        }
-        private string _currentFactory;
-        public string CurrentFactory
-        {
-            get => _currentFactory;
-            set
-            {
-                if (_currentFactory != value)
-                {
-                    _currentFactory = value;
-                    OnPropertyChanged(nameof(CurrentFactory));
-                }
-            }
-        }
-
-        private void ExecuteSettingForm(object parameter)
-        {
-            CurrentViewModel = SettingVM;  // Switch to the SettingViewModel
-        }
-        #endregion
-
-        #region ObservableCollection for Machines
-        public ObservableCollection<object> NavigationItems { get; set; }
-        public ObservableCollection<object> FooterNavigationItems { get; set; }
-        private ObservableCollection<Machine> _machines;
-        public ObservableCollection<Machine> Machines
-        {
-            get { return _machines; }
-            set
-            {
-                _machines = value;
-                OnPropertyChanged(nameof(Machines));
+                var jsonData = File.ReadAllText(filePath);
+                _currentLanguage = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonData);
+                OnPropertyChanged(""); // Thông báo tất cả thuộc tính đổi
             }
         }
         #endregion
 
-        #region Current ViewModel
-        private BaseViewModel _currentViewModel;
-        public BaseViewModel CurrentViewModel
+        #region [ Machine Management ]
+        private void OnNewButtonCreated(System.Windows.Controls.Button factoryButton, System.Windows.Controls.Button assemblingButton)
         {
-            get => _currentViewModel;
-            set
-            {
-                _currentViewModel = value;
-                OnPropertyChanged(nameof(CurrentViewModel));
-            }
-        }
-        #endregion
-
-        #region Event to handle new button creation
-        private void OnNewButtonCreated(Button factoryButton, Button assemblingButton)
-        {
-            // Create a new Machine object using the information from the buttons
             var newMachine = new Machine
             {
                 Name = factoryButton.Content.ToString(),
                 Line = assemblingButton.Content.ToString()
             };
-
-            // Add the new machine to the Machines collection
             Machines.Add(newMachine);
         }
-        #endregion
 
-        #region Load machines from the database
         public void LoadDefaultMachine()
         {
             Machines.Clear();
-            var machinesFromDb = _context.machines.ToList(); // Get list of machines from the database
-
+            var machinesFromDb = _context.machines.ToList();
             foreach (var machine in machinesFromDb)
-            {
                 Machines.Add(machine);
-            }
-
-            // Quay lại MainView nếu cần
-
-        }
-        #endregion
-
-        #region Mouse Click Event Commands
-        public ICommand OpenSettingCommand => new RelayCommand(parameter =>
-        {
-            // Lấy đối tượng Machine từ CommandParameter
-            var machine = parameter as Machine;
-
-            if (machine == null)
-                return;
-
-            // Hiển thị MessageBox xác nhận
-            var result = MessageBox.Show($"Bạn có muốn mở SettingView cho máy {machine.Name} không?",
-                                         "Xác nhận",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                // Truyền dữ liệu từ Machine sang SettingViewModel
-                SettingVM.SelectedMachine = machine;
-                SettingVM.SelectedBaudrate = machine.Baudrate; // Ví dụ thuộc tính Baudrate
-                if (SettingVM.SelectedAssembling == null)
-                {
-                    SettingVM.SelectedAssembling = new KeyValue(); // Khởi tạo mới
-                }
-
-
-                SettingVM.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
-                SettingVM.SelectedPort = machine.Port;
-                SettingVM.NameMachine = machine.Name;
-                SettingVM.AddressMachine = machine.Address.ToString();
-                SettingVM.SelectedAssembling.key = machine.Line;
-                SettingVM.SelectedAssembling.value = SettingVM.LstAssemblings.Where(x => x.key == machine.Line).Select(x => x.value).ToString();
-
-                SettingVM.IsEnabledBtnAddMachine = false;
-                SettingVM.IsEnableBtnEditMachine = true;
-
-
-                // Chuyển sang SettingView
-                CurrentViewModel = SettingVM;
-            }
-        });
-
-        private List<int> _selectedAddresses = new List<int>();  // Danh sách địa chỉ đã chọn
-
-        public List<int> SelectedAddresses
-        {
-            get { return _selectedAddresses; }
         }
 
-
-        // Dictionary để quản lý các Task theo địa chỉ
-        private readonly Dictionary<int, CancellationTokenSource> _addressTasks = new Dictionary<int, CancellationTokenSource>();
-
-        public ICommand OpenToolCommand => new RelayCommand(parameter =>
+        private void UpdateMachineButtonTexts()
         {
-            if (parameter is Machine machine)
-            {
-                ToolVM.AddressCurrent = machine.Address;
-                //// Kiểm tra xem địa chỉ đã có trong danh sách hay chưa
-                //if (!_addressTasks.ContainsKey(machine.Address))
-                //{
-                //    // Tạo CancellationTokenSource cho địa chỉ mới
-                //    var cancellationTokenSource = new CancellationTokenSource();
-                //    _addressTasks[machine.Address] = cancellationTokenSource;
-
-                //    // Tạo Task xử lý địa chỉ trong vòng lặp liên tục
-                //    try
-                //    {
-                //        // Chuyển Address thành danh sách
-
-
-                //    }
-                //    catch (OperationCanceledException ex)
-                //    {
-                //        MessageBox.Show(ex.Message);
-                //    }
-                //}
-                //else
-                //{
-                //    // Nếu task đã tồn tại, có thể thông báo cho người dùng hoặc bỏ qua
-                //    Tool.Log($"Địa chỉ {machine.Address} đã có task đang chạy.");
-                //}
-
-                // Thiết lập máy và chuyển ViewModel
-                ToolVM.IdMachine = machine.Id;
-                CurrentViewModel = ToolVM;
-                ToolVM.StartTimer();
-            }
-        });
-
-
-
-        #endregion
-        private DeviceConfig _deviceConfig;
-
-        public DeviceConfig DeviceConfig
-        {
-            get { return _deviceConfig; }
-            set
-            {
-                _deviceConfig = value;
-                OnPropertyChanged(nameof(DeviceConfig));
-            }
-        }
-
-        private void HandleDeviceConfigMessage(DeviceConfig message)
-        {
-            if (message != null)
-            {
-                DeviceConfig = message;
-                ToolVM.Port = message.Port;
-                ToolVM.Baudrate = message.Baudrate;
-                //ToolVM.Address = message.AddressMachine;
-
-            }
-        }
-
-        #region INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            // Logic cũ: AssemblingText += $" {button.Line}";
+            // Cần xem lại logic này, vì nó chỉ thêm text mà không reset, 
+            // có thể dẫn đến lặp lại. Giữ nguyên theo code gốc nhưng cần lưu ý.
+            foreach (var button in Machines)
+                AssemblingText += $" {button.Line}";
         }
         #endregion
     }

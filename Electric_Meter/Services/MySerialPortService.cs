@@ -1,4 +1,4 @@
-﻿using Electric_Meter.Configs;
+using Electric_Meter.Configs;
 using Electric_Meter.Utilities;
 using System;
 using System.Collections.Generic;
@@ -33,8 +33,8 @@ namespace Electric_Meter.Services
             _serialPort.ErrorReceived += _serialPort_ErrorReceived;
             _serialPort.PinChanged += _serialPort_PinChanged;
 
-            _serialPort.PortName = Port;
-            _serialPort.BaudRate = Baudrate;
+            _serialPort.PortName = "COM1";
+            _serialPort.BaudRate = 2400;
             _serialPort.DataBits = 8;//数据长度：
             _serialPort.StopBits = StopBits.One;//停止位
             _serialPort.Handshake = Handshake.None;

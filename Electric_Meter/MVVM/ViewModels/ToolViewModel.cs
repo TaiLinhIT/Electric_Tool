@@ -3,8 +3,9 @@ using System.IO.Ports;
 using System.Windows;
 using System.Windows.Threading;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using Electric_Meter.Configs;
-using Electric_Meter.Core;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 using Electric_Meter.Utilities;
@@ -13,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    public class ToolViewModel : BaseViewModel
+    public class ToolViewModel : ObservableObject
     {
         public string Port = string.Empty;
         public int Baudrate = 0;

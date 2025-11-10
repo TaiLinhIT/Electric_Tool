@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Input;
-using Electric_Meter.Core; // Thêm namespace chứa RelayCommand
 
 namespace Electric_Meter.Models
 {
@@ -13,7 +12,7 @@ namespace Electric_Meter.Models
             if (values.Length == 2 && values[0] is ICommand command && values[1] != null)
             {
                 // Lấy thông tin đối tượng từ `values[1]`
-                return new RelayCommand(obj => command.Execute(values[1]), null);
+                //return new RelayCommand(obj => command.Execute(values[1]), null);
             }
 
             return null;

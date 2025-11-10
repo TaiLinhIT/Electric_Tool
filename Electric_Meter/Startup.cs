@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Wpf.Ui;
+
 namespace Electric_Meter
 {
     public class Startup
@@ -56,6 +58,8 @@ namespace Electric_Meter
             // Services
             services.AddSingleton<Service>();
             services.AddSingleton<MySerialPortService>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IPageService, PageService>();
 
             // UI (MainWindow)
             services.AddSingleton<MainWindow>();

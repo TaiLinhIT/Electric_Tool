@@ -1,15 +1,8 @@
-using Electric_Meter.Configs;
 using Electric_Meter.MVVM.ViewModels;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Wpf.Ui;
+using Wpf.Ui.Controls; // Thêm để đảm bảo NavigationView được nhận dạng
+using INavigationService = Wpf.Ui.INavigationService;
 
 namespace Electric_Meter
 {
@@ -18,19 +11,38 @@ namespace Electric_Meter
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Khai báo các services để lưu trữ sau khi inject
+        private readonly INavigationService _navigationService;
+        private readonly IPageService _pageService;
 
-        public MainWindow(MainViewModel viewModel)
+        // ✅ CẬP NHẬT CONSTRUCTOR: Thêm INavigationService và IPageService
+        public MainWindow(
+            MainViewModel viewModel,
+            INavigationService navigationService,
+            IPageService pageService)             // Service Page Resolution
         {
+            // Lưu trữ services
+            _navigationService = navigationService;
+            _pageService = pageService;
+
+            DataContext = viewModel;
             InitializeComponent();
+
             Loaded += (sender, args) =>
             {
                 Wpf.Ui.Appearance.SystemThemeWatcher.Watch(
-                    this,                                    // Window class
-                    Wpf.Ui.Controls.WindowBackdropType.Mica, // Background type
-                    true                                     // Whether to change accents automatically
+                    this,
+                    Wpf.Ui.Controls.WindowBackdropType.Mica,
+                    true
                 );
+
+                // Attach the service to the NavigationView
+                navigationService.SetNavigationControl(RootNavigationView);
+
+                // You can also set the page service, which is required for some functionalities
+                RootNavigationView.SetPageService(pageService);
             };
-            DataContext = viewModel;
         }
+        public MainViewModel ViewModel { get; }
     }
 }

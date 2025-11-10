@@ -1,0 +1,326 @@
+[
+    {
+        "Name": "Line A",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1,
+        "Port": "COM04",
+        "Baudrate": 2400,
+        "Address": 1
+    },
+    {
+        "Name": "Line B",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1,
+        "Port": "COM04",
+        "Baudrate": 2400,
+        "Address": 2
+    },
+    {
+        "Name": "Line C",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1,
+        "Port": "COM04",
+        "Baudrate": 2400,
+        "Address": 3
+    },
+    {
+        "Name": "Line D",
+        "ActiveId": 1,
+        "TypeId": 8,
+        "IfShow": 1,
+        "Port": "COM04",
+        "Baudrate": 2400,
+        "Address": 4
+    },
+    {
+        "Name": "Line A01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 5
+    },
+    {
+        "Name": "Line A02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 6
+    },
+    {
+        "Name": "Line A03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 7
+    },
+    {
+        "Name": "Line A04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 8
+    },
+    {
+        "Name": "Line A05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 9
+    },
+    {
+        "Name": "Line A06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 10
+    },
+    {
+        "Name": "Line A07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 11
+    },
+    {
+        "Name": "Line A08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 12
+    },
+    {
+        "Name": "Line B01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 13
+    },
+    {
+        "Name": "Line B02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 14
+    },
+    {
+        "Name": "Line B03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 15
+    },
+    {
+        "Name": "Line B04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 16
+    },
+    {
+        "Name": "Line B05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 17
+    },
+    {
+        "Name": "Line B06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 18
+    },
+    {
+        "Name": "Line B07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 19
+    },
+    {
+        "Name": "Line B08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 20
+    },
+    {
+        "Name": "Line C01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 21
+    },
+    {
+        "Name": "Line C02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 22
+    },
+    {
+        "Name": "Line C03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 23
+    },
+    {
+        "Name": "Line C04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 24
+    },
+    {
+        "Name": "Line C05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 25
+    },
+    {
+        "Name": "Line C06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 26
+    },
+    {
+        "Name": "Line C07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 27
+    },
+    {
+        "Name": "Line C08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 28
+    },
+    {
+        "Name": "Line D01",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 29
+    },
+    {
+        "Name": "Line D02",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 30
+    },
+    {
+        "Name": "Line D03",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 31
+    },
+    {
+        "Name": "Line D04",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 32
+    },
+    {
+        "Name": "Line D05",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 33
+    },
+    {
+        "Name": "Line D06",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 34
+    },
+    {
+        "Name": "Line D07",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 35
+    },
+    {
+        "Name": "Line D08",
+        "ActiveId": 1,
+        "TypeId": 7,
+        "IfShow": 1,
+        "Port": "COM03",
+        "Baudrate": 2400,
+        "Address": 36
+    }
+]

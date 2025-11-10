@@ -1,48 +1,41 @@
-using Electric_Meter.MVVM.ViewModels;
 using System.Windows;
+
+using Electric_Meter.MVVM.ViewModels;
+
 using Wpf.Ui;
-using Wpf.Ui.Controls; // Thêm để đảm bảo NavigationView được nhận dạng
-using INavigationService = Wpf.Ui.INavigationService;
+using Wpf.Ui.Abstractions;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
+
 
 namespace Electric_Meter
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        // Khai báo các services để lưu trữ sau khi inject
         private readonly INavigationService _navigationService;
-        private readonly IPageService _pageService;
+        private readonly INavigationViewPageProvider _pageProvider;
 
-        // ✅ CẬP NHẬT CONSTRUCTOR: Thêm INavigationService và IPageService
         public MainWindow(
             MainViewModel viewModel,
             INavigationService navigationService,
-            IPageService pageService)             // Service Page Resolution
+            INavigationViewPageProvider pageProvider)
         {
-            // Lưu trữ services
-            _navigationService = navigationService;
-            _pageService = pageService;
-
-            DataContext = viewModel;
             InitializeComponent();
 
-            Loaded += (sender, args) =>
+            DataContext = viewModel;
+            _navigationService = navigationService;
+            _pageProvider = pageProvider;
+
+            Loaded += (_, _) =>
             {
-                Wpf.Ui.Appearance.SystemThemeWatcher.Watch(
-                    this,
-                    Wpf.Ui.Controls.WindowBackdropType.Mica,
-                    true
-                );
+                // Bật hiệu ứng Mica hoặc Acrylic
+                SystemThemeWatcher.Watch(this, WindowBackdropType.Mica, true);
 
-                // Attach the service to the NavigationView
-                navigationService.SetNavigationControl(RootNavigationView);
-
-                // You can also set the page service, which is required for some functionalities
-                RootNavigationView.SetPageService(pageService);
+                // Gán NavigationView và Provider cho hệ thống điều hướng
+                _navigationService.SetNavigationControl(RootNavigationView);
+                RootNavigationView.SetPageProviderService(_pageProvider);
             };
         }
-        public MainViewModel ViewModel { get; }
     }
 }
+

@@ -4,6 +4,8 @@ using Electric_Meter.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Wpf.Ui.Appearance;
+
 namespace Electric_Meter
 {
     public partial class App : Application
@@ -13,11 +15,11 @@ namespace Electric_Meter
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
             try
             {
                 // 1️⃣ Khởi tạo Startup để lấy ServiceProvider
                 var startup = new Startup();
+                ApplicationThemeManager.Apply(ApplicationTheme.Light);
                 _serviceProvider = startup.ServiceProvider;
 
                 // 2️⃣ Tạo scope và chạy DatabaseSeeder

@@ -2094,6 +2094,18 @@
             "fileVersion": "4.0.0.0"
           }
         }
+      },
+      "WPF-UI.DependencyInjection/4.0.3": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0",
+          "WPF-UI.Abstractions": "4.0.3"
+        },
+        "runtime": {
+          "lib/net8.0/Wpf.Ui.DependencyInjection.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
       }
     }
   },
@@ -3063,6 +3075,13 @@
       "sha512": "sha512-HyoPrc5TmasqzYqHk3UCvYFNWfBEj8GOI3ZXpX6Cl+BghHFWR5nMzjGkwJ2341ISs5HEt4Iun6DZgrYVZpwTXQ==",
       "path": "wpf-ui.abstractions/4.0.3",
       "hashPath": "wpf-ui.abstractions.4.0.3.nupkg.sha512"
+    },
+    "WPF-UI.DependencyInjection/4.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-A2kWlJaBnCbutqEvGtjhokAVIPxu60I25wM/E7yhXSy3+wu9qdCUXoRGhmR2k2HLGAxeYLGV3iYkmzZllahrtg==",
+      "path": "wpf-ui.dependencyinjection/4.0.3",
+      "hashPath": "wpf-ui.dependencyinjection.4.0.3.nupkg.sha512"
     }
   }
 }

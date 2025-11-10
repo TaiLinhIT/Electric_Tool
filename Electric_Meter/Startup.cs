@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Wpf.Ui;
+using Wpf.Ui.DependencyInjection;
 
 namespace Electric_Meter
 {
@@ -54,18 +55,26 @@ namespace Electric_Meter
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<SettingViewModel>();
             services.AddSingleton<ToolViewModel>();
+            services.AddSingleton<DashboardViewModel>();
 
             // Services
             services.AddSingleton<Service>();
             services.AddSingleton<MySerialPortService>();
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<IPageService, PageService>();
+            services.AddNavigationViewPageProvider();               // từ Wpf.Ui.DependencyInjection
+            services.AddSingleton<INavigationService, NavigationService>(); // từ Wpf.Ui (core)
 
             // UI (MainWindow)
             services.AddSingleton<MainWindow>();
 
             // UI (SettingView)
             services.AddSingleton<SettingView>();
+
+            // UI (Dashboard)
+            services.AddSingleton<DashboardView>();
+
+            // UI (ToolView)
+            services.AddSingleton<ToolView>();
         }
 
         /// <summary>

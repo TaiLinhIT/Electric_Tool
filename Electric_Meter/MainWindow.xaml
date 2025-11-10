@@ -4,34 +4,88 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:Electric_Meter.MVVM.ViewModels"
-    xmlns:views="clr-namespace:Electric_Meter.MVVM.Views"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:Electric_Meter.Converters"
-    mc:Ignorable="d"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    mc:Ignorable="d"
     Title="Electric Meter Interface"
     Height="600"
-    Width="850"
-    MinWidth="840"
-    MinHeight="450"
-    WindowState="{Binding MainWindowState, Mode=TwoWay}">
+    Width="950"
+    MinWidth="900"
+    MinHeight="480"
+    WindowStartupLocation="CenterScreen">
 
-    <!-- ================= Window Resources ================= -->
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <local:BoolToPlayPauseTextConverter x:Key="BoolToPlayPauseTextConverter"/>
-
-        
-    </Window.Resources>
-
-    <!-- ================= Main Grid ================= -->
     <Grid>
-        
-        <ui:NavigationView
-        x:Name="RootNavigationView"
-        MenuItemsSource="{Binding MenuItems}"
-        FooterMenuItemsSource="{Binding FooterMenuItems}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <!-- 🟦 Top toolbar -->
+        <Border Background="#2D2D30" Padding="8" BorderBrush="#3E3E42" BorderThickness="0,0,0,1">
+            <DockPanel LastChildFill="False">
+
+                <!-- Left: Help button -->
+                <ui:Button
+                    Content="Help"
+                    Width="80"
+                    Margin="0,0,10,0"
+                    DockPanel.Dock="Left"
+                    Icon="{ui:SymbolIcon Symbol=QuestionCircle24}"
+                    Command="{Binding OpenHelpCommand}" />
+
+                <!-- Language ComboBox -->
+                <ComboBox
+                    Width="140"
+                    Margin="0,0,10,0"
+                    DockPanel.Dock="Left"
+                    ItemsSource="{Binding Languages}"
+                    SelectedItem="{Binding SelectedLanguage}">
+                    <ComboBox.ToolTip>Language</ComboBox.ToolTip>
+                </ComboBox>
+
+                <!-- Port ComboBox -->
+                <ComboBox
+                    Width="140"
+                    Margin="0,0,10,0"
+                    DockPanel.Dock="Left"
+                    ItemsSource="{Binding Ports}"
+                    SelectedItem="{Binding SelectedPort}">
+                    <ComboBox.ToolTip>Port</ComboBox.ToolTip>
+                </ComboBox>
+
+                <!-- Baudrate ComboBox -->
+                <ComboBox
+                    Width="140"
+                    Margin="0,0,10,0"
+                    DockPanel.Dock="Left"
+                    ItemsSource="{Binding Baudrates}"
+                    SelectedItem="{Binding SelectedBaudrate}">
+                    <ComboBox.ToolTip>Baudrate</ComboBox.ToolTip>
+                </ComboBox>
+
+                <!-- Right: Play/Pause -->
+                <ui:Button
+                    Width="100"
+                    DockPanel.Dock="Right"
+                    Margin="10,0,0,0"
+                    Command="{Binding TogglePlayPauseCommand}">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <ui:SymbolIcon Symbol="{Binding PlayPauseIcon}" />
+                        <TextBlock Text="{Binding PlayPauseText}" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </ui:Button>
+            </DockPanel>
+        </Border>
+
+        <!-- 🟩 NavigationView -->
+        <ui:NavigationView
+            x:Name="RootNavigationView"
+            Grid.Row="1"
+            MenuItemsSource="{Binding MenuItems}"
+            FooterMenuItemsSource="{Binding FooterMenuItems}"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleVisible="True"
+            PaneDisplayMode="Left"
+            OpenPaneLength="200"
+            Background="#1C1C1C" />
     </Grid>
 </Window>

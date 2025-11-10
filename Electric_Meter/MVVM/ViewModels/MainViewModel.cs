@@ -1,12 +1,6 @@
-
-using System.Collections.Generic; // Thêm
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Threading; // Thêm
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -21,7 +15,6 @@ using Newtonsoft.Json;
 
 using Wpf.Ui;
 using Wpf.Ui.Controls;
-using Wpf.Ui.Controls.Interfaces;
 
 using Machine = Electric_Meter.Models.Machine;
 
@@ -32,29 +25,72 @@ namespace Electric_Meter.MVVM.ViewModels
     {
         #region [ Fields (Private data) - Observable Properties ]
 
-       
+        [ObservableProperty]
+        private IEnumerable<NavigationViewItem> _menuItems = new[]
+       {
+            new NavigationViewItem()
+            {
+                Content = "Dashboard",
+                Icon = new SymbolIcon(SymbolRegular.ChartMultiple24),
+                TargetPageType = typeof(Views.DashboardView)
+            },
+            new NavigationViewItem()
+            {
+                Content = "Tool",
+                Icon = new SymbolIcon(SymbolRegular.Toolbox24),
+                TargetPageType = typeof(Views.ToolView)
+            }
+        };
 
+        [ObservableProperty]
+        private IEnumerable<NavigationViewItem> _footerMenuItems = new[]
+        {
+            new NavigationViewItem()
+            {
+                Content = "Setting",
+                Icon = new SymbolIcon(SymbolRegular.Settings24),
+                TargetPageType = typeof(Views.SettingView)
+            }
+        };
+        [ObservableProperty] private string _selectedLanguage = "English";
+
+        private readonly INavigationService _navigationService;
         [ObservableProperty]
         private string _currentFactory;
 
         [ObservableProperty]
         private ObservableCollection<Machine> _machines;
 
-        [ObservableProperty]
-        private ICollection<object> _MenuItems; // Đổi tên từ NavigationItems
+        // ----- Toolbar -----
+        [ObservableProperty] private ObservableCollection<string> _languages = new(["English", "Vietnamese"]);
 
-        [ObservableProperty]
-        private ICollection<object> _FooterMenuItems; // Đổi tên từ FooterNavigationItems
 
-        
-        private readonly INavigationService _navigationService;
+        [ObservableProperty] private ObservableCollection<string> _ports = new(["COM1", "COM2", "COM3"]);
+        [ObservableProperty] private string _selectedPort = "COM1";
 
-        // ✅ THÊM: IPageService (Cần thiết cho Wpf.Ui)
-        private readonly IPageService _pageService;
+        [ObservableProperty] private ObservableCollection<int> _baudrates = new([9600, 19200, 38400, 115200]);
+        [ObservableProperty] private int _selectedBaudrate = 9600;
+
+        [ObservableProperty] private string _playPauseText = "Play";
+        [ObservableProperty] private SymbolRegular _playPauseIcon = SymbolRegular.Play24;
+        [ObservableProperty] private bool _isPlaying = false;
+
+
+
+
 
 
 
         // --- CÁC TRƯỜNG KHÁC (Không cần chuyển đổi) ---
+        private string _assemblingText;
+        private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
+        private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
+        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();
+        private HashSet<string> processedRequests = new HashSet<string>();
+        private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
+        private static readonly object lockObject = new object();
+        private readonly Service _service;
+        private readonly MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
         private readonly LanguageService _languageService;
@@ -66,19 +102,18 @@ namespace Electric_Meter.MVVM.ViewModels
 
         #endregion
 
-        #region [ Fields (Private data) - Custom Properties ]
-        private string _selectedLanguage;
-        private string _assemblingText;
-        #endregion
 
         #region [ Constructor ]
-        public MainViewModel(
+        public MainViewModel(MySerialPortService mySerialPort,
             SettingViewModel settingViewModel,
             ToolViewModel toolViewModel,
             AppSetting appSetting,
-            PowerTempWatchContext powerTempWatchContext)
+            PowerTempWatchContext powerTempWatchContext,
+            Service service)
         {
             // Inject các phụ thuộc
+            _service = service;
+            _mySerialPort = mySerialPort;
             _context = powerTempWatchContext;
             SettingVM = settingViewModel;
             ToolVM = toolViewModel;
@@ -105,51 +140,12 @@ namespace Electric_Meter.MVVM.ViewModels
 
             // Tải dữ liệu ban đầu
             LoadDefaultMachine();
-            InitializeNavigationItems();
 
-            // Khởi động ToolVM
-            ToolVM.Start();
-            MenuItems = new ObservableCollection<object>
-            {
-                new NavigationViewItem("Home", SymbolRegular.Home24, typeof(SettingView)),
-                new NavigationViewItem("Data", SymbolRegular.DataHistogram24, typeof(ToolView))
-            };
-
-                FooterMenuItems = new ObservableCollection<object>
-            {
-                new NavigationViewItem("Settings", SymbolRegular.Settings24, typeof(SettingView))
-            };
+            _service = service;
+            TogglePlayPause();
         }
         #endregion
-        private void InitializeNavigationItems()
-        {
-            // Sử dụng các View/Page Type của bạn (Giả định SettingView, ToolView là các Page)
-            NavMenuItems = new ObservableCollection<object>
-            {
-                new NavigationViewItem()
-                {
-                    Content = "Dashboard",
-                    Icon = new SymbolIcon(SymbolRegular.Home24),
-                    TargetPageType = typeof(SettingView) // Dashboard (Giả định là SettingView của bạn)
-                },
-                new NavigationViewItem()
-                {
-                    Content = "Data Analysis",
-                    Icon = new SymbolIcon(SymbolRegular.DataHistogram24),
-                    TargetPageType = typeof(ToolView)
-                }
-            };
 
-            NavFooterMenuItems = new ObservableCollection<object>
-            {
-                new NavigationViewItem()
-                {
-                    Content = "Settings",
-                    Icon = new SymbolIcon(SymbolRegular.Settings24),
-                    TargetPageType = typeof(SettingView)
-                }
-            };
-        }
 
         #region [ Properties (Public for UI Binding) ]
 
@@ -164,18 +160,6 @@ namespace Electric_Meter.MVVM.ViewModels
 
 
         // Ngôn ngữ đang chọn (Giữ lại setter tùy chỉnh)
-        public string SelectedLanguage
-        {
-            get => _selectedLanguage;
-            set
-            {
-                if (SetProperty(ref _selectedLanguage, value))
-                {
-                    _languageService.ChangeLanguage(_selectedLanguage);
-                    UpdateTexts();
-                }
-            }
-        }
 
         // Văn bản cho dây chuyền sản xuất (Giữ lại setter tùy chỉnh)
         public string AssemblingText
@@ -208,7 +192,7 @@ namespace Electric_Meter.MVVM.ViewModels
             if (machine is null)
                 return;
 
-            var result = MessageBox.Show(
+            var result = System.Windows.MessageBox.Show(
                 $"Bạn có muốn mở SettingView cho máy {machine.Name} không?",
                 "Xác nhận", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -251,6 +235,29 @@ namespace Electric_Meter.MVVM.ViewModels
             _navigationService?.Navigate(typeof(ToolView));
         }
 
+        [RelayCommand]
+        private void TogglePlayPause()
+        {
+            IsPlaying = !IsPlaying;
+            PlayPauseText = IsPlaying ? "Pause" : "Play";
+            PlayPauseIcon = IsPlaying ? SymbolRegular.Pause24 : SymbolRegular.Play24;
+
+            if (IsPlaying)
+                _mySerialPort.StartCommunication(); // bật lại gửi nhận
+            else
+                _mySerialPort.Stop(); // dừng gửi nhận
+        }
+
+        [RelayCommand]
+        private void OpenHelp()
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://your-help-link-or-docs",
+                UseShellExecute = true
+            });
+        }
+
         #endregion
 
         #region [ Command Methods ]
@@ -263,6 +270,10 @@ namespace Electric_Meter.MVVM.ViewModels
             else if (parameter is ToolViewModel)
             {
                 _navigationService?.Navigate(typeof(ToolView));
+            }
+            else if (parameter is DashboardViewModel)
+            {
+                _navigationService?.Navigate(typeof(DashboardView));
             }
         }
 
@@ -341,5 +352,6 @@ namespace Electric_Meter.MVVM.ViewModels
                 AssemblingText += $" {button.Line}";
         }
         #endregion
+
     }
 }

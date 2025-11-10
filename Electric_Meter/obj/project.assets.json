@@ -3793,6 +3793,23 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "WPF-UI.DependencyInjection/4.0.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0",
+          "WPF-UI.Abstractions": "4.0.3"
+        },
+        "compile": {
+          "lib/net8.0/Wpf.Ui.DependencyInjection.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Wpf.Ui.DependencyInjection.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
       }
     }
   },
@@ -8903,6 +8920,42 @@
         "wpf-ui.abstractions.4.0.3.nupkg.sha512",
         "wpf-ui.abstractions.nuspec"
       ]
+    },
+    "WPF-UI.DependencyInjection/4.0.3": {
+      "sha512": "A2kWlJaBnCbutqEvGtjhokAVIPxu60I25wM/E7yhXSy3+wu9qdCUXoRGhmR2k2HLGAxeYLGV3iYkmzZllahrtg==",
+      "type": "package",
+      "path": "wpf-ui.dependencyinjection/4.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.md",
+        "README.md",
+        "ThirdPartyNotices.txt",
+        "lib/net462/Wpf.Ui.DependencyInjection.dll",
+        "lib/net462/Wpf.Ui.DependencyInjection.pdb",
+        "lib/net462/Wpf.Ui.DependencyInjection.xml",
+        "lib/net472/Wpf.Ui.DependencyInjection.dll",
+        "lib/net472/Wpf.Ui.DependencyInjection.pdb",
+        "lib/net472/Wpf.Ui.DependencyInjection.xml",
+        "lib/net6.0/Wpf.Ui.DependencyInjection.dll",
+        "lib/net6.0/Wpf.Ui.DependencyInjection.pdb",
+        "lib/net6.0/Wpf.Ui.DependencyInjection.xml",
+        "lib/net8.0/Wpf.Ui.DependencyInjection.dll",
+        "lib/net8.0/Wpf.Ui.DependencyInjection.pdb",
+        "lib/net8.0/Wpf.Ui.DependencyInjection.xml",
+        "lib/net9.0/Wpf.Ui.DependencyInjection.dll",
+        "lib/net9.0/Wpf.Ui.DependencyInjection.pdb",
+        "lib/net9.0/Wpf.Ui.DependencyInjection.xml",
+        "lib/netstandard2.0/Wpf.Ui.DependencyInjection.dll",
+        "lib/netstandard2.0/Wpf.Ui.DependencyInjection.pdb",
+        "lib/netstandard2.0/Wpf.Ui.DependencyInjection.xml",
+        "lib/netstandard2.1/Wpf.Ui.DependencyInjection.dll",
+        "lib/netstandard2.1/Wpf.Ui.DependencyInjection.pdb",
+        "lib/netstandard2.1/Wpf.Ui.DependencyInjection.xml",
+        "wpf-ui.dependencyinjection.4.0.3.nupkg.sha512",
+        "wpf-ui.dependencyinjection.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -8919,27 +8972,28 @@
       "Microsoft.Xaml.Behaviors.Wpf >= 1.1.135",
       "Newtonsoft.Json >= 13.0.3",
       "System.IO.Ports >= 9.0.0",
-      "WPF-UI >= 4.0.3"
+      "WPF-UI >= 4.0.3",
+      "WPF-UI.DependencyInjection >= 4.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "C:\\Users\\Administrator\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\MyProject\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "projectUniqueName": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
       "projectName": "Electric_Meter",
-      "projectPath": "E:\\MyProject\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "E:\\MyProject\\Electric_Tool\\Electric_Meter\\obj\\",
+      "projectPath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+      "outputPath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -9026,6 +9080,10 @@
             "version": "[9.0.0, )"
           },
           "WPF-UI": {
+            "target": "Package",
+            "version": "[4.0.3, )"
+          },
+          "WPF-UI.DependencyInjection": {
             "target": "Package",
             "version": "[4.0.3, )"
           }

@@ -10,6 +10,9 @@
     <None Remove="appsettings.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="MVVM\Views\DashboardView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\Views\SettingView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

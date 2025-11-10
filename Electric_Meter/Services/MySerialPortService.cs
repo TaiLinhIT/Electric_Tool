@@ -33,10 +33,10 @@ namespace Electric_Meter.Services
         private AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
         #endregion
-        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext)
+        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting)
         {
             _context = powerTempWatchContext;
-            _appSetting = new AppSetting();
+            _appSetting = appSetting;
             _service = service;
         }
         public void Conn()

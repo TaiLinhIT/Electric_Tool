@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR
 D:\Linh\Project\Electric_Tool\Electric_Meter\App.xaml
 4-1560296319
 71516845140
-54-1174138845
+56992498433
 2651124821782
 MainWindow.xaml;MVVM\Views\DashboardView.xaml;MVVM\Views\SettingView.xaml;MVVM\Views\ToolView.xaml;
 
-True
+False
 

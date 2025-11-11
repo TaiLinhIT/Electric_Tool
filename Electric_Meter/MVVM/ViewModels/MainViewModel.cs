@@ -186,54 +186,54 @@ namespace Electric_Meter.MVVM.ViewModels
 
         // Commands được tạo tự động bởi [RelayCommand]
 
-        [RelayCommand]
-        private void OpenSetting(Machine machine)
-        {
-            if (machine is null)
-                return;
+        //[RelayCommand]
+        //private void OpenSetting(Machine machine)
+        //{
+        //    if (machine is null)
+        //        return;
 
-            var result = System.Windows.MessageBox.Show(
-                $"Bạn có muốn mở SettingView cho máy {machine.Name} không?",
-                "Xác nhận", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
+        //    var result = System.Windows.MessageBox.Show(
+        //        $"Bạn có muốn mở SettingView cho máy {machine.Name} không?",
+        //        "Xác nhận", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (result != System.Windows.MessageBoxResult.Yes) return;
+        //    if (result != System.Windows.MessageBoxResult.Yes) return;
 
-            // Truyền dữ liệu sang SettingVM
-            SettingVM.SelectedMachine = machine;
-            SettingVM.SelectedBaudrate = machine.Baudrate;
-            SettingVM.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
-            SettingVM.SelectedPort = machine.Port;
-            SettingVM.NameMachine = machine.Name;
-            SettingVM.AddressMachine = machine.Address.ToString();
+        //    // Truyền dữ liệu sang SettingVM
+        //    SettingVM.SelectedMachine = machine;
+        //    SettingVM.SelectedBaudrate = machine.Baudrate;
+        //    SettingVM.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
+        //    SettingVM.SelectedPort = machine.Port;
+        //    SettingVM.NameMachine = machine.Name;
+        //    SettingVM.AddressMachine = machine.Address.ToString();
 
-            // Gán giá trị cho Assembling 
-            if (SettingVM.SelectedAssembling == null)
-                // Giả định KeyValue là một model có sẵn. 
-                // Nếu nó nằm trong Electric_Meter.Core, bạn cần đảm bảo namespace đó được using
-                SettingVM.SelectedAssembling = new KeyValue();
+        //    // Gán giá trị cho Assembling 
+        //    if (SettingVM.SelectedAssembling == null)
+        //        // Giả định KeyValue là một model có sẵn. 
+        //        // Nếu nó nằm trong Electric_Meter.Core, bạn cần đảm bảo namespace đó được using
+        //        SettingVM.SelectedAssembling = new KeyValue();
 
-            SettingVM.SelectedAssembling.key = machine.Line;
-            SettingVM.SelectedAssembling.value = SettingVM.LstAssemblings
-                .FirstOrDefault(x => x.key == machine.Line)?.value;
+        //    SettingVM.SelectedAssembling.key = machine.Line;
+        //    SettingVM.SelectedAssembling.value = SettingVM.LstAssemblings
+        //        .FirstOrDefault(x => x.key == machine.Line)?.value;
 
-            SettingVM.IsEnabledBtnAddMachine = false;
-            SettingVM.IsEnableBtnEditMachine = true;
+        //    SettingVM.IsEnabledBtnAddMachine = false;
+        //    SettingVM.IsEnableBtnEditMachine = true;
 
-            //CurrentViewModel = SettingVM;
-            _navigationService?.Navigate(typeof(SettingView));
-        }
+        //    //CurrentViewModel = SettingVM;
+        //    _navigationService?.Navigate(typeof(SettingView));
+        //}
 
-        [RelayCommand]
-        private void OpenTool(Machine machine)
-        {
-            if (machine is null)
-                return;
+        //[RelayCommand]
+        //private void OpenTool(Machine machine)
+        //{
+        //    if (machine is null)
+        //        return;
 
-            ToolVM.AddressCurrent = machine.Address;
-            ToolVM.IdMachine = machine.Id;
-            ToolVM.StartTimer();
-            _navigationService?.Navigate(typeof(ToolView));
-        }
+        //    ToolVM.AddressCurrent = machine.Address;
+        //    ToolVM.IdMachine = machine.Id;
+        //    ToolVM.StartTimer();
+        //    _navigationService?.Navigate(typeof(ToolView));
+        //}
 
         [RelayCommand]
         private void TogglePlayPause()

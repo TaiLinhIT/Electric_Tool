@@ -11,6 +11,7 @@ namespace Electric_Meter.Models
         public int address { get; set; }
         public string name { get; set; }
         public string port { get; set; }
+        public string assembling { get; set; }
         public int baudrate { get; set; }
         public int activeid { get; set; }
         public int typeid { get; set; }

@@ -42,53 +42,56 @@
                     <TextBlock Text="Address:" Grid.Row="0" Grid.Column="0"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1"
-                             Text="{Binding AddressMachine, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"
+                             Padding="2,0,2,0"
                              VerticalAlignment="Center" Height="28"/>
 
-                    <TextBlock Text="Machine Name:" Grid.Row="0" Grid.Column="2"
+                    <TextBlock Text="Device Name:" Grid.Row="0" Grid.Column="2"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
                     <TextBox Grid.Row="0" Grid.Column="3"
-                             Text="{Binding NameMachine, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"
+                             Padding="2,0,2,0"
                              VerticalAlignment="Center" Height="28"/>
 
                     <TextBlock Text="Baudrate:" Grid.Row="1" Grid.Column="0"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <ComboBox Grid.Row="1" Grid.Column="1"
                               ItemsSource="{Binding LstBaudrate}"
-                              SelectedItem="{Binding SelectedBaudrate, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedBaudrate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center"
+                              Padding="2,0,2,0"
                               Height="28"/>
 
                     <TextBlock Text="Port:" Grid.Row="1" Grid.Column="2"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
                     <ComboBox Grid.Row="1" Grid.Column="3"
-                              ItemsSource="{Binding ListPost}"
-                              SelectedItem="{Binding SelectedPort, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding LstPort}"
+                              SelectedItem="{Binding SelectedPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center"
+                              Padding="2,0,2,0"
                               Height="28"/>
 
                     <TextBlock Text="Thành hình:" Grid.Row="2" Grid.Column="0"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <ComboBox Grid.Row="2" Grid.Column="1"
-                              ItemsSource="{Binding LstAssemblings}"
+                              ItemsSource="{Binding LstAssembling}"
                               DisplayMemberPath="value"
                               SelectedValuePath="key"
-                              SelectedItem="{Binding SelectedAssembling, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center"
+                              Padding="2,0,2,0"
                               Height="28"/>
 
-                    <TextBlock Text="Type:" Grid.Row="2" Grid.Column="2"
-                               VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
-                    <ComboBox Grid.Row="2" Grid.Column="3"
-                              SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
-                              Height="28">
-                        <ComboBoxItem Content="Hot"/>
-                        <ComboBoxItem Content="Cold"/>
-                    </ComboBox>
+                    
 
                 </Grid>
             </Border>
 
             <DataGrid Grid.Row="2"
                       ItemsSource="{Binding DeviceList, UpdateSourceTrigger=PropertyChanged}"
-                      AutoGenerateColumns="True"
+                      AutoGenerateColumns="False"
                       IsReadOnly="True"
                       CanUserAddRows="False"
                       SelectionMode="Single"
@@ -104,8 +107,6 @@
                     <DataGridTextColumn Header="Machine Name" Binding="{Binding name}" Width="*"/>
                     <DataGridTextColumn Header="Baudrate" Binding="{Binding baudrate}" Width="*"/>
                     <DataGridTextColumn Header="Port" Binding="{Binding port}" Width="*"/>
-                    <DataGridTextColumn Header="Thành hình" Binding="{Binding activeid}" Width="*"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding ifshow}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -119,17 +120,17 @@
             <Button Content="Thêm"
                     Width="140" Height="40"
                     Background="#27AE60" Foreground="White" FontWeight="Bold"
-                    Command="{Binding AddMachineCommand}" Margin="0,0,0,10"/>
+                    Command="{Binding AddDeviceCommand}" Margin="0,0,0,10"/>
             <Button Content="Sửa"
                     Width="140" Height="40"
                     Background="#F39C12" Foreground="White" FontWeight="Bold"
-                    Command="{Binding EditMachineCommand}"
+                    Command="{Binding EditDeviceCommand}"
                     IsEnabled="{Binding IsEnableBtnEditMachine}" Margin="0,0,0,10"/>
 
             <Button Content="Xóa"
                     Width="140" Height="40"
                     Background="#E74C3C" Foreground="White" FontWeight="Bold"
-                    Command="{Binding DeleteMachineCommand}"/>
+                    Command="{Binding DeleteDeviceCommand}"/>
 
         </StackPanel>
     </Grid>

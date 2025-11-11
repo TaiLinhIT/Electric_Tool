@@ -20,11 +20,11 @@ namespace Electric_Meter.Services
             _scopeFactory = serviceScope;
         }
 
-        public async Task<int> DeleteToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> DeleteToDevice(Device device)
         {
             try
             {
-                _context.machines.Remove(machine);
+                device.activeid = 0;
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -36,11 +36,11 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<int> EditToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> EditToDevice(Device device)
         {
             try
             {
-                _context.machines.Update(machine);
+                _context.devices.Update(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -109,11 +109,11 @@ namespace Electric_Meter.Services
 
 
 
-        public async Task<int> InsertToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> InsertToDevice(Device device)
         {
             try
             {
-                await _context.machines.AddAsync(machine);
+                await _context.devices.AddAsync(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }

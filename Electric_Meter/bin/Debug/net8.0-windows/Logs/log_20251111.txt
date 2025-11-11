@@ -1403,3 +1403,710 @@ File name: 'COM4'
 16:27:38 - Lỗi gửi request Pa_Address_2: The port is closed.
 16:27:38 - Lỗi gửi request Pa_Address_1: The port is closed.
 16:27:38 - Lỗi gửi request Pa_Address_3: The port is closed.
+21:30:57 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:30:57 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:30:57 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:30:57 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:30:57 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:30:57 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:31:07 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:31:07 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:31:07 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:31:07 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:31:07 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:31:17 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:31:17 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:31:17 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:31:17 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:31:17 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:31:27 - Lỗi gửi request Ic_Address_9: The port is closed.
+21:31:27 - Lỗi gửi request Ic_Address_1: The port is closed.
+21:31:27 - Lỗi gửi request Ic_Address_10: The port is closed.
+21:31:27 - Lỗi gửi request Ic_Address_2: The port is closed.
+21:31:27 - Lỗi gửi request Ic_Address_3: The port is closed.
+21:31:37 - Lỗi gửi request Imp_Address_9: The port is closed.
+21:31:37 - Lỗi gửi request Imp_Address_1: The port is closed.
+21:31:37 - Lỗi gửi request Imp_Address_10: The port is closed.
+21:31:37 - Lỗi gửi request Imp_Address_2: The port is closed.
+21:31:37 - Lỗi gửi request Imp_Address_3: The port is closed.
+21:31:47 - Lỗi gửi request Pa_Address_9: The port is closed.
+21:31:47 - Lỗi gửi request Pa_Address_1: The port is closed.
+21:31:47 - Lỗi gửi request Pa_Address_10: The port is closed.
+21:31:48 - Lỗi gửi request Pa_Address_2: The port is closed.
+21:31:48 - Lỗi gửi request Pa_Address_3: The port is closed.
+21:31:57 - Lỗi gửi request Pb_Address_9: The port is closed.
+21:31:57 - Lỗi gửi request Pb_Address_1: The port is closed.
+21:31:58 - Lỗi gửi request Pb_Address_10: The port is closed.
+21:31:58 - Lỗi gửi request Pb_Address_2: The port is closed.
+21:31:58 - Lỗi gửi request Pb_Address_3: The port is closed.
+21:32:07 - Lỗi gửi request Pc_Address_9: The port is closed.
+21:32:08 - Lỗi gửi request Pc_Address_1: The port is closed.
+21:32:08 - Lỗi gửi request Pc_Address_10: The port is closed.
+21:32:08 - Lỗi gửi request Pc_Address_2: The port is closed.
+21:32:08 - Lỗi gửi request Pc_Address_3: The port is closed.
+21:32:18 - Lỗi gửi request Pt_Address_9: The port is closed.
+21:32:18 - Lỗi gửi request Pt_Address_1: The port is closed.
+21:32:18 - Lỗi gửi request Pt_Address_10: The port is closed.
+21:32:18 - Lỗi gửi request Pt_Address_2: The port is closed.
+21:32:18 - Lỗi gửi request Pt_Address_3: The port is closed.
+21:34:24 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:34:24 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:34:24 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:34:24 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:34:24 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:34:24 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:36:51 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:36:51 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:36:51 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:36:51 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:36:51 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:36:51 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:37:05 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:37:07 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:37:07 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:37:08 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:37:08 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:37:17 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:37:17 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:37:18 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:37:18 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:37:18 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:37:27 - Lỗi gửi request Ic_Address_10: The port is closed.
+21:37:28 - Lỗi gửi request Ic_Address_1: The port is closed.
+21:37:28 - Lỗi gửi request Ic_Address_3: The port is closed.
+21:37:28 - Lỗi gửi request Ic_Address_2: The port is closed.
+21:37:28 - Lỗi gửi request Ic_Address_9: The port is closed.
+21:37:38 - Lỗi gửi request Imp_Address_10: The port is closed.
+21:37:38 - Lỗi gửi request Imp_Address_1: The port is closed.
+21:37:38 - Lỗi gửi request Imp_Address_3: The port is closed.
+21:37:38 - Lỗi gửi request Imp_Address_2: The port is closed.
+21:37:38 - Lỗi gửi request Imp_Address_9: The port is closed.
+21:44:18 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:44:18 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:44:18 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:44:18 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:44:18 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:44:18 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:44:28 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:44:28 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:44:28 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:44:28 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:44:28 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:44:38 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:44:38 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:44:38 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:44:38 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:44:38 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:44:48 - Lỗi gửi request Ic_Address_3: The port is closed.
+21:44:48 - Lỗi gửi request Ic_Address_2: The port is closed.
+21:44:48 - Lỗi gửi request Ic_Address_9: The port is closed.
+21:44:48 - Lỗi gửi request Ic_Address_1: The port is closed.
+21:44:48 - Lỗi gửi request Ic_Address_10: The port is closed.
+21:44:58 - Lỗi gửi request Imp_Address_3: The port is closed.
+21:44:58 - Lỗi gửi request Imp_Address_2: The port is closed.
+21:44:58 - Lỗi gửi request Imp_Address_9: The port is closed.
+21:44:58 - Lỗi gửi request Imp_Address_1: The port is closed.
+21:44:58 - Lỗi gửi request Imp_Address_10: The port is closed.
+21:45:08 - Lỗi gửi request Pa_Address_3: The port is closed.
+21:45:08 - Lỗi gửi request Pa_Address_2: The port is closed.
+21:45:08 - Lỗi gửi request Pa_Address_9: The port is closed.
+21:45:08 - Lỗi gửi request Pa_Address_1: The port is closed.
+21:45:08 - Lỗi gửi request Pa_Address_10: The port is closed.
+21:45:18 - Lỗi gửi request Pb_Address_3: The port is closed.
+21:45:18 - Lỗi gửi request Pb_Address_2: The port is closed.
+21:45:18 - Lỗi gửi request Pb_Address_9: The port is closed.
+21:45:18 - Lỗi gửi request Pb_Address_1: The port is closed.
+21:45:18 - Lỗi gửi request Pb_Address_10: The port is closed.
+21:45:28 - Lỗi gửi request Pc_Address_3: The port is closed.
+21:45:28 - Lỗi gửi request Pc_Address_2: The port is closed.
+21:45:28 - Lỗi gửi request Pc_Address_9: The port is closed.
+21:45:28 - Lỗi gửi request Pc_Address_1: The port is closed.
+21:45:28 - Lỗi gửi request Pc_Address_10: The port is closed.
+21:45:38 - Lỗi gửi request Pt_Address_3: The port is closed.
+21:45:38 - Lỗi gửi request Pt_Address_2: The port is closed.
+21:45:38 - Lỗi gửi request Pt_Address_9: The port is closed.
+21:45:38 - Lỗi gửi request Pt_Address_1: The port is closed.
+21:45:38 - Lỗi gửi request Pt_Address_10: The port is closed.
+21:45:48 - Lỗi gửi request Ua_Address_3: The port is closed.
+21:45:48 - Lỗi gửi request Ua_Address_2: The port is closed.
+21:45:48 - Lỗi gửi request Ua_Address_9: The port is closed.
+21:45:48 - Lỗi gửi request Ua_Address_1: The port is closed.
+21:45:48 - Lỗi gửi request Ua_Address_10: The port is closed.
+21:45:58 - Lỗi gửi request Ub_Address_3: The port is closed.
+21:45:58 - Lỗi gửi request Ub_Address_2: The port is closed.
+21:45:58 - Lỗi gửi request Ub_Address_9: The port is closed.
+21:45:58 - Lỗi gửi request Ub_Address_1: The port is closed.
+21:45:58 - Lỗi gửi request Ub_Address_10: The port is closed.
+21:46:08 - Lỗi gửi request Uc_Address_3: The port is closed.
+21:46:08 - Lỗi gửi request Uc_Address_2: The port is closed.
+21:46:08 - Lỗi gửi request Uc_Address_9: The port is closed.
+21:46:08 - Lỗi gửi request Uc_Address_1: The port is closed.
+21:46:08 - Lỗi gửi request Uc_Address_10: The port is closed.
+21:46:18 - Máy 3: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+21:46:18 - Máy 2: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+21:46:18 - Máy 9: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+21:46:18 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+21:46:18 - Máy 10: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+21:47:40 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:47:40 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:47:40 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:47:40 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:47:40 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:47:40 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:47:50 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:47:50 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:47:50 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:47:50 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:47:50 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:48:00 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:48:00 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:48:00 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:48:00 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:48:00 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:52:26 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:52:26 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:52:26 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:52:26 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:52:26 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:52:26 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:52:36 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:52:36 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:52:36 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:52:36 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:52:36 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:52:46 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:52:46 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:52:46 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:52:46 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:52:46 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:52:56 - Lỗi gửi request Ic_Address_3: The port is closed.
+21:52:56 - Lỗi gửi request Ic_Address_10: The port is closed.
+21:52:56 - Lỗi gửi request Ic_Address_2: The port is closed.
+21:52:56 - Lỗi gửi request Ic_Address_1: The port is closed.
+21:52:56 - Lỗi gửi request Ic_Address_9: The port is closed.
+21:53:06 - Lỗi gửi request Imp_Address_3: The port is closed.
+21:53:06 - Lỗi gửi request Imp_Address_10: The port is closed.
+21:53:06 - Lỗi gửi request Imp_Address_2: The port is closed.
+21:53:06 - Lỗi gửi request Imp_Address_1: The port is closed.
+21:53:06 - Lỗi gửi request Imp_Address_9: The port is closed.
+21:56:37 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:56:37 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:56:37 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:56:37 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:56:37 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:56:37 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:56:47 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:56:47 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:56:47 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:56:47 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:56:47 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:56:57 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:56:57 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:56:57 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:56:57 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:56:57 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:57:03 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:57:03 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:57:03 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:57:03 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:57:03 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:57:03 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:57:13 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:57:13 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:57:13 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:57:13 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:57:13 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:59:14 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+21:59:14 - Lỗi gửi request Exp_Address_3: The port is closed.
+21:59:14 - Lỗi gửi request Exp_Address_2: The port is closed.
+21:59:14 - Lỗi gửi request Exp_Address_9: The port is closed.
+21:59:14 - Lỗi gửi request Exp_Address_1: The port is closed.
+21:59:14 - Lỗi gửi request Exp_Address_10: The port is closed.
+21:59:24 - Lỗi gửi request Ia_Address_3: The port is closed.
+21:59:24 - Lỗi gửi request Ia_Address_2: The port is closed.
+21:59:24 - Lỗi gửi request Ia_Address_9: The port is closed.
+21:59:24 - Lỗi gửi request Ia_Address_1: The port is closed.
+21:59:24 - Lỗi gửi request Ia_Address_10: The port is closed.
+21:59:34 - Lỗi gửi request Ib_Address_3: The port is closed.
+21:59:34 - Lỗi gửi request Ib_Address_2: The port is closed.
+21:59:34 - Lỗi gửi request Ib_Address_9: The port is closed.
+21:59:34 - Lỗi gửi request Ib_Address_1: The port is closed.
+21:59:34 - Lỗi gửi request Ib_Address_10: The port is closed.
+21:59:44 - Lỗi gửi request Ic_Address_3: The port is closed.
+21:59:44 - Lỗi gửi request Ic_Address_2: The port is closed.
+21:59:44 - Lỗi gửi request Ic_Address_9: The port is closed.
+21:59:44 - Lỗi gửi request Ic_Address_1: The port is closed.
+21:59:44 - Lỗi gửi request Ic_Address_10: The port is closed.
+21:59:54 - Lỗi gửi request Imp_Address_3: The port is closed.
+21:59:54 - Lỗi gửi request Imp_Address_2: The port is closed.
+21:59:54 - Lỗi gửi request Imp_Address_9: The port is closed.
+21:59:54 - Lỗi gửi request Imp_Address_1: The port is closed.
+21:59:54 - Lỗi gửi request Imp_Address_10: The port is closed.
+22:25:58 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:25:58 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:25:58 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:25:58 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:25:58 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:25:58 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:26:08 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:26:08 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:26:08 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:26:08 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:26:08 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:26:18 - Lỗi gửi request Ib_Address_3: The port is closed.
+22:26:18 - Lỗi gửi request Ib_Address_9: The port is closed.
+22:26:18 - Lỗi gửi request Ib_Address_1: The port is closed.
+22:26:18 - Lỗi gửi request Ib_Address_2: The port is closed.
+22:26:18 - Lỗi gửi request Ib_Address_10: The port is closed.
+22:26:28 - Lỗi gửi request Ic_Address_3: The port is closed.
+22:26:28 - Lỗi gửi request Ic_Address_9: The port is closed.
+22:26:28 - Lỗi gửi request Ic_Address_1: The port is closed.
+22:26:28 - Lỗi gửi request Ic_Address_2: The port is closed.
+22:26:28 - Lỗi gửi request Ic_Address_10: The port is closed.
+22:26:38 - Lỗi gửi request Imp_Address_3: The port is closed.
+22:26:38 - Lỗi gửi request Imp_Address_9: The port is closed.
+22:26:38 - Lỗi gửi request Imp_Address_1: The port is closed.
+22:26:38 - Lỗi gửi request Imp_Address_2: The port is closed.
+22:26:38 - Lỗi gửi request Imp_Address_10: The port is closed.
+22:27:42 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:27:42 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:27:42 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:27:42 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:27:42 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:27:42 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:28:04 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:28:14 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:28:24 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:28:39 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:28:46 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:28:46 - Lỗi gửi request Ib_Address_3: The port is closed.
+22:28:46 - Lỗi gửi request Ib_Address_9: The port is closed.
+22:28:46 - Lỗi gửi request Ib_Address_1: The port is closed.
+22:28:50 - Lỗi gửi request Ib_Address_2: The port is closed.
+22:28:56 - Lỗi gửi request Ib_Address_10: The port is closed.
+22:28:58 - Lỗi gửi request Ic_Address_3: The port is closed.
+22:28:58 - Lỗi gửi request Ic_Address_9: The port is closed.
+22:28:58 - Lỗi gửi request Ic_Address_1: The port is closed.
+22:29:02 - Lỗi gửi request Ic_Address_2: The port is closed.
+22:29:07 - Lỗi gửi request Ic_Address_10: The port is closed.
+22:29:11 - Lỗi gửi request Imp_Address_1: The port is closed.
+22:29:13 - Lỗi gửi request Imp_Address_3: The port is closed.
+22:30:36 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:30:36 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:30:36 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:30:36 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:30:36 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:30:36 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:30:46 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:30:46 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:30:46 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:30:46 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:30:46 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:30:56 - Lỗi gửi request Ib_Address_2: The port is closed.
+22:30:56 - Lỗi gửi request Ib_Address_9: The port is closed.
+22:30:56 - Lỗi gửi request Ib_Address_3: The port is closed.
+22:30:56 - Lỗi gửi request Ib_Address_1: The port is closed.
+22:30:56 - Lỗi gửi request Ib_Address_10: The port is closed.
+22:39:30 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:39:30 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:39:30 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:39:30 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:39:30 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:39:30 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:39:40 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:39:40 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:39:40 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:39:40 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:39:40 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:39:50 - Lỗi gửi request Ib_Address_9: The port is closed.
+22:39:50 - Lỗi gửi request Ib_Address_1: The port is closed.
+22:39:50 - Lỗi gửi request Ib_Address_3: The port is closed.
+22:39:50 - Lỗi gửi request Ib_Address_10: The port is closed.
+22:39:50 - Lỗi gửi request Ib_Address_2: The port is closed.
+22:40:00 - Lỗi gửi request Ic_Address_9: The port is closed.
+22:40:00 - Lỗi gửi request Ic_Address_1: The port is closed.
+22:40:00 - Lỗi gửi request Ic_Address_3: The port is closed.
+22:40:00 - Lỗi gửi request Ic_Address_10: The port is closed.
+22:40:00 - Lỗi gửi request Ic_Address_2: The port is closed.
+22:40:10 - Lỗi gửi request Imp_Address_9: The port is closed.
+22:40:10 - Lỗi gửi request Imp_Address_1: The port is closed.
+22:40:10 - Lỗi gửi request Imp_Address_3: The port is closed.
+22:40:10 - Lỗi gửi request Imp_Address_10: The port is closed.
+22:40:10 - Lỗi gửi request Imp_Address_2: The port is closed.
+22:40:20 - Lỗi gửi request Pa_Address_9: The port is closed.
+22:40:20 - Lỗi gửi request Pa_Address_1: The port is closed.
+22:40:20 - Lỗi gửi request Pa_Address_3: The port is closed.
+22:40:20 - Lỗi gửi request Pa_Address_10: The port is closed.
+22:40:20 - Lỗi gửi request Pa_Address_2: The port is closed.
+22:40:30 - Lỗi gửi request Pb_Address_9: The port is closed.
+22:40:30 - Lỗi gửi request Pb_Address_1: The port is closed.
+22:40:30 - Lỗi gửi request Pb_Address_3: The port is closed.
+22:40:30 - Lỗi gửi request Pb_Address_10: The port is closed.
+22:40:30 - Lỗi gửi request Pb_Address_2: The port is closed.
+22:40:40 - Lỗi gửi request Pc_Address_9: The port is closed.
+22:40:40 - Lỗi gửi request Pc_Address_1: The port is closed.
+22:40:40 - Lỗi gửi request Pc_Address_3: The port is closed.
+22:40:40 - Lỗi gửi request Pc_Address_10: The port is closed.
+22:40:40 - Lỗi gửi request Pc_Address_2: The port is closed.
+22:40:50 - Lỗi gửi request Pt_Address_9: The port is closed.
+22:40:50 - Lỗi gửi request Pt_Address_1: The port is closed.
+22:40:50 - Lỗi gửi request Pt_Address_3: The port is closed.
+22:40:50 - Lỗi gửi request Pt_Address_10: The port is closed.
+22:40:50 - Lỗi gửi request Pt_Address_2: The port is closed.
+22:41:00 - Lỗi gửi request Ua_Address_9: The port is closed.
+22:41:00 - Lỗi gửi request Ua_Address_1: The port is closed.
+22:41:00 - Lỗi gửi request Ua_Address_3: The port is closed.
+22:41:00 - Lỗi gửi request Ua_Address_10: The port is closed.
+22:41:00 - Lỗi gửi request Ua_Address_2: The port is closed.
+22:41:10 - Lỗi gửi request Ub_Address_9: The port is closed.
+22:41:10 - Lỗi gửi request Ub_Address_1: The port is closed.
+22:41:10 - Lỗi gửi request Ub_Address_3: The port is closed.
+22:41:10 - Lỗi gửi request Ub_Address_10: The port is closed.
+22:41:10 - Lỗi gửi request Ub_Address_2: The port is closed.
+22:41:20 - Lỗi gửi request Uc_Address_9: The port is closed.
+22:41:20 - Lỗi gửi request Uc_Address_1: The port is closed.
+22:41:20 - Lỗi gửi request Uc_Address_3: The port is closed.
+22:41:20 - Lỗi gửi request Uc_Address_10: The port is closed.
+22:41:20 - Lỗi gửi request Uc_Address_2: The port is closed.
+22:41:30 - Máy 9: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+22:41:30 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+22:41:30 - Máy 3: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+22:41:30 - Máy 10: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+22:41:30 - Máy 2: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+22:42:20 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:42:20 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:42:20 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:42:20 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:42:20 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:42:20 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:42:30 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:42:30 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:42:30 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:42:31 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:42:31 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:44:38 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:44:38 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:44:38 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:44:38 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:44:38 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:44:38 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:47:30 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:47:30 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:47:30 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:47:30 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:47:30 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:47:30 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:47:40 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:47:40 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:47:40 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:47:40 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:47:40 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:47:50 - Lỗi gửi request Ib_Address_1: The port is closed.
+22:47:50 - Lỗi gửi request Ib_Address_10: The port is closed.
+22:47:50 - Lỗi gửi request Ib_Address_3: The port is closed.
+22:47:50 - Lỗi gửi request Ib_Address_2: The port is closed.
+22:47:50 - Lỗi gửi request Ib_Address_9: The port is closed.
+22:57:50 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+22:57:50 - Lỗi gửi request Exp_Address_3: The port is closed.
+22:57:50 - Lỗi gửi request Exp_Address_9: The port is closed.
+22:57:50 - Lỗi gửi request Exp_Address_2: The port is closed.
+22:57:50 - Lỗi gửi request Exp_Address_10: The port is closed.
+22:57:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+22:58:00 - Lỗi gửi request Ia_Address_3: The port is closed.
+22:58:00 - Lỗi gửi request Ia_Address_9: The port is closed.
+22:58:00 - Lỗi gửi request Ia_Address_2: The port is closed.
+22:58:00 - Lỗi gửi request Ia_Address_10: The port is closed.
+22:58:00 - Lỗi gửi request Ia_Address_1: The port is closed.
+22:58:10 - Lỗi gửi request Ib_Address_3: The port is closed.
+22:58:10 - Lỗi gửi request Ib_Address_9: The port is closed.
+22:58:10 - Lỗi gửi request Ib_Address_2: The port is closed.
+22:58:10 - Lỗi gửi request Ib_Address_10: The port is closed.
+22:58:10 - Lỗi gửi request Ib_Address_1: The port is closed.
+22:58:20 - Lỗi gửi request Ic_Address_3: The port is closed.
+22:58:20 - Lỗi gửi request Ic_Address_9: The port is closed.
+22:58:20 - Lỗi gửi request Ic_Address_2: The port is closed.
+22:58:20 - Lỗi gửi request Ic_Address_10: The port is closed.
+22:58:20 - Lỗi gửi request Ic_Address_1: The port is closed.
+23:03:50 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:03:50 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:03:50 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:03:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:03:50 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:03:50 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:28:32 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:28:32 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:28:32 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:28:32 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:28:32 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:28:32 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:28:42 - Lỗi gửi request Ia_Address_9: The port is closed.
+23:28:42 - Lỗi gửi request Ia_Address_1: The port is closed.
+23:28:42 - Lỗi gửi request Ia_Address_2: The port is closed.
+23:28:42 - Lỗi gửi request Ia_Address_3: The port is closed.
+23:28:42 - Lỗi gửi request Ia_Address_10: The port is closed.
+23:28:52 - Lỗi gửi request Ib_Address_9: The port is closed.
+23:28:52 - Lỗi gửi request Ib_Address_1: The port is closed.
+23:28:52 - Lỗi gửi request Ib_Address_2: The port is closed.
+23:28:52 - Lỗi gửi request Ib_Address_3: The port is closed.
+23:28:52 - Lỗi gửi request Ib_Address_10: The port is closed.
+23:29:02 - Lỗi gửi request Ic_Address_9: The port is closed.
+23:29:02 - Lỗi gửi request Ic_Address_1: The port is closed.
+23:29:02 - Lỗi gửi request Ic_Address_2: The port is closed.
+23:29:02 - Lỗi gửi request Ic_Address_3: The port is closed.
+23:29:02 - Lỗi gửi request Ic_Address_10: The port is closed.
+23:32:21 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:32:21 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:32:21 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:32:21 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:32:21 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:32:21 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:32:31 - Lỗi gửi request Ia_Address_3: The port is closed.
+23:32:31 - Lỗi gửi request Ia_Address_10: The port is closed.
+23:32:31 - Lỗi gửi request Ia_Address_1: The port is closed.
+23:32:31 - Lỗi gửi request Ia_Address_2: The port is closed.
+23:32:31 - Lỗi gửi request Ia_Address_9: The port is closed.
+23:32:41 - Lỗi gửi request Ib_Address_3: The port is closed.
+23:32:41 - Lỗi gửi request Ib_Address_10: The port is closed.
+23:32:41 - Lỗi gửi request Ib_Address_1: The port is closed.
+23:32:41 - Lỗi gửi request Ib_Address_2: The port is closed.
+23:32:41 - Lỗi gửi request Ib_Address_9: The port is closed.
+23:32:51 - Lỗi gửi request Ic_Address_3: The port is closed.
+23:32:51 - Lỗi gửi request Ic_Address_10: The port is closed.
+23:32:51 - Lỗi gửi request Ic_Address_1: The port is closed.
+23:32:51 - Lỗi gửi request Ic_Address_2: The port is closed.
+23:32:51 - Lỗi gửi request Ic_Address_9: The port is closed.
+23:33:45 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:33:45 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:33:45 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:33:45 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:33:45 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:33:45 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:33:55 - Lỗi gửi request Ia_Address_3: The port is closed.
+23:33:55 - Lỗi gửi request Ia_Address_10: The port is closed.
+23:33:55 - Lỗi gửi request Ia_Address_2: The port is closed.
+23:33:55 - Lỗi gửi request Ia_Address_1: The port is closed.
+23:33:55 - Lỗi gửi request Ia_Address_9: The port is closed.
+23:34:05 - Lỗi gửi request Ib_Address_3: The port is closed.
+23:34:05 - Lỗi gửi request Ib_Address_10: The port is closed.
+23:34:05 - Lỗi gửi request Ib_Address_2: The port is closed.
+23:34:05 - Lỗi gửi request Ib_Address_1: The port is closed.
+23:34:05 - Lỗi gửi request Ib_Address_9: The port is closed.
+23:34:15 - Lỗi gửi request Ic_Address_3: The port is closed.
+23:34:15 - Lỗi gửi request Ic_Address_10: The port is closed.
+23:34:15 - Lỗi gửi request Ic_Address_2: The port is closed.
+23:34:15 - Lỗi gửi request Ic_Address_1: The port is closed.
+23:34:15 - Lỗi gửi request Ic_Address_9: The port is closed.
+23:34:25 - Lỗi gửi request Imp_Address_3: The port is closed.
+23:34:25 - Lỗi gửi request Imp_Address_10: The port is closed.
+23:34:25 - Lỗi gửi request Imp_Address_2: The port is closed.
+23:34:25 - Lỗi gửi request Imp_Address_1: The port is closed.
+23:34:25 - Lỗi gửi request Imp_Address_9: The port is closed.
+23:34:35 - Lỗi gửi request Pa_Address_3: The port is closed.
+23:34:35 - Lỗi gửi request Pa_Address_10: The port is closed.
+23:34:35 - Lỗi gửi request Pa_Address_2: The port is closed.
+23:34:35 - Lỗi gửi request Pa_Address_1: The port is closed.
+23:34:35 - Lỗi gửi request Pa_Address_9: The port is closed.
+23:34:45 - Lỗi gửi request Pb_Address_3: The port is closed.
+23:34:45 - Lỗi gửi request Pb_Address_10: The port is closed.
+23:34:45 - Lỗi gửi request Pb_Address_2: The port is closed.
+23:34:45 - Lỗi gửi request Pb_Address_1: The port is closed.
+23:34:45 - Lỗi gửi request Pb_Address_9: The port is closed.
+23:34:55 - Lỗi gửi request Pc_Address_3: The port is closed.
+23:34:55 - Lỗi gửi request Pc_Address_10: The port is closed.
+23:34:55 - Lỗi gửi request Pc_Address_2: The port is closed.
+23:34:55 - Lỗi gửi request Pc_Address_1: The port is closed.
+23:34:55 - Lỗi gửi request Pc_Address_9: The port is closed.
+23:35:05 - Lỗi gửi request Pt_Address_3: The port is closed.
+23:35:05 - Lỗi gửi request Pt_Address_10: The port is closed.
+23:35:05 - Lỗi gửi request Pt_Address_2: The port is closed.
+23:35:05 - Lỗi gửi request Pt_Address_1: The port is closed.
+23:35:05 - Lỗi gửi request Pt_Address_9: The port is closed.
+23:35:15 - Lỗi gửi request Ua_Address_3: The port is closed.
+23:35:15 - Lỗi gửi request Ua_Address_10: The port is closed.
+23:35:15 - Lỗi gửi request Ua_Address_2: The port is closed.
+23:35:15 - Lỗi gửi request Ua_Address_1: The port is closed.
+23:35:15 - Lỗi gửi request Ua_Address_9: The port is closed.
+23:35:25 - Lỗi gửi request Ub_Address_3: The port is closed.
+23:35:25 - Lỗi gửi request Ub_Address_10: The port is closed.
+23:35:25 - Lỗi gửi request Ub_Address_2: The port is closed.
+23:35:25 - Lỗi gửi request Ub_Address_1: The port is closed.
+23:35:25 - Lỗi gửi request Ub_Address_9: The port is closed.
+23:38:24 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:38:24 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:38:24 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:38:24 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:38:24 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:38:24 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:38:46 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:38:46 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:38:46 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:38:46 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:38:46 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:38:46 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:42:34 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 62
+23:42:35 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:42:35 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:42:35 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:42:35 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:42:35 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:42:45 - Lỗi gửi request Ia_Address_2: The port is closed.
+23:42:45 - Lỗi gửi request Ia_Address_1: The port is closed.
+23:42:45 - Lỗi gửi request Ia_Address_3: The port is closed.
+23:42:45 - Lỗi gửi request Ia_Address_9: The port is closed.
+23:42:45 - Lỗi gửi request Ia_Address_10: The port is closed.
+23:42:55 - Lỗi gửi request Ib_Address_2: The port is closed.
+23:42:55 - Lỗi gửi request Ib_Address_1: The port is closed.
+23:42:55 - Lỗi gửi request Ib_Address_3: The port is closed.
+23:42:55 - Lỗi gửi request Ib_Address_9: The port is closed.
+23:42:55 - Lỗi gửi request Ib_Address_10: The port is closed.
+23:43:05 - Lỗi gửi request Ic_Address_2: The port is closed.
+23:43:05 - Lỗi gửi request Ic_Address_1: The port is closed.
+23:43:05 - Lỗi gửi request Ic_Address_3: The port is closed.
+23:43:05 - Lỗi gửi request Ic_Address_9: The port is closed.
+23:43:05 - Lỗi gửi request Ic_Address_10: The port is closed.
+23:43:15 - Lỗi gửi request Imp_Address_2: The port is closed.
+23:43:15 - Lỗi gửi request Imp_Address_1: The port is closed.
+23:43:15 - Lỗi gửi request Imp_Address_3: The port is closed.
+23:43:15 - Lỗi gửi request Imp_Address_9: The port is closed.
+23:43:15 - Lỗi gửi request Imp_Address_10: The port is closed.
+23:43:25 - Lỗi gửi request Pa_Address_2: The port is closed.
+23:43:25 - Lỗi gửi request Pa_Address_1: The port is closed.
+23:43:25 - Lỗi gửi request Pa_Address_3: The port is closed.
+23:43:25 - Lỗi gửi request Pa_Address_9: The port is closed.
+23:43:25 - Lỗi gửi request Pa_Address_10: The port is closed.
+23:43:35 - Lỗi gửi request Pb_Address_2: The port is closed.
+23:43:35 - Lỗi gửi request Pb_Address_1: The port is closed.
+23:43:35 - Lỗi gửi request Pb_Address_3: The port is closed.
+23:43:35 - Lỗi gửi request Pb_Address_9: The port is closed.
+23:43:35 - Lỗi gửi request Pb_Address_10: The port is closed.
+23:43:45 - Lỗi gửi request Pc_Address_2: The port is closed.
+23:43:45 - Lỗi gửi request Pc_Address_1: The port is closed.
+23:43:45 - Lỗi gửi request Pc_Address_3: The port is closed.
+23:43:45 - Lỗi gửi request Pc_Address_9: The port is closed.
+23:43:45 - Lỗi gửi request Pc_Address_10: The port is closed.
+23:56:24 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 63
+23:56:24 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:56:24 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:56:24 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:56:24 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:56:24 - Lỗi gửi request Exp_Address_10: The port is closed.
+23:56:34 - Lỗi gửi request Ia_Address_3: The port is closed.
+23:56:34 - Lỗi gửi request Ia_Address_9: The port is closed.
+23:56:34 - Lỗi gửi request Ia_Address_2: The port is closed.
+23:56:34 - Lỗi gửi request Ia_Address_1: The port is closed.
+23:56:34 - Lỗi gửi request Ia_Address_10: The port is closed.
+23:56:44 - Lỗi gửi request Ib_Address_3: The port is closed.
+23:56:44 - Lỗi gửi request Ib_Address_9: The port is closed.
+23:56:44 - Lỗi gửi request Ib_Address_2: The port is closed.
+23:56:44 - Lỗi gửi request Ib_Address_1: The port is closed.
+23:56:44 - Lỗi gửi request Ib_Address_10: The port is closed.
+23:59:58 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 63
+23:59:58 - Lỗi gửi request Exp_Address_2: The port is closed.
+23:59:58 - Lỗi gửi request Exp_Address_3: The port is closed.
+23:59:58 - Lỗi gửi request Exp_Address_1: The port is closed.
+23:59:58 - Lỗi gửi request Exp_Address_9: The port is closed.
+23:59:58 - Lỗi gửi request Exp_Address_10: The port is closed.

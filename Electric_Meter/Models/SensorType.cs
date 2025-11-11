@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Electric_Meter.Models
 {
    
-    [Table("SesnsorType")]
+    [Table("SensorType")]
     public class SensorType
     {
         [Key]

@@ -7,6 +7,47 @@
              mc:Ignorable="d"
              d:DesignWidth="900" Height="650"
              Background="#FFF">
+    <UserControl.Resources>
+        <!-- Style đơn giản, theo tone sáng của WPF UI -->
+        <Style TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#222"/>
+            <Setter Property="Background" Value="#F2F2F2"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover: sáng hơn một chút -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E6E6E6"/>
+                            </Trigger>
+                            <!-- Pressed: hơi tối xuống -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DADADA"/>
+                            </Trigger>
+                            <!-- Disabled: xám mờ -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
 
     <Grid Margin="10">
 
@@ -39,7 +80,7 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Address:" Grid.Row="0" Grid.Column="0"
+                    <TextBlock Text="{Binding AddressDeviceCommandText}" Grid.Row="0" Grid.Column="0"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <TextBox Grid.Row="0" Grid.Column="1"
                              Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -47,7 +88,7 @@
                              Padding="2,0,2,0"
                              VerticalAlignment="Center" Height="28"/>
 
-                    <TextBlock Text="Device Name:" Grid.Row="0" Grid.Column="2"
+                    <TextBlock Text="{Binding NameDeviceCommandText}" Grid.Row="0" Grid.Column="2"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
                     <TextBox Grid.Row="0" Grid.Column="3"
                              Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
@@ -55,7 +96,7 @@
                              Padding="2,0,2,0"
                              VerticalAlignment="Center" Height="28"/>
 
-                    <TextBlock Text="Baudrate:" Grid.Row="1" Grid.Column="0"
+                    <TextBlock Text="{Binding BaudrateDeviceCommandText}" Grid.Row="1" Grid.Column="0"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <ComboBox Grid.Row="1" Grid.Column="1"
                               ItemsSource="{Binding LstBaudrate}"
@@ -64,7 +105,7 @@
                               Padding="2,0,2,0"
                               Height="28"/>
 
-                    <TextBlock Text="Port:" Grid.Row="1" Grid.Column="2"
+                    <TextBlock Text="{Binding PortDeviceCommandText}" Grid.Row="1" Grid.Column="2"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
                     <ComboBox Grid.Row="1" Grid.Column="3"
                               ItemsSource="{Binding LstPort}"
@@ -73,7 +114,7 @@
                               Padding="2,0,2,0"
                               Height="28"/>
 
-                    <TextBlock Text="Thành hình:" Grid.Row="2" Grid.Column="0"
+                    <TextBlock Text="{Binding AssemblingCommandText}" Grid.Row="2" Grid.Column="0"
                                VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
                     <ComboBox Grid.Row="2" Grid.Column="1"
                               ItemsSource="{Binding LstAssembling}"
@@ -104,7 +145,7 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Address" Binding="{Binding address}" Width="*"/>
-                    <DataGridTextColumn Header="Machine Name" Binding="{Binding name}" Width="*"/>
+                    <DataGridTextColumn Header="Device Name" Binding="{Binding name}" Width="*"/>
                     <DataGridTextColumn Header="Baudrate" Binding="{Binding baudrate}" Width="*"/>
                     <DataGridTextColumn Header="Port" Binding="{Binding port}" Width="*"/>
                 </DataGrid.Columns>
@@ -117,20 +158,24 @@
                     VerticalAlignment="Top"
                     Margin="10,15,0,0">
 
-            <Button Content="Thêm"
+            <Button Content="{Binding AddDeviceCommandText}"
                     Width="140" Height="40"
                     Background="#27AE60" Foreground="White" FontWeight="Bold"
-                    Command="{Binding AddDeviceCommand}" Margin="0,0,0,10"/>
-            <Button Content="Sửa"
+                    Command="{Binding AddDeviceCommand}"
+                    ToolTip="{Binding AddDeviceCommandText}"
+                    Margin="0,0,0,10"/>
+            <Button Content="{Binding EditDeviceCommandText}"
                     Width="140" Height="40"
                     Background="#F39C12" Foreground="White" FontWeight="Bold"
                     Command="{Binding EditDeviceCommand}"
-                    IsEnabled="{Binding IsEnableBtnEditMachine}" Margin="0,0,0,10"/>
+                    ToolTip="{Binding EditDeviceCommandText}"
+                    IsEnabled="{Binding IsEnableBtnEditDevice}" Margin="0,0,0,10"/>
 
-            <Button Content="Xóa"
+            <Button Content="{Binding DeleteDeviceCommandText}"
                     Width="140" Height="40"
                     Background="#E74C3C" Foreground="White" FontWeight="Bold"
-                    Command="{Binding DeleteDeviceCommand}"/>
+                    Command="{Binding DeleteDeviceCommand}"
+                    ToolTip="{Binding DeleteDeviceCommandText}"/>
 
         </StackPanel>
     </Grid>

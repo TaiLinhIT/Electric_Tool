@@ -25,7 +25,7 @@
 
                 <!-- Left: Help button -->
                 <ui:Button
-                    Content="Help"
+                    Content="{Binding HelpCommandText}"
                     Width="80"
                     Margin="0,0,10,0"
                     DockPanel.Dock="Left"
@@ -87,5 +87,6 @@
             PaneDisplayMode="Left"
             OpenPaneLength="200"
             Background="#1C1C1C" />
+        
     </Grid>
 </Window>

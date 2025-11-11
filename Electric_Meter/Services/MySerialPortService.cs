@@ -33,15 +33,16 @@ namespace Electric_Meter.Services
         private AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
         #endregion
-        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting)
+        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting, SerialPort serialPort)
         {
+            _serialPort = serialPort;
             _context = powerTempWatchContext;
             _appSetting = appSetting;
             _service = service;
         }
         public void Conn()
         {
-            _serialPort = new SerialPort();
+            //_serialPort = new SerialPort();
             _serialPort.DataReceived += Sdre;
 
             _serialPort.ErrorReceived += _serialPort_ErrorReceived;
@@ -162,6 +163,7 @@ namespace Electric_Meter.Services
         {
             return _serialPort.IsOpen;
         }
+        
         #region [ Function communication ]
         public async void StartCommunication()
         {

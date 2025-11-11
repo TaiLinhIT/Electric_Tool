@@ -1,3 +1,5 @@
+using System.IO.Ports;
+
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;
@@ -59,11 +61,12 @@ namespace Electric_Meter
 
             // Services
             services.AddSingleton<Service>();
+            services.AddSingleton<SerialPort>();//new add
             services.AddSingleton<MySerialPortService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddNavigationViewPageProvider();               // từ Wpf.Ui.DependencyInjection
             services.AddSingleton<INavigationService, NavigationService>(); // từ Wpf.Ui (core)
-
+            services.AddSingleton<LanguageService>();
             // UI (MainWindow)
             services.AddSingleton<MainWindow>();
 

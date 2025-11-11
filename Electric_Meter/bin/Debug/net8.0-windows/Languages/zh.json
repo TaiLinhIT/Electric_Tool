@@ -1,0 +1,17 @@
+{
+    "Add a new device": "添加设备",
+    "Edit device": "编辑设备",
+    "Delete device": "删除设备",
+    "Name device": "设备名称",
+    "Address device": "设备地址",
+    "Baudrate": "波特率",
+    "Port": "端口",
+    "Assembling": "装配",
+    "Help": "帮助",
+    "Play": "播放",
+    "Pause": "暂停",
+    "Setting": "设置",
+    "Menu": "菜单",
+    "Dashboard": "仪表板",
+    "Tool": "工具"
+}

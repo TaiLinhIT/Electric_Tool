@@ -23,7 +23,6 @@ namespace Electric_Meter.Services
             await SeedActiveTypeAsync();
             await SeedControlCodeAsync();
             await SeedDevicesAsync();
-            await SeedMachinesAsync();
         }
 
         private async Task SeedSensorTypeAsync()
@@ -92,22 +91,7 @@ namespace Electric_Meter.Services
                 }
             }
         }
-        private async Task SeedMachinesAsync()
-        {
-            if (!await _context.Set<Machine>().AnyAsync())
-            {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "SeedData", "dv_Machine.json");
-                if (File.Exists(path))
-                {
-                    var data = JsonConvert.DeserializeObject<List<Machine>>(await File.ReadAllTextAsync(path));
-                    if (data != null)
-                    {
-                        _context.Set<Machine>().AddRange(data);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-            }
-        }
+        
 
     }
 }

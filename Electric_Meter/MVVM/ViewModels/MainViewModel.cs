@@ -1,22 +1,17 @@
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 using System.Windows.Input;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input; // Cung cấp RelayCommand mới
-
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
-
 using Newtonsoft.Json;
-
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
-using Machine = Electric_Meter.Models.Machine;
+using Device = Electric_Meter.Models.Device;
 
 namespace Electric_Meter.MVVM.ViewModels
 {
@@ -26,70 +21,34 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Fields (Private data) - Observable Properties ]
 
         [ObservableProperty]
-        private IEnumerable<NavigationViewItem> _menuItems = new[]
-       {
-            new NavigationViewItem()
-            {
-                Content = "Dashboard",
-                Icon = new SymbolIcon(SymbolRegular.ChartMultiple24),
-                TargetPageType = typeof(Views.DashboardView)
-            },
-            new NavigationViewItem()
-            {
-                Content = "Tool",
-                Icon = new SymbolIcon(SymbolRegular.Toolbox24),
-                TargetPageType = typeof(Views.ToolView)
-            }
-        };
-
+        private IEnumerable<NavigationViewItem> _menuItems;
         [ObservableProperty]
-        private IEnumerable<NavigationViewItem> _footerMenuItems = new[]
-        {
-            new NavigationViewItem()
-            {
-                Content = "Setting",
-                Icon = new SymbolIcon(SymbolRegular.Settings24),
-                TargetPageType = typeof(Views.SettingView)
-            }
-        };
-        [ObservableProperty] private string _selectedLanguage = "English";
-
+        private IEnumerable<NavigationViewItem> _footerMenuItems;
+        [ObservableProperty] private string _selectedLanguage;
         private readonly INavigationService _navigationService;
         [ObservableProperty]
-        private string _currentFactory;
-
-        [ObservableProperty]
-        private ObservableCollection<Machine> _machines;
+        private ObservableCollection<Device> _Devices;
 
         // ----- Toolbar -----
-        [ObservableProperty] private ObservableCollection<string> _languages = new(["English", "Vietnamese"]);
-
-
-        [ObservableProperty] private ObservableCollection<string> _ports = new(["COM1", "COM2", "COM3"]);
-        [ObservableProperty] private string _selectedPort = "COM1";
-
-        [ObservableProperty] private ObservableCollection<int> _baudrates = new([9600, 19200, 38400, 115200]);
-        [ObservableProperty] private int _selectedBaudrate = 9600;
-
-        [ObservableProperty] private string _playPauseText = "Play";
+        [ObservableProperty] private ObservableCollection<string> _languages;
+        [ObservableProperty] private ObservableCollection<string> _ports;
+        [ObservableProperty] private string _selectedPort;
+        [ObservableProperty] private ObservableCollection<int> _baudrates;
+        [ObservableProperty] private int _selectedBaudrate;
+        [ObservableProperty] private string _playPauseText;
         [ObservableProperty] private SymbolRegular _playPauseIcon = SymbolRegular.Play24;
         [ObservableProperty] private bool _isPlaying = false;
-
-
-
+        [ObservableProperty] private string helpCommandText;
+        [ObservableProperty] private string dashboardCommandText;
+        [ObservableProperty] private string toolCommandText;
+        [ObservableProperty] private string settingCommandText;
+        [ObservableProperty] private string playCommandText;
+        [ObservableProperty] private string pauseCommandText;
 
 
 
 
         // --- CÁC TRƯỜNG KHÁC (Không cần chuyển đổi) ---
-        private string _assemblingText;
-        private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
-        private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
-        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();
-        private HashSet<string> processedRequests = new HashSet<string>();
-        private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
-        private static readonly object lockObject = new object();
-        private readonly Service _service;
         private readonly MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
@@ -104,15 +63,56 @@ namespace Electric_Meter.MVVM.ViewModels
 
 
         #region [ Constructor ]
-        public MainViewModel(MySerialPortService mySerialPort,
+        public MainViewModel(
+            LanguageService languageService,
+            MySerialPortService mySerialPort,
             SettingViewModel settingViewModel,
             ToolViewModel toolViewModel,
             AppSetting appSetting,
             PowerTempWatchContext powerTempWatchContext,
             Service service)
         {
+            _languageService = languageService;
+            // Load ngôn ngữ mặc định trước
+            string code = SelectedLanguage switch
+            {
+                "English" => "en",
+                "中文" => "zh",
+                "Tiếng Việt" => "vi",
+                "ខ្មែរ" => "km",
+                _ => "zh"
+            };
+            _languageService.LoadLanguage(code);
+            // Đăng ký event sau khi load xong
+            _languageService.LanguageChanged += () => UpdateTexts();
+            #region Default Setting
+            SelectedLanguage = "中文";
+            Languages = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
+            SelectedBaudrate = 9600;
+            Baudrates = new([9600, 19200, 38400, 115200]);
+            Ports = new(["COM1", "COM2", "COM3"]);
+            #endregion
+            SelectedPort = "COM3";
+            // Select language
+
+
+            // Khi đổi SelectedLanguage -> load JSON tương ứng
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SelectedLanguage))
+                {
+                    string code = SelectedLanguage switch
+                    {
+                        "English" => "en",
+                        "中文" => "zh",
+                        "Tiếng Việt" => "vi",
+                        "ខ្មែរ" => "km",
+                        _ => "zh"
+                    };
+                    _languageService.LoadLanguage(code);
+                }
+            };
             // Inject các phụ thuộc
-            _service = service;
             _mySerialPort = mySerialPort;
             _context = powerTempWatchContext;
             SettingVM = settingViewModel;
@@ -123,56 +123,30 @@ namespace Electric_Meter.MVVM.ViewModels
             SettingCommand = new RelayCommand<object>(ExecuteSettingForm);
             ChangeLanguageCommand = new RelayCommand<object>(ChangeLanguage);
 
-            //CurrentViewModel = SettingVM;
-
-            // Lắng nghe event từ SettingVM
-            SettingVM.NewButtonCreated += OnNewButtonCreated;
-            SettingVM.OnMachineLoadDefault += LoadDefaultMachine;
+            SettingVM.OnDeviceLoadDefault += LoadDefaultDevice;
 
             // Tạo collection rỗng ban đầu
-            Machines = new ObservableCollection<Machine>();
-            CurrentFactory = _appSetting.CurrentArea;
+            Devices = new ObservableCollection<Device>();
 
-            // Khởi tạo service ngôn ngữ
-            _languageService = new LanguageService();
             UpdateTexts();
-            LoadLanguage("en");
 
             // Tải dữ liệu ban đầu
-            LoadDefaultMachine();
+            LoadDefaultDevice();
 
-            _service = service;
+            LoadLanguage("zh");
+
             TogglePlayPause();
         }
         #endregion
 
 
         #region [ Properties (Public for UI Binding) ]
-
-        // Text UI (Cần OnPropertyChanged thủ công trong UpdateTexts)
-        public string SettingCommandText { get; private set; }
-        public string HelpCommandText { get; private set; }
-        public string MenuCommandText { get; private set; }
-
         // ViewModels con
         public SettingViewModel SettingVM { get; }
         public ToolViewModel ToolVM { get; }
 
 
-        // Ngôn ngữ đang chọn (Giữ lại setter tùy chỉnh)
-
-        // Văn bản cho dây chuyền sản xuất (Giữ lại setter tùy chỉnh)
-        public string AssemblingText
-        {
-            get => _assemblingText;
-            set
-            {
-                if (SetProperty(ref _assemblingText, value))
-                {
-                    UpdateMachineButtonTexts();
-                }
-            }
-        }
+        
 
         public List<int> SelectedAddresses => _selectedAddresses;
 
@@ -184,62 +158,12 @@ namespace Electric_Meter.MVVM.ViewModels
         public ICommand ChangeLanguageCommand { get; }
         public ICommand SettingCommand { get; set; }
 
-        // Commands được tạo tự động bởi [RelayCommand]
-
-        //[RelayCommand]
-        //private void OpenSetting(Machine machine)
-        //{
-        //    if (machine is null)
-        //        return;
-
-        //    var result = System.Windows.MessageBox.Show(
-        //        $"Bạn có muốn mở SettingView cho máy {machine.Name} không?",
-        //        "Xác nhận", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-        //    if (result != System.Windows.MessageBoxResult.Yes) return;
-
-        //    // Truyền dữ liệu sang SettingVM
-        //    SettingVM.SelectedMachine = machine;
-        //    SettingVM.SelectedBaudrate = machine.Baudrate;
-        //    SettingVM.SelectedChooseAssembling = machine.LineCode == "H" ? "Nong" : "Lanh";
-        //    SettingVM.SelectedPort = machine.Port;
-        //    SettingVM.NameMachine = machine.Name;
-        //    SettingVM.AddressMachine = machine.Address.ToString();
-
-        //    // Gán giá trị cho Assembling 
-        //    if (SettingVM.SelectedAssembling == null)
-        //        // Giả định KeyValue là một model có sẵn. 
-        //        // Nếu nó nằm trong Electric_Meter.Core, bạn cần đảm bảo namespace đó được using
-        //        SettingVM.SelectedAssembling = new KeyValue();
-
-        //    SettingVM.SelectedAssembling.key = machine.Line;
-        //    SettingVM.SelectedAssembling.value = SettingVM.LstAssemblings
-        //        .FirstOrDefault(x => x.key == machine.Line)?.value;
-
-        //    SettingVM.IsEnabledBtnAddMachine = false;
-        //    SettingVM.IsEnableBtnEditMachine = true;
-
-        //    //CurrentViewModel = SettingVM;
-        //    _navigationService?.Navigate(typeof(SettingView));
-        //}
-
-        //[RelayCommand]
-        //private void OpenTool(Machine machine)
-        //{
-        //    if (machine is null)
-        //        return;
-
-        //    ToolVM.AddressCurrent = machine.Address;
-        //    ToolVM.IdMachine = machine.Id;
-        //    ToolVM.StartTimer();
-        //    _navigationService?.Navigate(typeof(ToolView));
-        //}
-
+        
         [RelayCommand]
         private void TogglePlayPause()
         {
             IsPlaying = !IsPlaying;
-            PlayPauseText = IsPlaying ? "Pause" : "Play";
+            RefreshPlayPauseText();
             PlayPauseIcon = IsPlaying ? SymbolRegular.Pause24 : SymbolRegular.Play24;
 
             if (IsPlaying)
@@ -256,6 +180,43 @@ namespace Electric_Meter.MVVM.ViewModels
                 FileName = "https://your-help-link-or-docs",
                 UseShellExecute = true
             });
+        }
+
+        #endregion
+        #region [ Method - Menu ]
+        private void InitializeMenuItems()
+        {
+            _menuItems = new[]
+            {
+                new NavigationViewItem()
+                {
+                    Content = DashboardCommandText,
+                    Icon = new SymbolIcon(SymbolRegular.ChartMultiple24),
+                    TargetPageType = typeof(Views.DashboardView)
+                },
+                new NavigationViewItem()
+                {
+                    Content = ToolCommandText,
+                    Icon = new SymbolIcon(SymbolRegular.Toolbox24),
+                    TargetPageType = typeof(Views.ToolView)
+                }
+            };
+            _footerMenuItems = new[]
+            {
+                new NavigationViewItem()
+                {
+                    Content = SettingCommandText,
+                    Icon = new SymbolIcon(SymbolRegular.Settings24),
+                    TargetPageType = typeof(Views.SettingView)
+                }
+
+            };
+        }
+        #endregion
+        #region [ Method - Refesh PlayPause Text ]
+        private void RefreshPlayPauseText()
+        {
+            PlayPauseText = IsPlaying ? PauseCommandText : PlayCommandText;
         }
 
         #endregion
@@ -282,35 +243,24 @@ namespace Electric_Meter.MVVM.ViewModels
             _navigationService?.Navigate(typeof(SettingView));
         }
 
-        private void ChangeLanguage(object languageCode)
+
+        #endregion
+
+        #region [ Methods - Language ]
+        private void UpdateTexts()
         {
-            if (languageCode is string code)
-                LoadLanguage(code);
+            HelpCommandText = _languageService.GetString("Help");
+            DashboardCommandText = _languageService.GetString("Dashboard");
+            ToolCommandText = _languageService.GetString("Tool");
+            SettingCommandText = _languageService.GetString("Setting");
+            PlayCommandText = _languageService.GetString("Play");
+            PauseCommandText = _languageService.GetString("Pause");
+
+            InitializeMenuItems();
+
         }
         #endregion
 
-        #region [ Language & Text Update ]
-        private void UpdateTexts()
-        {
-            SettingCommandText = _languageService.GetString("Settings");
-            HelpCommandText = _languageService.GetString("Helps");
-            MenuCommandText = _languageService.GetString("Menu");
-
-            // Cập nhật text cho SettingVM
-            SettingVM.NameMachineCommandText = _languageService.GetString("Name");
-            SettingVM.ConnectCommandText = _languageService.GetString("Connect");
-            SettingVM.BaudrateMachineCommandText = _languageService.GetString("Baudrate");
-            SettingVM.PortMachineCommandText = _languageService.GetString("Port");
-            SettingVM.AddressMachineCommandText = _languageService.GetString("Address");
-            SettingVM.AddMachineCommandText = _languageService.GetString("Add Machine");
-            SettingVM.EditMachineCommandText = _languageService.GetString("Edit Machine");
-            SettingVM.DeleteMachineCommandText = _languageService.GetString("Delete Machine");
-
-            // Cập nhật UI
-            OnPropertyChanged(nameof(SettingCommandText));
-            OnPropertyChanged(nameof(HelpCommandText));
-            OnPropertyChanged(nameof(MenuCommandText));
-        }
 
         public void LoadLanguage(string languageCode)
         {
@@ -322,35 +272,30 @@ namespace Electric_Meter.MVVM.ViewModels
                 OnPropertyChanged(""); // Thông báo tất cả thuộc tính đổi
             }
         }
+
+        #region [ Device Management ]
+        
+
+        public void LoadDefaultDevice()
+        {
+            Devices.Clear();
+            var DevicesFromDb = _context.devices.ToList();
+            foreach (var Device in DevicesFromDb)
+                Devices.Add(Device);
+        }
+
+        
         #endregion
-
-        #region [ Machine Management ]
-        private void OnNewButtonCreated(System.Windows.Controls.Button factoryButton, System.Windows.Controls.Button assemblingButton)
+        #region [ Method - Language ]
+        private void ChangeLanguage(object languageCode)
         {
-            var newMachine = new Machine
+            if (languageCode is string code)
             {
-                Name = factoryButton.Content.ToString(),
-                Line = assemblingButton.Content.ToString()
-            };
-            Machines.Add(newMachine);
+                _languageService.LoadLanguage(code); // Thông báo cho tất cả ViewModel
+                SelectedLanguage = code;
+            }
         }
 
-        public void LoadDefaultMachine()
-        {
-            Machines.Clear();
-            var machinesFromDb = _context.machines.ToList();
-            foreach (var machine in machinesFromDb)
-                Machines.Add(machine);
-        }
-
-        private void UpdateMachineButtonTexts()
-        {
-            // Logic cũ: AssemblingText += $" {button.Line}";
-            // Cần xem lại logic này, vì nó chỉ thêm text mà không reset, 
-            // có thể dẫn đến lặp lại. Giữ nguyên theo code gốc nhưng cần lưu ý.
-            foreach (var button in Machines)
-                AssemblingText += $" {button.Line}";
-        }
         #endregion
 
     }

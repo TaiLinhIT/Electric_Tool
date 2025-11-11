@@ -20,6 +20,7 @@ namespace Electric_Meter.MVVM.ViewModels
     public partial class SettingViewModel : ObservableObject
     {
         #region [ Fields - Private Dependencies ]
+        private readonly LanguageService _languageService;
         private readonly Service _service;
         private readonly ToolViewModel _toolViewModel;
         private readonly AppSetting _appSetting;
@@ -27,13 +28,17 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Events ]
-        public event Action OnMachineLoadDefault;
+        public event Action OnDeviceLoadDefault;
         public event Action<Button, Button> NewButtonCreated;
         #endregion
 
         #region [ Constructor ]
-        public SettingViewModel(Service service, ToolViewModel toolViewModel, AppSetting appSetting, PowerTempWatchContext context)
+        public SettingViewModel(LanguageService languageService, Service service, ToolViewModel toolViewModel, AppSetting appSetting, PowerTempWatchContext context)
         {
+            _languageService = languageService;
+            _languageService.LanguageChanged += UpdateTexts;
+
+            UpdateTexts();
             _service = service;
             _toolViewModel = toolViewModel;
             _appSetting = appSetting;
@@ -106,16 +111,31 @@ namespace Electric_Meter.MVVM.ViewModels
             lstPort = new() { "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM10" };
         }
         #endregion
+        #region [ Methods - Language ]
+        private void UpdateTexts()
+        {
+            AddDeviceCommandText = _languageService.GetString("Add a new device");
+            EditDeviceCommandText = _languageService.GetString("Edit device");
+            DeleteDeviceCommandText = _languageService.GetString("Delete device");
+            NameDeviceCommandText = _languageService.GetString("Name device");
+            AddressDeviceCommandText = _languageService.GetString("Address device");
+            BaudrateDeviceCommandText = _languageService.GetString("Baudrate");
+            PortDeviceCommandText = _languageService.GetString("Port");
+            AssemblingCommandText = _languageService.GetString("Assembling");
+
+
+        }
+        #endregion
 
         #region [ Language Texts ]
-        [ObservableProperty] private string connectCommandText = "Connect";
-        [ObservableProperty] private string addMachineCommandText = "Add Device";
-        [ObservableProperty] private string editMachineCommandText = "Edit Device";
-        [ObservableProperty] private string deleteMachineCommandText = "Delete Device";
-        [ObservableProperty] private string addressMachineCommandText = "Address";
-        [ObservableProperty] private string baudrateMachineCommandText = "Baudrate";
-        [ObservableProperty] private string nameMachineCommandText = "Name";
-        [ObservableProperty] private string portMachineCommandText = "Port";
+        [ObservableProperty] private string addDeviceCommandText;
+        [ObservableProperty] private string editDeviceCommandText;
+        [ObservableProperty] private string deleteDeviceCommandText;
+        [ObservableProperty] private string addressDeviceCommandText;
+        [ObservableProperty] private string baudrateDeviceCommandText;
+        [ObservableProperty] private string nameDeviceCommandText;
+        [ObservableProperty] private string portDeviceCommandText;
+        [ObservableProperty] private string assemblingCommandText;
         #endregion
 
         #region [ Methods - Load & Initialization ]
@@ -163,6 +183,10 @@ namespace Electric_Meter.MVVM.ViewModels
 
             // Cho phép nút Edit và Delete
             IsEnableBtnEditDevice = true;
+            AddDeviceCommand.NotifyCanExecuteChanged();
+            EditDeviceCommand.NotifyCanExecuteChanged();
+            DeleteDeviceCommand.NotifyCanExecuteChanged();
+
         }
 
 
@@ -171,17 +195,15 @@ namespace Electric_Meter.MVVM.ViewModels
 
 
         #region [ Command Logic - Add Device (Sử dụng [RelayCommand]) ]
-
-        // Tự động tạo AddMachineCommand
         [RelayCommand(CanExecute = nameof(CanExecuteAddDevice))]
-        private async Task AddDevice() // Thay đổi sang không tham số (void)
+        private async Task AddDevice()
         {
             try
             {
-                ValidateDeviceInput();
                 if (!ValidateDeviceInput()) return;
 
-                if (_context.devices.Where(x => x.typeid == 7).Any(x => x.name == nameDevice || x.address == AddressDevice ))
+                if (_context.devices.Where(x => x.typeid == 7)
+                    .Any(x => x.name == NameDevice || x.address == AddressDevice))
                 {
                     MessageBox.Show("Device already exists!");
                     return;
@@ -200,45 +222,32 @@ namespace Electric_Meter.MVVM.ViewModels
                 };
 
                 await _service.InsertToDevice(newDevice);
-                IsEnabledBtnAddDevice = false; // Tắt nút sau khi thêm thành công
-
-
                 MessageBox.Show("Device added successfully!");
+                LoadDeviceList();
             }
             catch (Exception ex)
             {
-                IsEnabledBtnAddDevice = true;
                 MessageBox.Show("Add Device error: " + ex.Message);
-            }
-            finally
-            {
-               //AddDeviceCommand.NotifyCanExecuteChanged();
             }
         }
 
-        private bool CanExecuteAddDevice() => IsEnabledBtnAddDevice && ValidateDeviceInput();
+        private bool CanExecuteAddDevice() => true; // ✅ luôn cho phép bấm
         #endregion
 
-        #region [ Command Logic - Edit Device (Sử dụng [RelayCommand]) ]
 
-        // Tự động tạo EditMachineCommand
+        #region [ Command Logic - Edit Device (Sử dụng [RelayCommand]) ]
         [RelayCommand(CanExecute = nameof(CanExecuteEditDevice))]
-        private async Task EditDevice() // Thay đổi sang không tham số (void)
+        private async Task EditDevice()
         {
             try
             {
-                // Kiểm tra trạng thái và SelectedMachine trước khi chạy
-                if (!IsEnableBtnEditDevice)
-                {
-                    MessageBox.Show("Button is disabled. Cannot edit Device.");
-                    return;
-                }
-
                 if (SelectedDevice == null)
                 {
                     MessageBox.Show("No Device selected.");
                     return;
                 }
+
+                if (!ValidateDeviceInput()) return;
 
                 var find = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
                 if (find == null)
@@ -247,7 +256,6 @@ namespace Electric_Meter.MVVM.ViewModels
                     return;
                 }
 
-                // Cập nhật thông tin máy
                 find.address = AddressDevice;
                 find.port = SelectedPort;
                 find.baudrate = SelectedBaudrate;
@@ -255,8 +263,8 @@ namespace Electric_Meter.MVVM.ViewModels
                 find.assembling = SelectedAssembling?.key;
 
                 await _service.EditToDevice(find);
-                OnMachineLoadDefault?.Invoke();
                 MessageBox.Show("Edit successfully!");
+                LoadDeviceList();
             }
             catch (Exception ex)
             {
@@ -264,40 +272,32 @@ namespace Electric_Meter.MVVM.ViewModels
             }
         }
 
-        private bool CanExecuteEditDevice() => IsEnableBtnEditDevice && ValidateDeviceInput();
+        private bool CanExecuteEditDevice() => SelectedDevice != null; // ✅ chỉ bật khi chọn thiết bị
         #endregion
 
-        #region [ Command Logic - Delete Device (Sử dụng [RelayCommand]) ]
 
-        // Tự động tạo DeleteMachineCommand
-        [RelayCommand(CanExecute = nameof(CanExecuteDeleteMachine))]
-        private async Task DeleteDevice() // Thay đổi sang không tham số (void)
+        #region [ Command Logic - Delete Device (Sử dụng [RelayCommand]) ]
+        [RelayCommand(CanExecute = nameof(CanExecuteDeleteDevice))]
+        private async Task DeleteDevice()
         {
             try
             {
-                // Kiểm tra trạng thái và SelectedMachine trước khi chạy
-                if (!IsEnableBtnEditDevice) // Sử dụng IsEnableBtnEditMachine để kiểm soát Delete theo logic gốc
-                {
-                    MessageBox.Show("Button is disabled. Cannot delete Device.");
-                    return;
-                }
-
                 if (SelectedDevice == null)
                 {
                     MessageBox.Show("No Device selected.");
                     return;
                 }
 
-                var Device = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
-                if (Device == null)
+                var device = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
+                if (device == null)
                 {
                     MessageBox.Show("Device not found.");
                     return;
                 }
 
-                await _service.DeleteToDevice(Device);
-                OnMachineLoadDefault?.Invoke();
+                await _service.DeleteToDevice(device);
                 MessageBox.Show("Delete successfully!");
+                LoadDeviceList();
             }
             catch (Exception ex)
             {
@@ -305,29 +305,30 @@ namespace Electric_Meter.MVVM.ViewModels
             }
         }
 
-        private bool CanExecuteDeleteMachine() => IsEnableBtnEditDevice && SelectedDevice != null; // Chỉ xóa khi đang ở chế độ Edit và có máy được chọn
+        private bool CanExecuteDeleteDevice() => SelectedDevice != null; // ✅ chỉ bật khi chọn thiết bị
         #endregion
 
+
         #region [ Helper / Validation ]
-        // Giữ nguyên hàm ValidateMachineInput
+        // Giữ nguyên hàm ValidateDeviceInput
         private bool ValidateDeviceInput()
         {
             if (string.IsNullOrWhiteSpace(NameDevice))
             {
-                ErrorMessage = "NameMachine is required.";
+                ErrorMessage = "NameDevice is required.";
                 return false;
             }
 
             if (!Regex.IsMatch(NameDevice, @"^[a-zA-Z0-9 ]+$"))
             {
-                ErrorMessage = "NameMachine cannot contain special characters.";
+                ErrorMessage = "NameDevice cannot contain special characters.";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(AddressDevice.ToString()) ||
                 !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1 || addr > 50)
             {
-                ErrorMessage = "AddressMachine must be a number between 1 and 50.";
+                ErrorMessage = "AddressDevice must be a number between 1 and 50.";
                 return false;
             }
 

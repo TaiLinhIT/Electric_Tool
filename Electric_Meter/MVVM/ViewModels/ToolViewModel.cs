@@ -20,7 +20,7 @@ namespace Electric_Meter.MVVM.ViewModels
         public int Baudrate = 0;
         public string Factory = string.Empty;
         private DispatcherTimer _dispatcherTimer;
-        public int IdMachine;
+        public int IdDevice;
         private readonly Service _service;
         public MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
@@ -123,17 +123,7 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
 
-        public async void Start()
-        {
-
-            _mySerialPort.Port = Port;
-            _mySerialPort.Baudrate = Baudrate;
-
-            _mySerialPort.Sdre += SerialPort_DataReceived;
-            _mySerialPort.Conn();
-            await SendRequestsToAllAddressesAsync(); // Gọi phương thức gửi yêu cầu cho tất cả địa chỉ
-
-        }
+        
         #region Gửi request
         private async Task SendRequestAsync(string requestName, string requestHex, int address)
         {
@@ -202,15 +192,8 @@ namespace Electric_Meter.MVVM.ViewModels
                 Tool.Log($"Lỗi khi xử lý timeout cho địa chỉ {addressKey}: {ex.Message}");
             }
         }
-        public async Task SendRequestsToAllAddressesAsync()
-        {
-            for (int address = 1; address <= _appSetting.TotalMachine; address++)
-            {
-                int capturedAddress = address; // tránh closure issue
-                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
-            }
-        }
-        private async Task LoopRequestsForMachineAsync(int address)
+        
+        private async Task LoopRequestsForDeviceAsync(int address)
         {
             while (true)
             {
@@ -489,17 +472,17 @@ namespace Electric_Meter.MVVM.ViewModels
                     }
                 }
 
-                //Tool.Log($"Đang tìm IdMachine tương ứng với địa chỉ {address}...");
+                //Tool.Log($"Đang tìm IdDevice tương ứng với địa chỉ {address}...");
 
                 var device = _appSetting.devices.FirstOrDefault(m => m.address == address);
                 if (device == null)
                 {
-                    Tool.Log($"Không tìm thấy IdMachine với địa chỉ {address}");
+                    Tool.Log($"Không tìm thấy IdDevice với địa chỉ {address}");
                     return;
                 }
 
-                int idMachine = device.devid;
-                //Tool.Log($"Tìm thấy IdMachine = {idMachine} cho địa chỉ {address}");
+                int idDevice = device.devid;
+                //Tool.Log($"Tìm thấy IdDevice = {idDevice} cho địa chỉ {address}");
 
                 var now = DateTime.Now;
 
@@ -521,7 +504,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
                 // 2. Lấy danh sách control code theo devid
                 var controlCodes = await _context.controlcodes
-                    .Where(c => c.devid == idMachine)
+                    .Where(c => c.devid == idDevice)
                     .ToListAsync();
 
                 int savedCount = 0;
@@ -542,7 +525,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
                         var sensorData = new SensorData
                         {
-                            devid = idMachine,
+                            devid = idDevice,
                             codeid = code.codeid,
                             value = item.Value.Value,
                             day = now

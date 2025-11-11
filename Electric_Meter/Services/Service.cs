@@ -178,7 +178,7 @@ namespace Electric_Meter.Services
 
         public  List<Device> GetDevicesList()
         {
-            var lstDevice =  _context.devices.Where(x => x.typeid == 7).ToList();
+            var lstDevice =  _context.devices.Where(x => x.activeid == 1 && x.typeid ==7).ToList();
             return lstDevice;
         }
     }

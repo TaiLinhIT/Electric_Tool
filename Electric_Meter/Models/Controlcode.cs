@@ -7,6 +7,7 @@ namespace Electric_Meter.Models
     public class Controlcode
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int codeid { get; set; }
         public int devid { get; set; }
         public string code { get; set; }

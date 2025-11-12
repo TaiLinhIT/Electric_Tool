@@ -7,6 +7,7 @@ namespace Electric_Meter.Models
     public class ActiveType
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int activeid { get; set; }
         public string name { get; set; }
     }

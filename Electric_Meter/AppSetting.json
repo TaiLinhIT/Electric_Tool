@@ -1,8 +1,8 @@
 {
     "AppSettings": {
         //"ConnectString": "Server=FLP-YTJ-07;Database=PowerTempWatch;TrustServerCertificate=True;MultipleActiveResultSets=True;",
-        //"ConnectString": "Data Source=FLP-YTJ-07;Initial Catalog=PowerTempWatch;Integrated Security=True;Trust Server Certificate=True;",
-        "ConnectString": "Server=10.30.201.201;Database=PowerTempWatch;User ID=sa;Password=greenland@VN;TrustServerCertificate=True;MultipleActiveResultSets=True;",
+        "ConnectString": "Data Source=ADMIN-PC\\ANTHONYNGUYEN;Initial Catalog=PowerTempWatch;Integrated Security=True;Trust Server Certificate=True;",
+        //"ConnectString": "Server=10.30.201.201;Database=PowerTempWatch;User ID=sa;Password=greenland@VN;TrustServerCertificate=True;MultipleActiveResultSets=True;",
         "TimeReloadData": 10, //second
         "TimeSaveToDataBase": 300, //second
         "TimeSendRequest": 5,
@@ -24,7 +24,7 @@
         "CurrentArea": "VB2",
         "Port": "COM4",
         "Baudrate": 2400,
-        "TotalMachine": 25,
+        "TotalDevice": 25,
         "AutoActions": [
             "Connect",
             "ClickBtn"

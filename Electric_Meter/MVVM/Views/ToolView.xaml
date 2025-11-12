@@ -7,74 +7,287 @@
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="700">
 
-    <Grid >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <!-- Style cho các nhãn (Vàng) - Giảm từ 20 xuống 16 -->
+        <Style x:Key="BoardLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,6"/>
+        </Style>
 
-        <!-- 🧭 Header -->
-        <ui:Card Margin="16"
-                 Padding="16"
-                 Grid.Row="0">
-            <Grid>
+        <!-- Style cho các giá trị số lớn (Đỏ LED) - Giảm từ 32 xuống 26 -->
+        <Style x:Key="BoardValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <!-- Style cho đơn vị - Giảm từ 18 xuống 14 -->
+        <Style x:Key="BoardUnitStyle" TargetType="TextBlock" BasedOn="{StaticResource BoardValueStyle}">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+        </Style>
+
+        <!-- Style cho nhãn phụ (Tiếng Anh - Trắng) - Giảm từ 12 xuống 10 -->
+        <Style x:Key="SubLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="0,-6,0,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- 📊 Content - Bảng điều khiển điện -->
+    <Border Margin="16"
+            BorderBrush="#6B7280"
+            BorderThickness="0.5"
+            Background="#F9FAFB"
+            CornerRadius="5"
+            Padding="25">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- TIÊU ĐỀ LỚN VÀ THÔNG TIN DÂY CHUYỀN - Giảm từ 36 xuống 28 -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                <TextBlock Text="ELECTRIC DATA MONITOR"
+                           Foreground="#111827"
+                           HorizontalAlignment="Center"
+                           FontSize="28"
+                           FontWeight="ExtraBold"/>
+
+                <!-- Hiển thị Thời gian -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
+                    <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0" Foreground="#111827" FontSize="14"/>
+                    <TextBlock Text="{Binding CurrentTime, StringFormat='HH:mm:ss dd/MM/yyyy'}"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"
+                               Foreground="#111827"/>
+                </StackPanel>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Giảm từ 16 xuống 14 -->
+                    <TextBlock Grid.Column="0" Text="WORKSHOP: ASSY"
+                               Foreground="#111827" FontSize="14" FontWeight="SemiBold"/>
+                    <ComboBox Grid.Column="1"
+                        Width="140"
+                        Margin="0,0,10,0"
+                        ItemsSource="{Binding Languages}"
+                        SelectedItem="{Binding SelectedLanguage}">
+                                            <ComboBox.ToolTip>Select Assembling</ComboBox.ToolTip>
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+
+            <!-- Bảng Dữ liệu Chi tiết 13 Trường - Bố cục 2 cột -->
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <!-- Khoảng cách giữa 2 cột chính -->
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <ui:SymbolIcon Symbol="Battery824"  Margin="0,0,8,0"/>
-                    <TextBlock Text="Electric Meter Monitor"
-                               FontSize="28"
-                               FontWeight="SemiBold"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
+                <!-- 🟥 KHỐI DỮ LIỆU BÊN TRÁI: Ua, Ub, Uc, Ia, Ib, Ic (6 trường) -->
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- 0: Ua -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 1: Ub -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 2: Uc -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Dòng phân cách 1 (Line) -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 4: Ia -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 5: Ib -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 6: Ic -->
+                        <RowDefinition Height="*"/>
+                        <!-- Dòng đệm (Spacer) -->
+                    </Grid.RowDefinitions>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <ui:SymbolIcon Symbol="Clock24"  Margin="0,0,6,0"/>
-                    <TextBlock Text="{Binding CurrentTime}" 
-                               FontSize="18"
-                               FontWeight="Medium"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
+                    <!-- Ua -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="ĐIỆN ÁP PHA A" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="VOLTAGE (Ua)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ua}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Ub -->
+                    <StackPanel Grid.Row="1" Grid.Column="0">
+                        <TextBlock Text="ĐIỆN ÁP PHA B" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="VOLTAGE (Ub)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ub}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Uc -->
+                    <StackPanel Grid.Row="2" Grid.Column="0">
+                        <TextBlock Text="ĐIỆN ÁP PHA C" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="VOLTAGE (Uc)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Uc}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Phân cách 1 -->
+                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1" Fill="#374151" Margin="0,10"/>
+
+                    <!-- Ia -->
+                    <StackPanel Grid.Row="4" Grid.Column="0">
+                        <TextBlock Text="DÒNG ĐIỆN PHA A" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="CURRENT (Ia)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ia}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Ib -->
+                    <StackPanel Grid.Row="5" Grid.Column="0">
+                        <TextBlock Text="DÒNG ĐIỆN PHA B" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="CURRENT (Ib)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ib}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Ic -->
+                    <StackPanel Grid.Row="6" Grid.Column="0">
+                        <TextBlock Text="DÒNG ĐIỆN PHA C" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="CURRENT (Ic)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ic}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- 🟦 KHỐI DỮ LIỆU BÊN PHẢI: Pt, Pa, Pb, Pc, Exp, Imp, Total (7 trường) -->
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- 0: Pt -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 1: Pa -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 2: Pb -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 3: Pc -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Dòng phân cách 2 (Line) -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 5: Exp -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 6: Imp -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 7: Total -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Pt -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="TỔNG CÔNG SUẤT" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="TOTAL POWER (Pt)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pt}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Pa -->
+                    <StackPanel Grid.Row="1" Grid.Column="0">
+                        <TextBlock Text="CÔNG SUẤT PHA A" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="POWER (Pa)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pa}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Pb -->
+                    <StackPanel Grid.Row="2" Grid.Column="0">
+                        <TextBlock Text="CÔNG SUẤT PHA B" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="POWER (Pb)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pb}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Pc -->
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock Text="CÔNG SUẤT PHA C" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="POWER (Pc)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pc}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Phân cách 2 -->
+                    <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="#374151" Margin="0,10"/>
+
+                    <!-- Exp -->
+                    <StackPanel Grid.Row="5" Grid.Column="0">
+                        <TextBlock Text="NĂNG LƯỢNG XUẤT" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="EXPORT ENERGY (Exp)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Exp}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Imp -->
+                    <StackPanel Grid.Row="6" Grid.Column="0">
+                        <TextBlock Text="NĂNG LƯỢNG NHẬP" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="IMPORT ENERGY (Imp)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Imp}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Total -->
+                    <StackPanel Grid.Row="7" Grid.Column="0">
+                        <TextBlock Text="TỔNG NĂNG LƯỢNG" Style="{StaticResource BoardLabelStyle}"/>
+                        <TextBlock Text="TOTAL ENERGY (Total)" Style="{StaticResource SubLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Total}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                </Grid>
             </Grid>
-        </ui:Card>
-
-        <!-- 📊 Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <WrapPanel Margin="16" HorizontalAlignment="Center" ItemWidth="220" ItemHeight="120">
-                <ItemsControl ItemsSource="{Binding ElectricDataTemp}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ui:Card Margin="10" Padding="16" Width="220" Height="120">
-                                <StackPanel HorizontalAlignment="Center">
-                                    <ui:SymbolIcon Symbol="DataBarVertical24"
-                                                   Width="32" Height="32"
-                                                   Margin="0,0,0,6"/>
-                                    <TextBlock Text="{Binding Name}" 
-                                               FontSize="18" 
-                                               FontWeight="SemiBold"
-                                               HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding Value}" 
-                                               FontSize="28" 
-                                               FontWeight="Bold" 
-                                               HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding Unit}" 
-                                               FontSize="14"
-                                               HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </ui:Card>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </WrapPanel>
-        </ScrollViewer>
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

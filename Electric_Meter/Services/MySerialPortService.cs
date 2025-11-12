@@ -12,8 +12,9 @@ namespace Electric_Meter.Services
 {
     public class MySerialPortService
     {
+        // Định nghĩa Delegate cho Event
+        public event Action<Dictionary<string, double?>> DataUpdated;
         #region [ Fields (Private data) - Observable Properties ]
-
         private readonly Service _service;
         private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
         private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
@@ -21,8 +22,6 @@ namespace Electric_Meter.Services
         private HashSet<string> processedRequests = new HashSet<string>();
         private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
         private static readonly object lockObject = new object();
-
-
 
         public SerialPort _serialPort;
         public event SerialDataReceivedEventHandler Sdre;
@@ -44,10 +43,8 @@ namespace Electric_Meter.Services
         {
             //_serialPort = new SerialPort();
             _serialPort.DataReceived += Sdre;
-
             _serialPort.ErrorReceived += _serialPort_ErrorReceived;
             _serialPort.PinChanged += _serialPort_PinChanged;
-
             _serialPort.PortName = _appSetting.Port;
             _serialPort.BaudRate = _appSetting.Baudrate;
             _serialPort.DataBits = 8;//数据长度：
@@ -56,7 +53,6 @@ namespace Electric_Meter.Services
             _serialPort.Parity = Parity.None;//校验方式
             _serialPort.ReadTimeout = 500; //设置超时读取时间
             _serialPort.WriteTimeout = 100;
-
             _serialPort.RtsEnable = true;
             try
             {
@@ -163,7 +159,7 @@ namespace Electric_Meter.Services
         {
             return _serialPort.IsOpen;
         }
-        
+
         #region [ Function communication ]
         public async void StartCommunication()
         {
@@ -171,13 +167,10 @@ namespace Electric_Meter.Services
             {
                 // Bắt event nhận dữ liệu
                 Sdre += SerialPort_DataReceived;
-
                 // Mở cổng
                 Conn();
-
                 // Bắt đầu gửi request cho tất cả địa chỉ
                 await SendRequestsToAllAddressesAsync();
-
             }
             catch (Exception ex)
             {
@@ -271,15 +264,10 @@ namespace Electric_Meter.Services
         {
             foreach (var item in GetDevices())
             {
-                int capturedAddress = item;
+                int capturedAddress = item.address;
                 _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
-
             }
-            //for (int address = 1; address <= _appSetting.TotalMachine; address++)
-            //{
-            //    int capturedAddress = address; // tránh closure issue
-            //    _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
-            //}
+
         }
         private async Task LoopRequestsForMachineAsync(int address)
         {
@@ -295,7 +283,7 @@ namespace Electric_Meter.Services
                 }
 
                 Tool.Log($"Máy {address}: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...");
-                await Task.Delay(TimeSpan.FromMinutes(_appSetting.TimeSendRequest)); // Hoặc dùng _appSetting.TimeReloadData
+                await Task.Delay(TimeSpan.FromMinutes(_appSetting.TimeSendRequest));
             }
         }
 
@@ -389,7 +377,7 @@ namespace Electric_Meter.Services
 
                     // Phân loại theo tên
                     if (requestName.StartsWith("U") || requestName.StartsWith("Exp") || requestName.StartsWith("Imp") || requestName.StartsWith("P"))
-                        actualValue = rawValue * 20.0; //actualValue = rawValue / 10.0;
+                        actualValue = rawValue * _appSetting.ResistanceCoefficient; //actualValue = rawValue / 10.0;
                     else if (requestName.StartsWith("I"))
                         actualValue = rawValue / 1000.0;
                     else
@@ -473,14 +461,14 @@ namespace Electric_Meter.Services
 
                 //Tool.Log($"Đang tìm IdMachine tương ứng với địa chỉ {address}...");
 
-                var device = _appSetting.devices.FirstOrDefault(m => m.address == address);
+                var device = _context.devices.Where(x => x.typeid == 7 && x.ifshow == 1).FirstOrDefault(m => m.address == address);
                 if (device == null)
                 {
                     Tool.Log($"Không tìm thấy IdMachine với địa chỉ {address}");
                     return;
                 }
 
-                int idMachine = device.devid;
+                int Devid = device.devid;
                 //Tool.Log($"Tìm thấy IdMachine = {idMachine} cho địa chỉ {address}");
 
                 var now = DateTime.Now;
@@ -500,10 +488,15 @@ namespace Electric_Meter.Services
                     { "Exp", GetValueWithAddressSuffix(dataForAddress, "Exp", address) },
                     { "Imp", GetValueWithAddressSuffix(dataForAddress, "Imp", address) }
                 };
-
+                // *************** BƯỚC CẬP NHẬT GIAO DIỆN ĐỒNG THỜI ***************
+                // Cần truyền dữ liệu đã lấy được sang ViewModel để cập nhật giao diện
+                // Giả sử ToolViewModel được inject hoặc có thể truy cập được:
+                // GỌI EVENT ĐỂ THÔNG BÁO CHO VIEWMODEL
+                DataUpdated?.Invoke(valuesToSave);
+                // ********************************************************************
                 // 2. Lấy danh sách control code theo devid
                 var controlCodes = await _context.controlcodes
-                    .Where(c => c.devid == idMachine)
+                    .Where(c => c.devid == Devid)
                     .ToListAsync();
 
                 int savedCount = 0;
@@ -524,7 +517,7 @@ namespace Electric_Meter.Services
 
                         var sensorData = new SensorData
                         {
-                            devid = idMachine,
+                            devid = Devid,
                             codeid = code.codeid,
                             value = item.Value.Value,
                             day = now
@@ -566,10 +559,9 @@ namespace Electric_Meter.Services
         #endregion
 
         #region [ Function Device ]
-        private List<int> GetDevices()
+        private List<Device> GetDevices()
         {
-            //return _context.devices.Where(d => d.ifshow == 1 && d.typeid == 7).ToList();
-            return new List<int> { 1,2,3,9,10 };
+            return _context.devices.Where(d => d.ifshow == 1 && d.typeid == 7).ToList();
         }
         #endregion
     }

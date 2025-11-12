@@ -22,39 +22,10 @@
 
         },
         "CurrentArea": "VB2",
-        "Port": "COM4",
-        "Baudrate": 2400,
-        "TotalMachine": 25,
-        "AutoActions": [
-            "Connect",
-            "ClickBtn"
-        ],
-        "devices": [
-            {
-                "address": "1",
-                "devid": "5"
-            },
-            {
-                "address": "2",
-                "devid": "6"
-            },
-            {
-                "address": "3",
-                "devid": "7"
-            },
-            {
-                "address": "9",
-                "devid": "13"
-            },
-            {
-                "address": "10",
-                "devid": "14"
-            },
-            {
-                "address": "11",
-                "devid": "15"
-            }
-        ]
+        "ResistanceCoefficient": 20.0,
+        "Port": "COM3",
+        "Baudrate": 1200
+        
 
     }
 }

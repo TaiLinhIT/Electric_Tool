@@ -11,9 +11,7 @@ public partial class PowerTempWatchContext : DbContext
     {
     }
 
-    public virtual DbSet<DvElectricDataTemp> DvElectricDataTemps { get; set; }
-    public DbSet<Machine> machines { get; set; }
-    public DbSet<DvFactoryAssembling> dvFactoryAssemblings { get; set; }
+
     public DbSet<ActiveType> activeTypes { get; set; }
     public DbSet<Controlcode> controlcodes { get; set; }
     public DbSet<Device> devices { get; set; }
@@ -26,12 +24,7 @@ public partial class PowerTempWatchContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DvElectricDataTemp>(entity =>
-        {
-            entity.ToTable("dv_ElectricDataTemp"); // Đặt tên bảng trong cơ sở dữ liệu
-            entity.HasKey(e => e.Id); // Đặt Id làm khóa chính
-        });
-
+        
 
         OnModelCreatingPartial(modelBuilder);
     }

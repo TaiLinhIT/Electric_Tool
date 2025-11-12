@@ -12,11 +12,7 @@ namespace Electric_Meter.MVVM.Views
         public SettingView(SettingViewModel settingViewModel)
         {
             InitializeComponent();
-
             DataContext = settingViewModel;
-
         }
-        
-
     }
 }

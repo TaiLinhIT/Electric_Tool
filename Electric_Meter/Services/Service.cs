@@ -53,62 +53,7 @@ namespace Electric_Meter.Services
 
         }
 
-        public async Task<List<DvElectricDataTemp>> GetListDataAsync(int address)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                try
-                {
-                    // Ordering by CreatedAt (assuming the column name is CreatedAt)
-                    var data = await dbContext.DvElectricDataTemps.Where(x => x.IdMachine == address)
-                                             .OrderByDescending(d => d.UploadDate) // Order by date descending
-                                             .Take(1) // Get the most recent 2 records
-                                             .ToListAsync();
-
-                    return data;
-                }
-                catch (Exception ex)
-                {
-
-                    Tool.Log(ex.Message);
-                    return new List<DvElectricDataTemp>();
-                }
-
-            }
-        }
-
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-
-        public async Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                await _semaphore.WaitAsync();
-                try
-                {
-
-                    await dbContext.DvElectricDataTemps.AddAsync(dvElectricDataTemp);
-                    await dbContext.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Lỗi khi thêm dữ liệu vào cơ sở dữ liệu: {ex.Message}");
-                }
-                finally
-                {
-                    _semaphore.Release();
-                }
-
-            }
-        }
-
-
-
-
-
-
         public async Task<int> InsertToDevice(Device device)
         {
             try

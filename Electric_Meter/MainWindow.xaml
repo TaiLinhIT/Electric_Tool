@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <!-- 🟦 Top toolbar -->
-        <Border Background="#2D2D30" Padding="8" BorderBrush="#3E3E42" BorderThickness="0,0,0,1">
+        <Border Background="#FFFF" Padding="8" BorderBrush="#fefefe" BorderThickness="0,0,0,1">
             <DockPanel LastChildFill="False">
 
                 <!-- Left: Help button -->

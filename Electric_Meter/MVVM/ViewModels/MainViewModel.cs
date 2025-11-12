@@ -1,13 +1,17 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input; // Cung cấp RelayCommand mới
+
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
+
 using Newtonsoft.Json;
+
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -73,25 +77,8 @@ namespace Electric_Meter.MVVM.ViewModels
             Service service)
         {
             _languageService = languageService;
-            // Load ngôn ngữ mặc định trước
-            string code = SelectedLanguage switch
-            {
-                "English" => "en",
-                "中文" => "zh",
-                "Tiếng Việt" => "vi",
-                "ខ្មែរ" => "km",
-                _ => "zh"
-            };
-            _languageService.LoadLanguage(code);
-            // Đăng ký event sau khi load xong
-            _languageService.LanguageChanged += () => UpdateTexts();
-            #region Default Setting
-            SelectedLanguage = "中文";
-            Languages = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
-            SelectedBaudrate = 9600;
-            Baudrates = new([9600, 19200, 38400, 115200]);
-            Ports = new(["COM1", "COM2", "COM3"]);
-            #endregion
+            
+            
             SelectedPort = "COM3";
             // Select language
 
@@ -112,6 +99,15 @@ namespace Electric_Meter.MVVM.ViewModels
                     _languageService.LoadLanguage(code);
                 }
             };
+            // Đăng ký event sau khi load xong
+            _languageService.LanguageChanged += () => UpdateTexts();
+            #region Default Setting
+            SelectedLanguage = "中文";
+            Languages = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
+            SelectedBaudrate = 9600;
+            Baudrates = new([9600, 19200, 38400, 115200]);
+            Ports = new(["COM1", "COM2", "COM3"]);
+            #endregion
             // Inject các phụ thuộc
             _mySerialPort = mySerialPort;
             _context = powerTempWatchContext;
@@ -123,17 +119,11 @@ namespace Electric_Meter.MVVM.ViewModels
             SettingCommand = new RelayCommand<object>(ExecuteSettingForm);
             ChangeLanguageCommand = new RelayCommand<object>(ChangeLanguage);
 
-            SettingVM.OnDeviceLoadDefault += LoadDefaultDevice;
-
             // Tạo collection rỗng ban đầu
             Devices = new ObservableCollection<Device>();
 
-            UpdateTexts();
+     
 
-            // Tải dữ liệu ban đầu
-            LoadDefaultDevice();
-
-            LoadLanguage("zh");
 
             TogglePlayPause();
         }
@@ -146,7 +136,7 @@ namespace Electric_Meter.MVVM.ViewModels
         public ToolViewModel ToolVM { get; }
 
 
-        
+
 
         public List<int> SelectedAddresses => _selectedAddresses;
 
@@ -158,7 +148,7 @@ namespace Electric_Meter.MVVM.ViewModels
         public ICommand ChangeLanguageCommand { get; }
         public ICommand SettingCommand { get; set; }
 
-        
+
         [RelayCommand]
         private void TogglePlayPause()
         {
@@ -274,17 +264,10 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
         #region [ Device Management ]
-        
 
-        public void LoadDefaultDevice()
-        {
-            Devices.Clear();
-            var DevicesFromDb = _context.devices.ToList();
-            foreach (var Device in DevicesFromDb)
-                Devices.Add(Device);
-        }
 
-        
+
+
         #endregion
         #region [ Method - Language ]
         private void ChangeLanguage(object languageCode)

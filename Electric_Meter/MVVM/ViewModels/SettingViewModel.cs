@@ -56,8 +56,6 @@ namespace Electric_Meter.MVVM.ViewModels
             LoadDeviceList();
             GetDefaultSetting();
 
-            // *** LOẠI BỎ KHỞI TẠO COMMAND THỦ CÔNG: ConnectCommand = new RelayCommand(...) ***
-            // Source Generator sẽ tạo ra chúng
         }
         #endregion
 

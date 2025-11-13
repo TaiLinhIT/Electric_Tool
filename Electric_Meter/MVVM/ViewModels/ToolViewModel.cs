@@ -55,9 +55,12 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string pc = "0.00";
         [ObservableProperty] private string exp = "0.00";
         [ObservableProperty] private string imp = "0.00";
-
         [ObservableProperty] private string total = "0.00";
-
+        [ObservableProperty] private List<KeyValue> lstAssembling;
+        [ObservableProperty] private KeyValue selectedAssembling;
+        [ObservableProperty] private ObservableCollection<Device> lstDevices;
+        [ObservableProperty] private Device selectedDevice;
+        [ObservableProperty] private string searchQuery; // Đã thấy trong XAML, nhưng chưa
         #endregion
 
 
@@ -85,12 +88,6 @@ namespace Electric_Meter.MVVM.ViewModels
             // Đăng ký lắng nghe sự kiện ngay khi ViewModel được tạo
             _mySerialPort.DataUpdated += HandleDataUpdate;
 
-            _dispatcherTimer = new DispatcherTimer();
-
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(Convert.ToInt32(_appSetting.TimeReloadData));
-
-            _dispatcherTimer.Tick += _dispatcherTimer_Tick;
-
             _currentTime = DateTime.Now;
             _timerCurrent = new DispatcherTimer
             {
@@ -117,33 +114,12 @@ namespace Electric_Meter.MVVM.ViewModels
                 new ElectricDataDisplay { Name = "Imp", Value = 0, Unit = "kWh" }
                 // Bạn có thể cần thêm Total
             };
+            GetDefaultSetting();
         }
 
-
-        private void _dispatcherTimer_Tick(object? sender, EventArgs e)
-        {
-            ReloadData(FactoryCode, AddressCurrent);
-        }
-
-        public void StartTimer()
-        {
-            ReloadData(FactoryCode, AddressCurrent);
-            _dispatcherTimer.Start();
-        }
         public void StopTimer()
         {
             _dispatcherTimer.Stop();
-        }
-
-
-
-
-        private async void ReloadData(string factory, int address)
-        {
-            if (!string.IsNullOrEmpty(Port))
-            {
-
-            }
         }
         public void Close()
         {
@@ -159,7 +135,7 @@ namespace Electric_Meter.MVVM.ViewModels
         }
         #region [ Method - Update Display ]
 
-        
+
         public void UpdateToolViewData(Dictionary<string, double?> values)
         {
             // Cập nhật các ObservableProperty mới
@@ -227,6 +203,32 @@ namespace Electric_Meter.MVVM.ViewModels
                 // Gọi hàm cập nhật dữ liệu của ViewModel
                 UpdateToolViewData(data);
             });
+        }
+        #endregion
+        #region [ Method ]
+        private void GetDefaultSetting()
+        {
+
+            LstAssembling = new()
+            {
+                new KeyValue { key = "A", value = "Thành Hình A" },
+                new KeyValue { key = "B", value = "Thành Hình B" },
+                new KeyValue { key = "C", value = "Thành Hình C" },
+                new KeyValue { key = "D", value = "Thành Hình D" }
+            };
+            LstDevices = new ObservableCollection<Device>();
+            SelectedAssembling = LstAssembling.FirstOrDefault();
+            SearchQuery = string.Empty;
+        }
+        private void OnSelectedAssemblingChanged(KeyValue value)
+        {
+            if (value != null)
+            {
+                LstDevices = new ObservableCollection<Device>(_service.GetDevicesByAssembling(value.key));
+                // Chọn Device đầu tiên
+                SelectedDevice = LstDevices.FirstOrDefault();
+                //ReloadData(value.key, SelectedDevice?.address ?? 0);
+            }
         }
         #endregion
 

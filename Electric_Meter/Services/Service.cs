@@ -4,6 +4,7 @@ using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
 
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -121,10 +122,46 @@ namespace Electric_Meter.Services
             }
         }
 
-        public  List<Device> GetDevicesList()
+        public List<Device> GetDevicesList()
         {
-            var lstDevice =  _context.devices.Where(x => x.activeid == 1 && x.typeid ==7).ToList();
+            var lstDevice = _context.devices.Where(x => x.activeid == 1 && x.typeid == 7).ToList();
             return lstDevice;
+        }
+
+        public List<Device> GetDevicesByAssembling(string key)
+        {
+            return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
+        }
+
+        public async Task<List<Device>> GetActiveDevicesAsync()
+        {
+            try
+            {
+                return await _context.devices
+                    .FromSqlRaw("EXEC GetActiveDevices")
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Lỗi khi gọi GetActiveDevices: " + ex.Message);
+                return new List<Device>();
+            }
+        }
+
+        public async Task<List<Device>> GetDeviceByIdAsync(int devid)
+        {
+            try
+            {
+                var param = new SqlParameter("@devid", devid);
+                return await _context.devices
+                    .FromSqlRaw("EXEC GetDeviceById @devid", param)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Lỗi khi gọi GetDeviceById: " + ex.Message);
+                return new List<Device>();
+            }
         }
     }
 

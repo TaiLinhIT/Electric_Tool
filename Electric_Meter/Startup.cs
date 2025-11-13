@@ -98,6 +98,7 @@ namespace Electric_Meter
 
                     var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
                     await seeder.SeedAsync();
+                    await EnsureStoredProceduresAsync(db);
                 }
                 catch (Exception ex)
                 {
@@ -105,6 +106,52 @@ namespace Electric_Meter
                 }
             }).Wait(); // Wait ở background, không chặn UI thread
         }
+        private static async Task EnsureStoredProceduresAsync(PowerTempWatchContext db)
+        {
+            try
+            {
+                var sqlCheck = @"
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'GetActiveDevices')
+                    BEGIN
+                        EXEC('
+                            CREATE PROCEDURE GetActiveDevices
+                            AS
+                            BEGIN
+                                SET NOCOUNT ON;
+                                SELECT * FROM devices WHERE activeid = 1;
+                            END
+                        ')
+                    END
+                ";
+
+                await db.Database.ExecuteSqlRawAsync(sqlCheck);
+
+                        // Có thể tạo thêm nhiều SP ở đây
+                        var sqlCheck2 = @"
+                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'GetDeviceById')
+                    BEGIN
+                        EXEC('
+                            CREATE PROCEDURE GetDeviceById
+                                @devid INT
+                            AS
+                            BEGIN
+                                SET NOCOUNT ON;
+                                SELECT * FROM devices WHERE devid = @devid;
+                            END
+                        ')
+                    END
+                ";
+
+                await db.Database.ExecuteSqlRawAsync(sqlCheck2);
+
+                Console.WriteLine("✅ Stored procedures checked/created successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Create Stored Procedures failed: " + ex.Message);
+            }
+        }
+
 
     }
 }

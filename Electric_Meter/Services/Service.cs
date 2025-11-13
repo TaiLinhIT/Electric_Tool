@@ -20,11 +20,11 @@ namespace Electric_Meter.Services
             _scopeFactory = serviceScope;
         }
 
-        public async Task<int> DeleteToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> DeleteToDevice(Device device)
         {
             try
             {
-                _context.machines.Remove(machine);
+                device.activeid = 0;
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -36,11 +36,11 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<int> EditToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> EditToDevice(Device device)
         {
             try
             {
-                _context.machines.Update(machine);
+                _context.devices.Update(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -51,69 +51,14 @@ namespace Electric_Meter.Services
             }
 
 
-        }
-
-        public async Task<List<DvElectricDataTemp>> GetListDataAsync(int address)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                try
-                {
-                    // Ordering by CreatedAt (assuming the column name is CreatedAt)
-                    var data = await dbContext.DvElectricDataTemps.Where(x => x.IdMachine == address)
-                                             .OrderByDescending(d => d.UploadDate) // Order by date descending
-                                             .Take(1) // Get the most recent 2 records
-                                             .ToListAsync();
-
-                    return data;
-                }
-                catch (Exception ex)
-                {
-
-                    Tool.Log(ex.Message);
-                    return new List<DvElectricDataTemp>();
-                }
-
-            }
         }
 
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-
-        public async Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                await _semaphore.WaitAsync();
-                try
-                {
-
-                    await dbContext.DvElectricDataTemps.AddAsync(dvElectricDataTemp);
-                    await dbContext.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Lỗi khi thêm dữ liệu vào cơ sở dữ liệu: {ex.Message}");
-                }
-                finally
-                {
-                    _semaphore.Release();
-                }
-
-            }
-        }
-
-
-
-
-
-
-        public async Task<int> InsertToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> InsertToDevice(Device device)
         {
             try
             {
-                await _context.machines.AddAsync(machine);
+                await _context.devices.AddAsync(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -176,7 +121,11 @@ namespace Electric_Meter.Services
             }
         }
 
-
+        public  List<Device> GetDevicesList()
+        {
+            var lstDevice =  _context.devices.Where(x => x.activeid == 1 && x.typeid ==7).ToList();
+            return lstDevice;
+        }
     }
 
 

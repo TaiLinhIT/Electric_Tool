@@ -1,220 +1,273 @@
-﻿<UserControl x:Class="Electric_Meter.MVVM.Views.ToolView"
+<UserControl x:Class="Electric_Meter.MVVM.Views.ToolView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
-             Background="#18181b" 
-             d:DesignWidth="800" Height="650">
+             d:DesignWidth="1000" d:DesignHeight="700">
 
-    <DockPanel Margin="20">
-        <!-- Header -->
-        <Border Background="#18181b" DockPanel.Dock="Top" Height="150">
-            <StackPanel>
-                <TextBlock Text="Electric Meter" FontSize="50" FontWeight="SemiBold" Foreground="#f59e0b" Padding="0 20" HorizontalAlignment="Center" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10">
-                    <TextBlock Text="Time:" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" Margin="0 0 10 0" Width="56"/>
-                    <TextBlock Text="{Binding CurrentTime}" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" HorizontalAlignment="Center" />
+    <UserControl.Resources>
+        <!-- Style cho các nhãn -->
+        <Style x:Key="BoardLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,6"/>
+        </Style>
+
+        <!-- Style cho các giá trị số lớn -->
+        <Style x:Key="BoardValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <!-- Style cho đơn vị - Giảm từ 18 xuống 14 -->
+        <Style x:Key="BoardUnitStyle" TargetType="TextBlock" BasedOn="{StaticResource BoardValueStyle}">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- 📊 Content - Bảng điều khiển điện -->
+    <Border Margin="16"
+            BorderBrush="#6B7280"
+            BorderThickness="0.5"
+            Background="#F9FAFB"
+            CornerRadius="5"
+            Padding="25">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- TIÊU ĐỀ LỚN VÀ THÔNG TIN DÂY CHUYỀN - Giảm từ 36 xuống 28 -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                
+                <!-- Hiển thị Thời gian -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
+                    <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0" Foreground="#111827" FontSize="14"/>
+                    <TextBlock Text="{Binding CurrentTime, StringFormat='HH:mm:ss dd/MM/yyyy'}"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"
+                               Foreground="#111827"/>
                 </StackPanel>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Giảm từ 16 xuống 14 -->
+                    <ComboBox Grid.Column="0"
+                        Width="140"
+                        Margin="0,0,10,0"
+                        ItemsSource="{Binding Languages}"
+                        SelectedItem="{Binding SelectedLanguage}">
+                        <ComboBox.ToolTip>Select Device</ComboBox.ToolTip>
+                    </ComboBox>
+                    <ComboBox Grid.Column="1"
+                        Width="140"
+                        Margin="0,0,10,0"
+                        ItemsSource="{Binding Languages}"
+                        SelectedItem="{Binding SelectedLanguage}">
+                           <ComboBox.ToolTip>Select Assembling</ComboBox.ToolTip>
+                    </ComboBox>
+                </Grid>
             </StackPanel>
-        </Border>
 
-        <!-- Content Area -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" DockPanel.Dock="Bottom">
-            <ItemsControl ItemsSource="{Binding ElectricDataTemp}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
+            <!-- Bảng Dữ liệu Chi tiết 13 Trường - Bố cục 2 cột -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <!-- Khoảng cách giữa 2 cột chính -->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                            <!-- Dòng điện -->
-                            <Border Grid.Row="0" Grid.Column="0" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Ia" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Ia}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                </Grid>
-                            </Border>
+                <!-- 🟥 KHỐI DỮ LIỆU BÊN TRÁI: Ua, Ub, Uc, Ia, Ib, Ic (6 trường) -->
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- 0: Ua -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 1: Ub -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 2: Uc -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Dòng phân cách 1 (Line) -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 4: Ia -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 5: Ib -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 6: Ic -->
+                        <RowDefinition Height="*"/>
+                        <!-- Dòng đệm (Spacer) -->
+                    </Grid.RowDefinitions>
 
-                            <Border Grid.Row="1" Grid.Column="0" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Ib" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Ib}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                </Grid>
-                            </Border>
+                    <!-- Ua -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="ĐIỆN ÁP PHA A" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ua}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <Border Grid.Row="2" Grid.Column="0" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Ic" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Ic}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                </Grid>
-                            </Border>
+                    <!-- Ub -->
+                    <StackPanel Grid.Row="1" Grid.Column="0">
+                        <TextBlock Text="ĐIỆN ÁP PHA B" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ub}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <!-- Hiệu điện thế -->
-                            <Border Grid.Row="0" Grid.Column="2" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Ua" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Ua}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                </Grid>
-                            </Border>
+                    <!-- Uc -->
+                    <StackPanel Grid.Row="2" Grid.Column="0">
+                        <TextBlock Text="ĐIỆN ÁP PHA C" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Uc}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <Border Grid.Row="1" Grid.Column="2" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Ub" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Ub}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                </Grid>
-                            </Border>
+                    <!-- Phân cách 1 -->
+                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1" Fill="#374151" Margin="0,10"/>
 
-                            <Border Grid.Row="2" Grid.Column="2" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Uc" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Uc}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15" />
-                                </Grid>
-                            </Border>
+                    <!-- Ia -->
+                    <StackPanel Grid.Row="4" Grid.Column="0">
+                        <TextBlock Text="DÒNG ĐIỆN PHA A" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ia}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <!-- Công suất -->
-                            <Border Grid.Row="3" Grid.Column="0" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Pt" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Pt}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                </Grid>
-                            </Border>
+                    <!-- Ib -->
+                    <StackPanel Grid.Row="5" Grid.Column="0">
+                        <TextBlock Text="DÒNG ĐIỆN PHA B" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ib}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <Border Grid.Row="4" Grid.Column="0" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Pa" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Pa}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                </Grid>
-                            </Border>
+                    <!-- Ic -->
+                    <StackPanel Grid.Row="6" Grid.Column="0">
+                        <TextBlock Text="DÒNG ĐIỆN PHA C" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Ic}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <Border Grid.Row="5" Grid.Column="0" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Pb" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Pb}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                </Grid>
-                            </Border>
+                </Grid>
 
-                            <!-- Điện năng -->
-                            <Border Grid.Row="3" Grid.Column="2" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Imp" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Imp}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                </Grid>
-                            </Border>
+                <!-- 🟦 KHỐI DỮ LIỆU BÊN PHẢI: Pt, Pa, Pb, Pc, Exp, Imp, Total (7 trường) -->
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- 0: Pt -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 1: Pa -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 2: Pb -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 3: Pc -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Dòng phân cách 2 (Line) -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 5: Exp -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 6: Imp -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- 7: Total -->
+                    </Grid.RowDefinitions>
 
+                    <!-- Pt -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="TỔNG CÔNG SUẤT" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pt}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
+                    <!-- Pa -->
+                    <StackPanel Grid.Row="1" Grid.Column="0">
+                        <TextBlock Text="CÔNG SUẤT PHA A" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pa}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
+                    <!-- Pb -->
+                    <StackPanel Grid.Row="2" Grid.Column="0">
+                        <TextBlock Text="CÔNG SUẤT PHA B" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pb}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <!-- Điện năng tiêu thụ -->
-                            <Border Grid.Row="4" Grid.Column="2" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="Exp" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding Exp}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                </Grid>
-                            </Border>
+                    <!-- Pc -->
+                    <StackPanel Grid.Row="3" Grid.Column="0">
+                        <TextBlock Text="CÔNG SUẤT PHA C" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Pc}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
 
-                            <Border Grid.Row="5" Grid.Column="2" BorderBrush="#22c55e" BorderThickness="1" Grid.ColumnSpan="2">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="0" Padding="10" Text="TotalElectric" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                    <Border Grid.Column="1" Background="#22c55e" Width="1" />
-                                    <TextBlock HorizontalAlignment="Center" Grid.Column="2" Text="{Binding TotalElectric}" Padding="10" FontSize="25" FontWeight="SemiBold" Foreground="#facc15"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                    <!-- Phân cách 2 -->
+                    <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="#374151" Margin="0,10"/>
 
-    </DockPanel>
+                    <!-- Exp -->
+                    <StackPanel Grid.Row="5" Grid.Column="0">
+                        <TextBlock Text="NĂNG LƯỢNG XUẤT" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Exp}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Imp -->
+                    <StackPanel Grid.Row="6" Grid.Column="0">
+                        <TextBlock Text="NĂNG LƯỢNG NHẬP" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Imp}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                    <!-- Total -->
+                    <StackPanel Grid.Row="7" Grid.Column="0">
+                        <TextBlock Text="TỔNG NĂNG LƯỢNG" Style="{StaticResource BoardLabelStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Total}" Style="{StaticResource BoardValueStyle}" />
+                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
 </UserControl>

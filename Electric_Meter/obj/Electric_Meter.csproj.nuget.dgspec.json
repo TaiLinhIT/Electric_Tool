@@ -51,6 +51,10 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -83,6 +87,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Microsoft.VisualStudio.Utilities": {
+              "target": "Package",
+              "version": "[17.14.40264, )"
+            },
             "Microsoft.Xaml.Behaviors.Wpf": {
               "target": "Package",
               "version": "[1.1.135, )"
@@ -94,6 +102,14 @@
             "System.IO.Ports": {
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "WPF-UI": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "WPF-UI.DependencyInjection": {
+              "target": "Package",
+              "version": "[4.0.3, )"
             }
           },
           "imports": [

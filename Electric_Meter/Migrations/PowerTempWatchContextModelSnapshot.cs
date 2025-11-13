@@ -88,6 +88,46 @@ namespace Electric_Meter.Migrations
                     b.ToTable("controlcode");
                 });
 
+            modelBuilder.Entity("Electric_Meter.Models.Device", b =>
+                {
+                    b.Property<int>("devid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("devid"));
+
+                    b.Property<int>("activeid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("address")
+                        .HasColumnType("int");
+
+                    b.Property<string>("assembling")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("baudrate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ifshow")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("port")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("typeid")
+                        .HasColumnType("int");
+
+                    b.HasKey("devid");
+
+                    b.ToTable("devices");
+                });
+
             modelBuilder.Entity("Electric_Meter.Models.DvElectricDataTemp", b =>
                 {
                     b.Property<int>("Id")
@@ -225,30 +265,21 @@ namespace Electric_Meter.Migrations
                     b.ToTable("SensorData");
                 });
 
-            modelBuilder.Entity("Electric_Meter.Models.devices", b =>
+            modelBuilder.Entity("Electric_Meter.Models.SensorType", b =>
                 {
-                    b.Property<int>("devid")
+                    b.Property<int>("typeid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("devid"));
-
-                    b.Property<int>("activeid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ifshow")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("typeid"));
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("typeid")
-                        .HasColumnType("int");
+                    b.HasKey("typeid");
 
-                    b.HasKey("devid");
-
-                    b.ToTable("devices");
+                    b.ToTable("SensorType");
                 });
 #pragma warning restore 612, 618
         }

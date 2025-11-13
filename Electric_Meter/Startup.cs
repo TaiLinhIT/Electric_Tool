@@ -1,13 +1,17 @@
+using System.IO.Ports;
+
 using Electric_Meter.Configs;
-using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;
+using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.IO;
+
+using Wpf.Ui;
+using Wpf.Ui.DependencyInjection;
 
 namespace Electric_Meter
 {
@@ -18,54 +22,89 @@ namespace Electric_Meter
 
         public Startup()
         {
-            // Đọc cấu hình từ appsettings.json
+            // Đọc file appsetting.json
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // Lấy thư mục hiện tại
-                .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true); // Tải file appsettings.json
+                .SetBasePath(AppContext.BaseDirectory) // an toàn hơn cho WPF khi publish
+                .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
 
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
-            ServiceProvider = serviceCollection.BuildServiceProvider();
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+
+            ServiceProvider = services.BuildServiceProvider();
+
+            // Áp dụng migration và seed (async)
+            ApplyMigrationsAndSeed();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // Bind AppSettings với cấu hình từ appsettings.json
-            var appSetting = Configuration.GetSection("AppSettings").Get<AppSetting>();
+            // Lấy AppSettings
+            var appSetting = Configuration.GetSection("AppSettings").Get<AppSetting>()
+                ?? throw new NullReferenceException("AppSettings is null. Please check your appsetting.json file.");
 
-            if (appSetting == null)
-            {
-                throw new NullReferenceException("AppSettings is null. Please check your appsetting.json file.");
-            }
-
-            // Đăng ký AppSetting
             services.AddSingleton(appSetting);
 
-            // Đăng ký DbContext với chuỗi kết nối từ AppSetting
+            // Đăng ký DbContext
             services.AddDbContext<PowerTempWatchContext>(options =>
                 options.UseSqlServer(appSetting.ConnectString));
 
-            // Đăng ký ViewModels
-            services.AddSingleton<MainViewModel>();
+            // Seeder (dùng DI để lấy context tự động)
+            services.AddTransient<DatabaseSeeder>();
 
-            // Đăng ký MainWindow
+            // ViewModels
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<SettingViewModel>();
+            services.AddSingleton<ToolViewModel>();
+            services.AddSingleton<DashboardViewModel>();
+
+            // Services
+            services.AddSingleton<Service>();
+            services.AddSingleton<SerialPort>();//new add
+            services.AddSingleton<MySerialPortService>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddNavigationViewPageProvider();               // từ Wpf.Ui.DependencyInjection
+            services.AddSingleton<INavigationService, NavigationService>(); // từ Wpf.Ui (core)
+            services.AddSingleton<LanguageService>();
+            // UI (MainWindow)
             services.AddSingleton<MainWindow>();
 
-            // Đăng ký SettingViewModel
-            services.AddSingleton<SettingViewModel>();
+            // UI (SettingView)
+            services.AddSingleton<SettingView>();
 
-            //Đăng ký ToolViewModel
-            services.AddSingleton<ToolViewModel>();
+            // UI (Dashboard)
+            services.AddSingleton<DashboardView>();
 
-            //Đăng ký Service
-            services.AddSingleton<Service>();
-
-            //Đăng ký MySerialPort
-            services.AddSingleton<MySerialPortService>();
+            // UI (ToolView)
+            services.AddSingleton<ToolView>();
         }
 
-        
+        /// <summary>
+        /// Áp dụng migration và seed dữ liệu mặc định khi chạy app
+        /// </summary>
+        private void ApplyMigrationsAndSeed()
+        {
+            using var scope = ServiceProvider.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var pending = await db.Database.GetPendingMigrationsAsync();
+                    if (pending.Any())
+                        await db.Database.MigrateAsync();
+
+                    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+                    await seeder.SeedAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Migration/Seeding failed: " + ex.Message);
+                }
+            }).Wait(); // Wait ở background, không chặn UI thread
+        }
+
     }
 }

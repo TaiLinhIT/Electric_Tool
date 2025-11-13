@@ -112,7 +112,7 @@ namespace Electric_Meter.MVVM.ViewModels
         }
         #endregion
         #region [ Methods - Language ]
-        private void UpdateTexts()
+        public void UpdateTexts()
         {
             AddDeviceCommandText = _languageService.GetString("Add a new device");
             EditDeviceCommandText = _languageService.GetString("Edit device");

@@ -315,7 +315,6 @@ E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Mete
 E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.genruntimeconfig.cache
 E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\ref\Electric_Meter.dll
 E:\MyProject\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Languages\zh.json
-E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Assets\electric.ico
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\MessagePack.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.CodeAnalysis.CSharp.dll

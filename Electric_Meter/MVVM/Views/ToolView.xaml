@@ -8,7 +8,7 @@
              d:DesignWidth="1000" d:DesignHeight="700">
 
     <UserControl.Resources>
-        <!-- Style cho các nhãn (Vàng) - Giảm từ 20 xuống 16 -->
+        <!-- Style cho các nhãn -->
         <Style x:Key="BoardLabelStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#111827"/>
             <Setter Property="FontSize" Value="16"/>
@@ -17,26 +17,19 @@
             <Setter Property="Margin" Value="0,6"/>
         </Style>
 
-        <!-- Style cho các giá trị số lớn (Đỏ LED) - Giảm từ 32 xuống 26 -->
+        <!-- Style cho các giá trị số lớn -->
         <Style x:Key="BoardValueStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#1F2937"/>
-            <Setter Property="FontSize" Value="26"/>
-            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
         <!-- Style cho đơn vị - Giảm từ 18 xuống 14 -->
         <Style x:Key="BoardUnitStyle" TargetType="TextBlock" BasedOn="{StaticResource BoardValueStyle}">
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Margin" Value="8,0,0,0"/>
-        </Style>
-
-        <!-- Style cho nhãn phụ (Tiếng Anh - Trắng) - Giảm từ 12 xuống 10 -->
-        <Style x:Key="SubLabelStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#6B7280"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="Margin" Value="0,-6,0,0"/>
         </Style>
     </UserControl.Resources>
 
@@ -55,12 +48,7 @@
 
             <!-- TIÊU ĐỀ LỚN VÀ THÔNG TIN DÂY CHUYỀN - Giảm từ 36 xuống 28 -->
             <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                <TextBlock Text="ELECTRIC DATA MONITOR"
-                           Foreground="#111827"
-                           HorizontalAlignment="Center"
-                           FontSize="28"
-                           FontWeight="ExtraBold"/>
-
+                
                 <!-- Hiển thị Thời gian -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
                     <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0" Foreground="#111827" FontSize="14"/>
@@ -77,14 +65,19 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <!-- Giảm từ 16 xuống 14 -->
-                    <TextBlock Grid.Column="0" Text="WORKSHOP: ASSY"
-                               Foreground="#111827" FontSize="14" FontWeight="SemiBold"/>
+                    <ComboBox Grid.Column="0"
+                        Width="140"
+                        Margin="0,0,10,0"
+                        ItemsSource="{Binding Languages}"
+                        SelectedItem="{Binding SelectedLanguage}">
+                        <ComboBox.ToolTip>Select Device</ComboBox.ToolTip>
+                    </ComboBox>
                     <ComboBox Grid.Column="1"
                         Width="140"
                         Margin="0,0,10,0"
                         ItemsSource="{Binding Languages}"
                         SelectedItem="{Binding SelectedLanguage}">
-                                            <ComboBox.ToolTip>Select Assembling</ComboBox.ToolTip>
+                           <ComboBox.ToolTip>Select Assembling</ComboBox.ToolTip>
                     </ComboBox>
                 </Grid>
             </StackPanel>
@@ -126,7 +119,6 @@
                     <!-- Ua -->
                     <StackPanel Grid.Row="0" Grid.Column="0">
                         <TextBlock Text="ĐIỆN ÁP PHA A" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="VOLTAGE (Ua)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ua}" Style="{StaticResource BoardValueStyle}" />
@@ -136,7 +128,6 @@
                     <!-- Ub -->
                     <StackPanel Grid.Row="1" Grid.Column="0">
                         <TextBlock Text="ĐIỆN ÁP PHA B" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="VOLTAGE (Ub)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ub}" Style="{StaticResource BoardValueStyle}" />
@@ -146,7 +137,6 @@
                     <!-- Uc -->
                     <StackPanel Grid.Row="2" Grid.Column="0">
                         <TextBlock Text="ĐIỆN ÁP PHA C" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="VOLTAGE (Uc)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Uc}" Style="{StaticResource BoardValueStyle}" />
@@ -159,7 +149,6 @@
                     <!-- Ia -->
                     <StackPanel Grid.Row="4" Grid.Column="0">
                         <TextBlock Text="DÒNG ĐIỆN PHA A" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="CURRENT (Ia)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ia}" Style="{StaticResource BoardValueStyle}" />
@@ -169,7 +158,6 @@
                     <!-- Ib -->
                     <StackPanel Grid.Row="5" Grid.Column="0">
                         <TextBlock Text="DÒNG ĐIỆN PHA B" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="CURRENT (Ib)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ib}" Style="{StaticResource BoardValueStyle}" />
@@ -179,7 +167,6 @@
                     <!-- Ic -->
                     <StackPanel Grid.Row="6" Grid.Column="0">
                         <TextBlock Text="DÒNG ĐIỆN PHA C" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="CURRENT (Ic)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ic}" Style="{StaticResource BoardValueStyle}" />
@@ -216,7 +203,6 @@
                     <!-- Pt -->
                     <StackPanel Grid.Row="0" Grid.Column="0">
                         <TextBlock Text="TỔNG CÔNG SUẤT" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="TOTAL POWER (Pt)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pt}" Style="{StaticResource BoardValueStyle}" />
@@ -226,7 +212,6 @@
                     <!-- Pa -->
                     <StackPanel Grid.Row="1" Grid.Column="0">
                         <TextBlock Text="CÔNG SUẤT PHA A" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="POWER (Pa)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pa}" Style="{StaticResource BoardValueStyle}" />
@@ -236,7 +221,6 @@
                     <!-- Pb -->
                     <StackPanel Grid.Row="2" Grid.Column="0">
                         <TextBlock Text="CÔNG SUẤT PHA B" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="POWER (Pb)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pb}" Style="{StaticResource BoardValueStyle}" />
@@ -246,7 +230,6 @@
                     <!-- Pc -->
                     <StackPanel Grid.Row="3" Grid.Column="0">
                         <TextBlock Text="CÔNG SUẤT PHA C" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="POWER (Pc)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pc}" Style="{StaticResource BoardValueStyle}" />
@@ -259,7 +242,6 @@
                     <!-- Exp -->
                     <StackPanel Grid.Row="5" Grid.Column="0">
                         <TextBlock Text="NĂNG LƯỢNG XUẤT" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="EXPORT ENERGY (Exp)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Exp}" Style="{StaticResource BoardValueStyle}" />
@@ -269,7 +251,6 @@
                     <!-- Imp -->
                     <StackPanel Grid.Row="6" Grid.Column="0">
                         <TextBlock Text="NĂNG LƯỢNG NHẬP" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="IMPORT ENERGY (Imp)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Imp}" Style="{StaticResource BoardValueStyle}" />
@@ -279,7 +260,6 @@
                     <!-- Total -->
                     <StackPanel Grid.Row="7" Grid.Column="0">
                         <TextBlock Text="TỔNG NĂNG LƯỢNG" Style="{StaticResource BoardLabelStyle}"/>
-                        <TextBlock Text="TOTAL ENERGY (Total)" Style="{StaticResource SubLabelStyle}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Total}" Style="{StaticResource BoardValueStyle}" />

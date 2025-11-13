@@ -176,7 +176,8 @@
                 </Grid>
             </Border>
 
-            <DataGrid Grid.Row="2"
+            <DataGrid x:Name="DeviceGrid"
+                      Grid.Row="2"
 					  ItemsSource="{Binding DeviceList, UpdateSourceTrigger=PropertyChanged}"
 					  AutoGenerateColumns="False"
 					  IsReadOnly="True"
@@ -190,10 +191,11 @@
 					  Margin="0,5,0,0">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Address" Binding="{Binding address}" Width="*"/>
-                    <DataGridTextColumn Header="Device Name" Binding="{Binding name}" Width="*"/>
-                    <DataGridTextColumn Header="Baudrate" Binding="{Binding baudrate}" Width="*"/>
-                    <DataGridTextColumn Header="Port" Binding="{Binding port}" Width="*"/>
+                    <DataGridTextColumn Header="{Binding AddressDeviceCommandText}" Binding="{Binding address}" Width="*"/>
+                    <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding name}" Width="*"/>
+                    <DataGridTextColumn Header="{Binding BaudrateDeviceCommandText}" Binding="{Binding baudrate}" Width="*"/>
+                    <DataGridTextColumn Header="{Binding PortDeviceCommandText}" Binding="{Binding port}" Width="*"/>
+                    <DataGridTextColumn Header="{Binding AssemblingCommandText}" Binding="{Binding assembling}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

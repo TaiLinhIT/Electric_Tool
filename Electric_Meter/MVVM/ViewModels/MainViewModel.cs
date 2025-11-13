@@ -176,32 +176,39 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Method - Menu ]
         private void InitializeMenuItems()
         {
-            _menuItems = new[]
+            MenuItems = new ObservableCollection<NavigationViewItem>
             {
-                new NavigationViewItem()
+                new NavigationViewItem
                 {
                     Content = DashboardCommandText,
                     Icon = new SymbolIcon(SymbolRegular.ChartMultiple24),
                     TargetPageType = typeof(Views.DashboardView)
                 },
-                new NavigationViewItem()
+                new NavigationViewItem
                 {
                     Content = ToolCommandText,
                     Icon = new SymbolIcon(SymbolRegular.Toolbox24),
                     TargetPageType = typeof(Views.ToolView)
                 }
             };
-            _footerMenuItems = new[]
+
+                    FooterMenuItems = new ObservableCollection<NavigationViewItem>
             {
-                new NavigationViewItem()
+                new NavigationViewItem
                 {
                     Content = SettingCommandText,
                     Icon = new SymbolIcon(SymbolRegular.Settings24),
                     TargetPageType = typeof(Views.SettingView)
+                },
+                new NavigationViewItem
+                {
+                    Content = HelpCommandText,
+                    Icon = new SymbolIcon(SymbolRegular.QuestionCircle24),
+                    Command = new RelayCommand(OpenHelp)
                 }
-
             };
         }
+
         #endregion
         #region [ Method - Refesh PlayPause Text ]
         private void RefreshPlayPauseText()
@@ -245,7 +252,7 @@ namespace Electric_Meter.MVVM.ViewModels
             SettingCommandText = _languageService.GetString("Setting");
             PlayCommandText = _languageService.GetString("Play");
             PauseCommandText = _languageService.GetString("Pause");
-
+            RefreshPlayPauseText();
             InitializeMenuItems();
 
         }

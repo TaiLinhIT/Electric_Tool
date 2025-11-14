@@ -13,5 +13,20 @@
     "Setting": "Setting",
     "Menu": "Menu",
     "Dashboard": "Dashboard",
-    "Tool": "Tool"
+    "Tool": "Tool",
+    "PHASE A VOLTAGE": "PHASE A VOLTAGE",
+    "PHASE B VOLTAGE": "PHASE B VOLTAGE",
+    "PHASE C VOLTAGE": "PHASE C VOLTAGE",
+    "PHASE A CURRENT": "PHASE A CURRENT",
+    "PHASE B CURRENT": "PHASE B CURRENT",
+    "PHASE C CURRENT": "PHASE C CURRENT",
+    "TOTAL POWER": "TOTAL POWER",
+    "Phase A Power": "Phase A Power",
+    "Phase B Power": "Phase B Power",
+    "Phase C Power": "Phase C Power",
+    "EXPORT ENERGY": "EXPORT ENERGY",
+    "IMPORT ENERGY": "IMPORT ENERGY",
+    "TOTAL ENERGY": "TOTAL ENERGY",
+    "Search keyword": "Search keyword",
+    "Select device...": "Select device..."
 }

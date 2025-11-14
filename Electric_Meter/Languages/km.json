@@ -13,5 +13,20 @@
     "Setting": "ការកំណត់",
     "Menu": "ម៉ឺនុយ",
     "Dashboard": "ផ្ទាំងគ្រប់គ្រង",
-    "Tool": "ឧបករណ៍"
+    "Tool": "ឧបករណ៍",
+    "PHASE A VOLTAGE": "តង់ស្យុងហ្វា A",
+    "PHASE B VOLTAGE": "តង់ស្យុងហ្វា B",
+    "PHASE C VOLTAGE": "តង់ស្យុងហ្វា C",
+    "PHASE A CURRENT": "ចរន្តហ្វា A",
+    "PHASE B CURRENT": "ចរន្តហ្វា B",
+    "PHASE C CURRENT": "ចរន្តហ្វា C",
+    "TOTAL POWER": "ថាមពលសរុប",
+    "Phase A Power": "ថាមពលហ្វា A",
+    "Phase B Power": "ថាមពលហ្វា B",
+    "Phase C Power": "ថាមពលហ្វា C",
+    "EXPORT ENERGY": "ថាមពលនាំចេញ",
+    "IMPORT ENERGY": "ថាមពលនាំចូល",
+    "TOTAL ENERGY": "ថាមពលសរុប",
+    "Search keyword": "ពាក្យគន្លឹះស្វែងរក",
+    "Select device...": "ជ្រើសរើសឧបករណ៍..."
 }

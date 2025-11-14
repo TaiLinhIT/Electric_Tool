@@ -7,10 +7,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     mc:Ignorable="d"
     Title="Electric Meter Interface"
-    Height="600"
-    Width="950"
-    MinWidth="900"
-    MinHeight="480"
+    d:MinWidth="1100"
+    d:MinHeight="540"
     WindowStartupLocation="CenterScreen">
 
     <Grid>

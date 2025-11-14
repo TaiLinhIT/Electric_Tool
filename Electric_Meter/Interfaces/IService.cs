@@ -14,5 +14,6 @@ namespace Electric_Meter.Interfaces
         List<Device> GetDevicesByAssembling(string key);
         Task<List<Device>> GetActiveDevicesAsync();
         Task<List<Device>> GetDeviceByIdAsync(int devid);
+        Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid);
     }
 }

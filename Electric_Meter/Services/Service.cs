@@ -163,6 +163,11 @@ namespace Electric_Meter.Services
                 return new List<Device>();
             }
         }
+
+        public async Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid)
+        {
+            return await _context.sensorDatas.FromSqlInterpolated($"EXEC GetLatestSensorByDevice @devid={devid}").ToListAsync();
+        }
     }
 
 

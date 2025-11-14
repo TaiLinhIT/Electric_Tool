@@ -15,6 +15,7 @@ namespace Electric_Meter.MVVM.ViewModels
     public partial class ToolViewModel : ObservableObject
     {
         #region [ Fields (Private data) - Observable Properties ]
+        private readonly LanguageService _languageService;
         private ObservableCollection<ElectricDataDisplay> _electricDataTemp;
         public ObservableCollection<ElectricDataDisplay> ElectricDataTemp
         {
@@ -58,7 +59,7 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string total = "0.00";
         [ObservableProperty] private List<KeyValue> lstAssembling;
         [ObservableProperty] private KeyValue selectedAssembling;
-        [ObservableProperty] private ObservableCollection<Device> lstDevices;
+        [ObservableProperty] private ObservableCollection<Device> lstDevice;
         [ObservableProperty] private Device selectedDevice;
         [ObservableProperty] private string searchQuery; // Đã thấy trong XAML, nhưng chưa
         #endregion
@@ -78,13 +79,16 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
         //Constructor
-        public ToolViewModel(Service service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext)
+        public ToolViewModel(Service service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext, LanguageService languageService)
         {
-
+            _languageService = languageService;
             _context = powerTempWatchContext;
             _service = service;
             _appSetting = appSetting;
             _mySerialPort = mySerialPortService;
+            _languageService.LanguageChanged += UpdateTexts;
+
+            UpdateTexts();
             // Đăng ký lắng nghe sự kiện ngay khi ViewModel được tạo
             _mySerialPort.DataUpdated += HandleDataUpdate;
 
@@ -205,6 +209,55 @@ namespace Electric_Meter.MVVM.ViewModels
             });
         }
         #endregion
+        #region [ Methods - Language ]
+        public void UpdateTexts()
+        {
+            // Điện áp
+            PhaseAVoltageText = _languageService.GetString("PHASE A VOLTAGE");
+            PhaseBVoltageText = _languageService.GetString("PHASE B VOLTAGE");
+            PhaseCVoltageText = _languageService.GetString("PHASE C VOLTAGE");
+
+            // Dòng điện
+            PhaseACurrentText = _languageService.GetString("PHASE A CURRENT");
+            PhaseBCurrentText = _languageService.GetString("PHASE B CURRENT");
+            PhaseCCurrentText = _languageService.GetString("PHASE C CURRENT");
+
+            // Công suất
+            TotalPowerText = _languageService.GetString("TOTAL POWER");
+            PhaseAPowerText = _languageService.GetString("Phase A Power");
+            PhaseBPowerText = _languageService.GetString("Phase B Power");
+            PhaseCPowerText = _languageService.GetString("Phase C Power");
+
+            // Năng lượng
+            ExportEnergyText = _languageService.GetString("EXPORT ENERGY");
+            ImportEnergyText = _languageService.GetString("IMPORT ENERGY");
+            TotalEnergyText = _languageService.GetString("TOTAL ENERGY");
+
+            // Khác
+            SearchKeywordText = _languageService.GetString("Search keyword");
+            SelectDevicePlaceholderText = _languageService.GetString("Select device...");
+
+
+        }
+        #endregion
+
+        #region [ Language Texts ]
+        [ObservableProperty] private string phaseAVoltageText;
+        [ObservableProperty] private string phaseBVoltageText;
+        [ObservableProperty] private string phaseCVoltageText;
+        [ObservableProperty] private string phaseACurrentText;
+        [ObservableProperty] private string phaseBCurrentText;
+        [ObservableProperty] private string phaseCCurrentText;
+        [ObservableProperty] private string totalPowerText;
+        [ObservableProperty] private string phaseAPowerText;
+        [ObservableProperty] private string phaseBPowerText;
+        [ObservableProperty] private string phaseCPowerText;
+        [ObservableProperty] private string exportEnergyText;
+        [ObservableProperty] private string importEnergyText;
+        [ObservableProperty] private string totalEnergyText;
+        [ObservableProperty] private string searchKeywordText;
+        [ObservableProperty] private string selectDevicePlaceholderText;
+        #endregion
         #region [ Method ]
         private void GetDefaultSetting()
         {
@@ -216,18 +269,50 @@ namespace Electric_Meter.MVVM.ViewModels
                 new KeyValue { key = "C", value = "Thành Hình C" },
                 new KeyValue { key = "D", value = "Thành Hình D" }
             };
-            LstDevices = new ObservableCollection<Device>();
+            LstDevice = new ObservableCollection<Device>();
             SelectedAssembling = LstAssembling.FirstOrDefault();
             SearchQuery = string.Empty;
         }
-        private void OnSelectedAssemblingChanged(KeyValue value)
+        partial void OnSelectedAssemblingChanged(KeyValue value)
         {
             if (value != null)
             {
-                LstDevices = new ObservableCollection<Device>(_service.GetDevicesByAssembling(value.key));
-                // Chọn Device đầu tiên
-                SelectedDevice = LstDevices.FirstOrDefault();
-                //ReloadData(value.key, SelectedDevice?.address ?? 0);
+                // Lấy danh sách device theo assembling
+                LstDevice = new ObservableCollection<Device>(_service.GetDevicesByAssembling(value.key));
+
+                // Chọn device đầu tiên
+                SelectedDevice = LstDevice.FirstOrDefault();
+            }
+        }
+        partial void OnSelectedDeviceChanged(Device value)
+        {
+            if (value != null)
+            {
+                // Lấy dữ liệu mới từ database theo device mới
+                _ = LoadLatestDataAsync(value.devid);
+            }
+        }
+        // Hàm async load dữ liệu mới
+        private async Task LoadLatestDataAsync(int devid)
+        {
+            try
+            {
+                var latestData = await _service.GetLatestSensorByDeviceAsync(devid);
+
+                var latestDict = latestData
+                 .Join(_context.controlcodes,
+                       s => s.codeid,
+                       c => c.codeid,
+                       (s, c) => new { c.name, s.value })
+                  .ToDictionary(x => x.name, x => (double?)x.value);
+
+                // Cập nhật UI
+                UpdateToolViewData(latestDict);
+
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu cần
             }
         }
         #endregion

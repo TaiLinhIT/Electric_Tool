@@ -6,6 +6,7 @@ using Electric_Meter.MVVM.ViewModels;
 using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
 
+using Microsoft.Data.SqlClient; // Cần thiết để bắt SqlException
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,7 +65,7 @@ namespace Electric_Meter
             services.AddSingleton<SerialPort>();//new add
             services.AddSingleton<MySerialPortService>();
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddNavigationViewPageProvider();               // từ Wpf.Ui.DependencyInjection
+            services.AddNavigationViewPageProvider();             // từ Wpf.Ui.DependencyInjection
             services.AddSingleton<INavigationService, NavigationService>(); // từ Wpf.Ui (core)
             services.AddSingleton<LanguageService>();
             // UI (MainWindow)
@@ -88,68 +89,91 @@ namespace Electric_Meter
             using var scope = ServiceProvider.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
 
+            // Chặn luồng startup cho đến khi database sẵn sàng.
             Task.Run(async () =>
             {
                 try
                 {
+                    // 1. Apply Migrations (Tách ra để xử lý lỗi "Object already exists")
                     var pending = await db.Database.GetPendingMigrationsAsync();
                     if (pending.Any())
-                        await db.Database.MigrateAsync();
+                    {
+                        try
+                        {
+                            await db.Database.MigrateAsync();
+                        }
+                        // Bắt lỗi cụ thể "Đối tượng đã tồn tại" và bỏ qua lỗi này (chỉ trong trường hợp development)
+                        catch (SqlException sqlEx) when (sqlEx.Message.Contains("已存在") || sqlEx.Message.Contains("already exists"))
+                        {
+                            Console.WriteLine("⚠️ WARNING: Migration failed due to 'object already exists' error. Assuming schema is mostly correct and continuing.");
+                            // In lỗi chi tiết
+                            Console.WriteLine($"  Inner Exception: {sqlEx.Message}");
+                        }
+                    }
 
+                    // 2. Seed Data
                     var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
                     await seeder.SeedAsync();
+
+                    // 3. Create Stored Procedures
                     await EnsureStoredProceduresAsync(db);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Migration/Seeding failed: " + ex.Message);
+                    // Log tất cả các lỗi khác (Seeding, Stored Procedure, hoặc Migration lỗi khác)
+                    Console.WriteLine("❌ Database Startup Error:");
+                    Console.WriteLine($"  Message: {ex.Message}");
+                    if (ex.InnerException != null)
+                        Console.WriteLine($"  Inner Exception: {ex.InnerException.Message}");
+
+                    // Throw the exception again to signal a critical startup failure
+                    throw;
                 }
-            }).Wait(); // Wait ở background, không chặn UI thread
+            }).Wait();
         }
+
+        /// <summary>
+        /// Tạo hoặc cập nhật Stored Procedures.
+        /// (Đã xóa try-catch ở đây để lỗi SQL được xử lý ở ApplyMigrationsAndSeed)
+        /// </summary>
         private static async Task EnsureStoredProceduresAsync(PowerTempWatchContext db)
         {
-            try
-            {
-                var sqlCheck = @"
-                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'GetActiveDevices')
+            var sqlLatestSensor = @"
+                    CREATE OR ALTER PROCEDURE GetLatestSensorByDevice
+                        @devid INT
+                    AS
                     BEGIN
-                        EXEC('
-                            CREATE PROCEDURE GetActiveDevices
-                            AS
-                            BEGIN
-                                SET NOCOUNT ON;
-                                SELECT * FROM devices WHERE activeid = 1;
-                            END
-                        ')
+                        SET NOCOUNT ON;
+
+                        ;WITH LatestData AS
+                        (
+                            SELECT 
+                                devid,
+                                codeid,
+                                value,
+                                day,
+                                logid,
+                                ROW_NUMBER() OVER (
+                                    PARTITION BY devid, codeid 
+                                    ORDER BY logid DESC
+                                ) AS rn
+                            FROM SensorData
+                            WHERE devid = @devid
+                        )
+                        SELECT 
+                            devid,
+                            codeid,
+                            value,
+                            day,
+                            logid -- Đã bổ sung
+                        FROM LatestData
+                        WHERE rn = 1
+                        ORDER BY codeid;
                     END
                 ";
-
-                await db.Database.ExecuteSqlRawAsync(sqlCheck);
-
-                        // Có thể tạo thêm nhiều SP ở đây
-                        var sqlCheck2 = @"
-                    IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'GetDeviceById')
-                    BEGIN
-                        EXEC('
-                            CREATE PROCEDURE GetDeviceById
-                                @devid INT
-                            AS
-                            BEGIN
-                                SET NOCOUNT ON;
-                                SELECT * FROM devices WHERE devid = @devid;
-                            END
-                        ')
-                    END
-                ";
-
-                await db.Database.ExecuteSqlRawAsync(sqlCheck2);
-
-                Console.WriteLine("✅ Stored procedures checked/created successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("⚠️ Create Stored Procedures failed: " + ex.Message);
-            }
+            // Thực thi SQL. Nếu có lỗi, nó sẽ được ném lên caller.
+            await db.Database.ExecuteSqlRawAsync(sqlLatestSensor);
+            Console.WriteLine("✅ Stored Procedure 'GetLatestSensorByDevice' created/updated successfully.");
         }
 
 

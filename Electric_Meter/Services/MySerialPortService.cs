@@ -476,6 +476,7 @@ namespace Electric_Meter.Services
                 // 1. Chuẩn bị giá trị cần lưu
                 var valuesToSave = new Dictionary<string, double?>
                 {
+                    { "Ua", GetValueWithAddressSuffix(dataForAddress, "Ua", address) },
                     { "Ub", GetValueWithAddressSuffix(dataForAddress, "Ub", address) },
                     { "Uc", GetValueWithAddressSuffix(dataForAddress, "Uc", address) },
                     { "Ia", GetValueWithAddressSuffix(dataForAddress, "Ia", address) },

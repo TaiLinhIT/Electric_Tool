@@ -13,5 +13,20 @@
     "Setting": "Cài đặt",
     "Menu": "Menu",
     "Dashboard": "Bảng điều khiển",
-    "Tool": "Công cụ"
+    "Tool": "Công cụ",
+    "PHASE A VOLTAGE": "ĐIỆN ÁP PHA A",
+    "PHASE B VOLTAGE": "ĐIỆN ÁP PHA B",
+    "PHASE C VOLTAGE": "ĐIỆN ÁP PHA C",
+    "PHASE A CURRENT": "DÒNG ĐIỆN PHA A",
+    "PHASE B CURRENT": "DÒNG ĐIỆN PHA B",
+    "PHASE C CURRENT": "DÒNG ĐIỆN PHA C",
+    "TOTAL POWER": "TỔNG CÔNG SUẤT",
+    "Phase A Power": "Công suất Pha A",
+    "Phase B Power": "Công suất Pha B",
+    "Phase C Power": "Công suất Pha C",
+    "EXPORT ENERGY": "NĂNG LƯỢNG XUẤT",
+    "IMPORT ENERGY": "NĂNG LƯỢNG NHẬP",
+    "TOTAL ENERGY": "TỔNG NĂNG LƯỢNG",
+    "Search keyword": "Nhập từ khóa tìm kiếm",
+    "Select device...": "Chọn thiết bị..."
 }

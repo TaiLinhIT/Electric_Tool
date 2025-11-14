@@ -8,99 +8,117 @@
              d:DesignWidth="1000" d:DesignHeight="700">
 
     <UserControl.Resources>
+        <SolidColorBrush x:Key="TextColorPrimary" Color="#fafafa"/>
+        <SolidColorBrush x:Key="TextColorSecondary" Color="#6B7280"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#0a0a0a"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#374151"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#1D4ED8"/>
+
         <Style x:Key="BoardLabelStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#111827"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0,6"/>
+            <Setter Property="Margin" Value="0,10,0,10"/>
         </Style>
 
         <Style x:Key="BoardValueStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#1F2937"/>
-            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
+            <Setter Property="FontSize" Value="32"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
-        <Style x:Key="BoardUnitStyle" TargetType="TextBlock" BasedOn="{StaticResource BoardValueStyle}">
+        <Style x:Key="BoardUnitStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
             <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="Opacity" Value="0.8"/>
         </Style>
     </UserControl.Resources>
 
     <Border Margin="16"
-            BorderBrush="#6B7280"
+            Background="{StaticResource BackgroundColor}"
+            BorderBrush="{StaticResource BorderColor}"
             BorderThickness="0.5"
-            Background="#F9FAFB"
-            CornerRadius="5"
-            Padding="25">
+            CornerRadius="10" Padding="30">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="0,0,0,15">
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
-                    <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0" Foreground="#111827" FontSize="14"/>
+            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
+                    <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0" Foreground="{StaticResource AccentColor}" FontSize="14"/>
                     <TextBlock Text="{Binding CurrentTime, StringFormat='HH:mm:ss dd/MM/yyyy'}"
                                FontSize="12"
                                FontWeight="Medium"
                                VerticalAlignment="Center"
-                               Foreground="#111827"/>
+                               Foreground="{StaticResource TextColorPrimary}"/>
                 </StackPanel>
 
-                <Grid Margin="0,8,0,0">
+                <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="0" Width="140" HorizontalAlignment="Left" Margin="0,0,10,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0"
+                              ItemsSource="{Binding LstDevice}"
+                              DisplayMemberPath="name"
+                              SelectedValuePath="devid"
+                              SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Foreground="{StaticResource TextColorPrimary}"
+                              Background="{StaticResource BackgroundColor}" BorderBrush="{StaticResource BorderColor}"
+                              Height="32"
+                              VerticalContentAlignment="Center"
+                              Margin="0,0,10,0"
+                              HorizontalAlignment="Left"
+                              Width="200"/>
 
-                        <TextBox Grid.Column="0"
-                             Text="{Binding SearchQuery}"
-                             Padding="5,0,25,0" 
-                             VerticalContentAlignment="Center">
-                            <TextBox.ToolTip>Nhập từ khóa tìm kiếm</TextBox.ToolTip>
-                        </TextBox>
+                    <ComboBox Grid.Column="0"
+                              ItemsSource="{Binding LstDevice}"
+                              DisplayMemberPath="name"
+                              SelectedValuePath="devid"
+                              SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Foreground="{StaticResource TextColorPrimary}"
+                              Background="{StaticResource BackgroundColor}"
+                              BorderBrush="{StaticResource BorderColor}"
+                              Height="32"
+                              VerticalContentAlignment="Center"
+                              Margin="0,0,10,0"
+                              HorizontalAlignment="Left"
+                              Width="200"/>
 
-                        <ui:SymbolIcon Grid.Column="1" 
-                                       Symbol="Search24" 
-                                       Foreground="#6B7280"
-                                       Margin="0,0,5,0"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <ComboBox Grid.Column="1"
-					          ItemsSource="{Binding LstAssembling}"
-					          DisplayMemberPath="value"
-					          SelectedValuePath="key"
-					          SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-					          VerticalContentAlignment="Center"
-					          Padding="2,0,2,0"
-					          Height="28"/>
+                    <ComboBox Grid.Column="2"
+                              ItemsSource="{Binding LstAssembling}"
+                              DisplayMemberPath="value"
+                              SelectedValuePath="key"
+                              SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center"
+                              Padding="10,0,10,0"
+                              Height="32"
+                              Foreground="{StaticResource TextColorPrimary}"
+                              Background="{StaticResource BackgroundColor}" BorderBrush="{StaticResource BorderColor}"
+                              HorizontalAlignment="Right"/>
                 </Grid>
             </StackPanel>
 
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -114,51 +132,39 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="0">
-                        <TextBlock Text="ĐIỆN ÁP PHA A" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding PhaseAVoltageText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ua}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="1" Grid.Column="0">
-                        <TextBlock Text="ĐIỆN ÁP PHA B" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PhaseBVoltageText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ub}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="0">
-                        <TextBlock Text="ĐIỆN ÁP PHA C" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding PhaseCVoltageText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Uc}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1" Fill="#374151" Margin="0,10"/>
+                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1" Fill="{StaticResource BorderColor}" Margin="0,15"/>
 
-                    <StackPanel Grid.Row="4" Grid.Column="0">
-                        <TextBlock Text="DÒNG ĐIỆN PHA A" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding PhaseACurrentText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ia}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="5" Grid.Column="0">
-                        <TextBlock Text="DÒNG ĐIỆN PHA B" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding PhaseBCurrentText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ib}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="6" Grid.Column="0">
-                        <TextBlock Text="DÒNG ĐIỆN PHA C" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding PhaseCCurrentText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Ic}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
@@ -180,61 +186,48 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="0">
-                        <TextBlock Text="TỔNG CÔNG SUẤT" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding TotalPowerText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pt}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="1" Grid.Column="0">
-                        <TextBlock Text="CÔNG SUẤT PHA A" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PhaseAPowerText}"  Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pa}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="0">
-                        <TextBlock Text="CÔNG SUẤT PHA B" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding PhaseBPowerText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pb}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="0">
-                        <TextBlock Text="CÔNG SUẤT PHA C" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding PhaseCPowerText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Pc}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="#374151" Margin="0,10"/>
+                    <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="{StaticResource BorderColor}" Margin="0,15"/>
 
-                    <StackPanel Grid.Row="5" Grid.Column="0">
-                        <TextBlock Text="NĂNG LƯỢNG XUẤT" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding ExportEnergyText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Exp}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="6" Grid.Column="0">
-                        <TextBlock Text="NĂNG LƯỢNG NHẬP" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding ImportEnergyText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Imp}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="7" Grid.Column="0">
-                        <TextBlock Text="TỔNG NĂNG LƯỢNG" Style="{StaticResource BoardLabelStyle}"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding TotalEnergyText}" Style="{StaticResource BoardLabelStyle}"/>
                     <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{Binding Total}" Style="{StaticResource BoardValueStyle}" />
                         <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />

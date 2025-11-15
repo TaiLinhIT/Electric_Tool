@@ -299,12 +299,32 @@ namespace Electric_Meter.MVVM.ViewModels
             {
                 var latestData = await _service.GetLatestSensorByDeviceAsync(devid);
 
-                var latestDict = latestData
-                 .Join(_context.controlcodes,
-                       s => s.codeid,
-                       c => c.codeid,
-                       (s, c) => new { c.name, s.value })
-                  .ToDictionary(x => x.name, x => (double?)x.value);
+                Dictionary<string, double?> latestDict;
+
+                if (latestData == null || latestData.Count == 0) // <--- KIỂM TRA DỮ LIỆU RỖNG
+                {
+                    // 1. Nếu không có dữ liệu, tạo một Dictionary với tất cả các key cần thiết và gán giá trị 0.0
+                    latestDict = new Dictionary<string, double?>
+            {
+                // Danh sách tất cả các key bạn đang sử dụng trong UpdateToolViewData
+                { "Ia", 0.0 }, { "Ib", 0.0 }, { "Ic", 0.0 },
+                { "Ua", 0.0 }, { "Ub", 0.0 }, { "Uc", 0.0 },
+                { "Pt", 0.0 }, { "Pa", 0.0 }, { "Pb", 0.0 }, { "Pc", 0.0 },
+                { "Exp", 0.0 }, { "Imp", 0.0 },
+                { "Total", 0.0 } // Thêm Total nếu bạn muốn nó là 0.0
+                // Thêm các key khác nếu có
+            };
+                }
+                else
+                {
+                    // 2. Nếu có dữ liệu, thực hiện Join và tạo Dictionary như bình thường
+                    latestDict = latestData
+                       .Join(_context.controlcodes,
+                            s => s.codeid,
+                            c => c.codeid,
+                            (s, c) => new { c.name, s.value })
+                       .ToDictionary(x => x.name, x => (double?)x.value);
+                }
 
                 // Cập nhật UI
                 UpdateToolViewData(latestDict);

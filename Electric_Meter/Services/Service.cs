@@ -17,7 +17,7 @@ namespace Electric_Meter.Services
         private readonly IServiceScopeFactory _scopeFactory;
         public Service(PowerTempWatchContext powerTempWatchContext, IServiceScopeFactory serviceScope)
         {
-            _context = powerTempWatchContext;
+            //_context = powerTempWatchContext;
             _scopeFactory = serviceScope;
         }
 
@@ -124,12 +124,16 @@ namespace Electric_Meter.Services
 
         public List<Device> GetDevicesList()
         {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
             var lstDevice = _context.devices.Where(x => x.activeid == 1 && x.typeid == 7).ToList();
             return lstDevice;
         }
 
         public List<Device> GetDevicesByAssembling(string key)
         {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
             return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
         }
 
@@ -166,6 +170,8 @@ namespace Electric_Meter.Services
 
         public async Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid)
         {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
             return await _context.sensorDatas.FromSqlInterpolated($"EXEC GetLatestSensorByDevice @devid={devid}").ToListAsync();
         }
     }

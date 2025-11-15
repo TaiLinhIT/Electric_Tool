@@ -92,6 +92,9 @@ namespace Electric_Meter
             // Chặn luồng startup cho đến khi database sẵn sàng.
             Task.Run(async () =>
             {
+                using var scope = ServiceProvider.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
                 try
                 {
                     // 1. Apply Migrations (Tách ra để xử lý lỗi "Object already exists")
@@ -105,14 +108,14 @@ namespace Electric_Meter
                         // Bắt lỗi cụ thể "Đối tượng đã tồn tại" và bỏ qua lỗi này (chỉ trong trường hợp development)
                         catch (SqlException sqlEx) when (sqlEx.Message.Contains("已存在") || sqlEx.Message.Contains("already exists"))
                         {
-                            Console.WriteLine("⚠️ WARNING: Migration failed due to 'object already exists' error. Assuming schema is mostly correct and continuing.");
+                            Console.WriteLine("WARNING: Migration failed due to 'object already exists' error. Assuming schema is mostly correct and continuing.");
                             // In lỗi chi tiết
                             Console.WriteLine($"  Inner Exception: {sqlEx.Message}");
                         }
                     }
 
                     // 2. Seed Data
-                    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+                    //var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
                     await seeder.SeedAsync();
 
                     // 3. Create Stored Procedures

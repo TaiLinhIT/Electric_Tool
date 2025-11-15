@@ -315,16 +315,7 @@ E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Mete
 E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.genruntimeconfig.cache
 E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\ref\Electric_Meter.dll
 E:\MyProject\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Languages\zh.json
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.CodeAnalysis.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.EntityFrameworkCore.Relational.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Tokens.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.ComponentModel.Composition.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Runtime.Caching.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Wpf.Ui.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Assets\electric.ico
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.exe
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\appsetting.json
@@ -338,7 +329,6 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\SeedData\d
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\SeedData\sensorType.json
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.deps.json
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.runtimeconfig.json
-D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.pdb
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Azure.Core.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Azure.Identity.dll
@@ -348,6 +338,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\MessagePac
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\MessagePack.Annotations.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Bcl.AsyncInterfaces.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Build.Locator.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.CodeAnalysis.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.CodeAnalysis.CSharp.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.CodeAnalysis.Workspaces.dll
@@ -357,6 +348,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.EntityFrameworkCore.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.EntityFrameworkCore.Abstractions.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.EntityFrameworkCore.Design.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.EntityFrameworkCore.Relational.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.EntityFrameworkCore.SqlServer.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Extensions.Caching.Abstractions.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Extensions.Caching.Memory.dll
@@ -383,6 +375,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Logging.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Protocols.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.IdentityModel.Tokens.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.NET.StringTools.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.ServiceHub.Framework.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.ServiceHub.Resources.dll
@@ -399,9 +392,11 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Xaml.Behaviors.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Mono.TextTemplating.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Nerdbank.Streams.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\StreamJsonRpc.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.ClientModel.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Collections.Immutable.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.ComponentModel.Composition.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Composition.AttributedModel.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Composition.Convention.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Composition.Hosting.dll
@@ -416,11 +411,13 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.IO.
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.IO.Ports.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Management.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Memory.Data.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Runtime.Caching.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Security.Cryptography.ProtectedData.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Text.Encodings.Web.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Text.Json.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Threading.AccessControl.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\System.Threading.Tasks.Dataflow.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Wpf.Ui.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Wpf.Ui.Abstractions.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Wpf.Ui.DependencyInjection.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\cs\Microsoft.CodeAnalysis.resources.dll
@@ -444,6 +441,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\it\Microso
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
@@ -581,7 +579,9 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\zh-Hans\St
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\zh-Hant\StreamJsonRpc.resources.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\runtimes\android-arm\native\libSystem.IO.Ports.Native.so

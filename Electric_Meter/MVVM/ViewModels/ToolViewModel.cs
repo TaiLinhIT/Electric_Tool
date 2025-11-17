@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
+using Electric_Meter.Utilities;
 // Thêm partial vào lớp ToolViewModel
 
 namespace Electric_Meter.MVVM.ViewModels
@@ -57,6 +58,7 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string exp = "0.00";
         [ObservableProperty] private string imp = "0.00";
         [ObservableProperty] private string total = "0.00";
+        [ObservableProperty] private bool isLoading = false;
         [ObservableProperty] private List<KeyValue> lstAssembling;
         [ObservableProperty] private KeyValue selectedAssembling;
         [ObservableProperty] private ObservableCollection<Device> lstDevice;
@@ -201,8 +203,9 @@ namespace Electric_Meter.MVVM.ViewModels
 
         private void HandleDataUpdate(Dictionary<string, double?> data)
         {
+
             // Đảm bảo cập nhật UI trên luồng chính (Dispatcher)
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 // Gọi hàm cập nhật dữ liệu của ViewModel
                 UpdateToolViewData(data);
@@ -295,44 +298,66 @@ namespace Electric_Meter.MVVM.ViewModels
         // Hàm async load dữ liệu mới
         private async Task LoadLatestDataAsync(int devid)
         {
+            // Bắt đầu LOADING trên UI Thread
+            Application.Current.Dispatcher.Invoke(() => { IsLoading = true; });
+
+            Dictionary<string, double?> latestDict = null;
+
             try
             {
-                var latestData = await _service.GetLatestSensorByDeviceAsync(devid);
+                // 1. Tải dữ liệu DB: Dùng ConfigureAwait(false) để cho phép phần tiếp theo của hàm 
+                // chạy trên luồng nền (Thread Pool) và không cần quay lại UI Thread.
+                var latestSensorData = await _service.GetLatestSensorByDeviceAsync(devid).ConfigureAwait(false);
 
-                Dictionary<string, double?> latestDict;
-
-                if (latestData == null || latestData.Count == 0) // <--- KIỂM TRA DỮ LIỆU RỖNG
+                if (latestSensorData == null || latestSensorData.Count == 0)
                 {
-                    // 1. Nếu không có dữ liệu, tạo một Dictionary với tất cả các key cần thiết và gán giá trị 0.0
+                    // Nếu không có dữ liệu, khởi tạo Dictionary với giá trị mặc định 0.0
                     latestDict = new Dictionary<string, double?>
-            {
-                // Danh sách tất cả các key bạn đang sử dụng trong UpdateToolViewData
-                { "Ia", 0.0 }, { "Ib", 0.0 }, { "Ic", 0.0 },
-                { "Ua", 0.0 }, { "Ub", 0.0 }, { "Uc", 0.0 },
-                { "Pt", 0.0 }, { "Pa", 0.0 }, { "Pb", 0.0 }, { "Pc", 0.0 },
-                { "Exp", 0.0 }, { "Imp", 0.0 },
-                { "Total", 0.0 } // Thêm Total nếu bạn muốn nó là 0.0
-                // Thêm các key khác nếu có
-            };
+                    {
+                        { "Ia", 0.0 }, { "Ib", 0.0 }, { "Ic", 0.0 },
+                        { "Ua", 0.0 }, { "Ub", 0.0 }, { "Uc", 0.0 },
+                        { "Pt", 0.0 }, { "Pa", 0.0 }, { "Pb", 0.0 }, { "Pc", 0.0 },
+                        { "Exp", 0.0 }, { "Imp", 0.0 },
+                        { "Total", 0.0 }
+                    };
                 }
                 else
                 {
-                    // 2. Nếu có dữ liệu, thực hiện Join và tạo Dictionary như bình thường
-                    latestDict = latestData
+                    latestDict = latestSensorData
                        .Join(_context.controlcodes,
-                            s => s.codeid,
-                            c => c.codeid,
-                            (s, c) => new { c.name, s.value })
+                             s => s.codeid,
+                             c => c.codeid,
+                             (s, c) => new { c.name, s.value })
+                       // Sử dụng ToList() HOẶC ToDictionary() trên luồng nền là OK.
                        .ToDictionary(x => x.name, x => (double?)x.value);
                 }
 
-                // Cập nhật UI
-                UpdateToolViewData(latestDict);
-
+                // 3. Cập nhật UI: Bắt buộc phải quay lại UI Thread để tương tác với Properties/Control.
+                if (latestDict != null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        // Gọi hàm cập nhật UI chính
+                        UpdateToolViewData(latestDict);
+                    });
+                }
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi nếu cần
+                // Xử lý lỗi. Bạn có thể muốn cập nhật UI để hiển thị lỗi:
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // Ví dụ: MessageBox.Show($"Lỗi khi tải dữ liệu: {ex.Message}");
+                    Tool.Log($"Lỗi khi tải dữ liệu cho devid {devid}: {ex.Message}");
+                });
+            }
+            finally
+            {
+                // 4. TẮT Loading: Bắt buộc phải quay lại UI Thread để thay đổi IsLoading.
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    IsLoading = false;
+                });
             }
         }
         #endregion

@@ -49,7 +49,15 @@ namespace Electric_Meter
 
             // Đăng ký DbContext
             services.AddDbContext<PowerTempWatchContext>(options =>
-                options.UseSqlServer(appSetting.ConnectString));
+                options.UseSqlServer(
+                    appSetting.ConnectString,
+                    sqlOptions =>
+                    {
+                        sqlOptions.CommandTimeout(240); // ⏱ Timeout 60 giây
+                    }
+                )
+            );
+
 
             // Seeder (dùng DI để lấy context tự động)
             services.AddTransient<DatabaseSeeder>();

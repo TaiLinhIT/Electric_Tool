@@ -172,7 +172,10 @@ namespace Electric_Meter.Services
         {
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            return await _context.sensorDatas.FromSqlInterpolated($"EXEC GetLatestSensorByDevice @devid={devid}").ToListAsync();
+
+            return await _context.sensorDatas
+            .FromSqlInterpolated($"EXEC GetLatestSensorByDevice @devid={devid}")
+            .ToListAsync();
         }
     }
 

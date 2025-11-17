@@ -22,7 +22,6 @@ namespace Electric_Meter.Services
         private HashSet<string> processedRequests = new HashSet<string>();
         private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
         private static readonly object lockObject = new object();
-
         public SerialPort _serialPort;
         public event SerialDataReceivedEventHandler Sdre;
         public string Port;
@@ -34,6 +33,7 @@ namespace Electric_Meter.Services
         #endregion
         public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting, SerialPort serialPort)
         {
+
             _serialPort = serialPort;
             _context = powerTempWatchContext;
             _appSetting = appSetting;

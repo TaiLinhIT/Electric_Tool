@@ -7,8 +7,10 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     mc:Ignorable="d"
     Title="Electric Meter Interface"
-    d:MinWidth="1100"
-    d:MinHeight="540"
+    MinWidth="1100" 
+    MinHeight="600"
+    Width="1100" 
+    Height="600"
     WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -35,7 +37,7 @@
                     Width="140"
                     Margin="0,0,10,0"
                     DockPanel.Dock="Left"
-                    ItemsSource="{Binding Languages}"
+                    ItemsSource="{Binding LstLanguage}"
                     SelectedItem="{Binding SelectedLanguage}">
                     <ComboBox.ToolTip>Language</ComboBox.ToolTip>
                 </ComboBox>
@@ -45,7 +47,7 @@
                     Width="140"
                     Margin="0,0,10,0"
                     DockPanel.Dock="Left"
-                    ItemsSource="{Binding Ports}"
+                    ItemsSource="{Binding LstPort}"
                     SelectedItem="{Binding SelectedPort}">
                     <ComboBox.ToolTip>Port</ComboBox.ToolTip>
                 </ComboBox>
@@ -55,11 +57,21 @@
                     Width="140"
                     Margin="0,0,10,0"
                     DockPanel.Dock="Left"
-                    ItemsSource="{Binding Baudrates}"
+                    ItemsSource="{Binding LstBaurate}"
                     SelectedItem="{Binding SelectedBaudrate}">
                     <ComboBox.ToolTip>Baudrate</ComboBox.ToolTip>
                 </ComboBox>
 
+                <!-- Reload data-->
+                <ComboBox
+                    Width="140"
+                    Margin="0,0,10,0"
+                    DockPanel.Dock="Left"
+                    ItemsSource="{Binding LstSenddata}"
+                    SelectedItem="{Binding SelectedSenddata}">
+                    <ComboBox.ToolTip>Baudrate</ComboBox.ToolTip>
+                </ComboBox>
+                
                 <!-- Right: Play/Pause -->
                 <ui:Button
                     Width="100"

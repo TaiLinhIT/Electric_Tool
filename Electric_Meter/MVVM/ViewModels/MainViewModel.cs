@@ -34,11 +34,13 @@ namespace Electric_Meter.MVVM.ViewModels
         private ObservableCollection<Device> _Devices;
 
         // ----- Toolbar -----
-        [ObservableProperty] private ObservableCollection<string> _languages;
-        [ObservableProperty] private ObservableCollection<string> _ports;
-        [ObservableProperty] private string _selectedPort;
-        [ObservableProperty] private ObservableCollection<int> _baudrates;
-        [ObservableProperty] private int _selectedBaudrate;
+        [ObservableProperty] private ObservableCollection<string> lstLanguage;
+        [ObservableProperty] private ObservableCollection<string> lstPort;
+        [ObservableProperty] private string selectedPort;
+        [ObservableProperty] private ObservableCollection<int> lstBaurate;
+        [ObservableProperty] private int selectedBaudrate;
+        [ObservableProperty] public ObservableCollection<int> lstResendData;
+        [ObservableProperty] public int selectedResendData;
         [ObservableProperty] private string _playPauseText;
         [ObservableProperty] private SymbolRegular _playPauseIcon = SymbolRegular.Play24;
         [ObservableProperty] private bool _isPlaying = false;
@@ -77,9 +79,10 @@ namespace Electric_Meter.MVVM.ViewModels
             Service service)
         {
             _languageService = languageService;
-            
-            
-            SelectedPort = "COM3";
+
+
+            _appSetting = appSetting;
+            SelectedPort = _appSetting.Port;
             // Select language
 
 
@@ -103,17 +106,17 @@ namespace Electric_Meter.MVVM.ViewModels
             _languageService.LanguageChanged += () => UpdateTexts();
             #region Default Setting
             SelectedLanguage = "中文";
-            Languages = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
-            SelectedBaudrate = 9600;
-            Baudrates = new([9600, 19200, 38400, 115200]);
-            Ports = new(["COM1", "COM2", "COM3"]);
+            LstLanguage = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
+            SelectedBaudrate = _appSetting.Baudrate;
+            LstBaurate = new([1200, 9600, 19200, 38400, 115200]);
+            LstPort = new(["COM1", "COM2", "COM3"]);
+            LstResendData = new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
             #endregion
             // Inject các phụ thuộc
             _mySerialPort = mySerialPort;
             _context = powerTempWatchContext;
             SettingVM = settingViewModel;
             ToolVM = toolViewModel;
-            _appSetting = appSetting;
             // Khởi tạo Commands thủ công, sử dụng namespace đầy đủ để giải quyết lỗi mơ hồ
             NavigateCommand = new RelayCommand<object>(OnNavigate);
             SettingCommand = new RelayCommand<object>(ExecuteSettingForm);
@@ -122,7 +125,7 @@ namespace Electric_Meter.MVVM.ViewModels
             // Tạo collection rỗng ban đầu
             Devices = new ObservableCollection<Device>();
 
-     
+
 
 
             TogglePlayPause();
@@ -192,7 +195,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 }
             };
 
-                    FooterMenuItems = new ObservableCollection<NavigationViewItem>
+            FooterMenuItems = new ObservableCollection<NavigationViewItem>
             {
                 new NavigationViewItem
                 {

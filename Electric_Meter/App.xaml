@@ -8,14 +8,63 @@
              xmlns:views="clr-namespace:Electric_Meter.MVVM.Views"
              >
     <Application.Resources>
+        <!-- FIX: Explicitly define the ResourceDictionary to resolve the MergedDictionaries property -->
         <ResourceDictionary>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <!-- Merged Dictionaries (WPFIUI theming) -->
+            <!-- This section uses property element syntax to merge external dictionaries into the main ResourceDictionary of the application. -->
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
-            
+
+            <!-- Effects -->
+            <DropShadowEffect x:Key="WindowDropShadow"
+                              ShadowDepth="5"
+                              Direction="315"
+                              Color="Black"
+                              Opacity="0.3"
+                              BlurRadius="10"/>
+
+            <DropShadowEffect x:Key="CardDropShadow"
+                              ShadowDepth="2"
+                              Direction="270"
+                              Color="Black"
+                              Opacity="0.1"
+                              BlurRadius="5"/>
+
+            <!-- TextBlock Styles -->
+            <Style TargetType="TextBlock" x:Key="TitleTextBlockStyle">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="#333"/>
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="InfoTextBlockStyle">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="#666"/>
+            </Style>
+
+            <!-- Button Style -->
+            <Style x:Key="ActionButtonStyle" TargetType="Button">
+                <Setter Property="Padding" Value="8 4"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="5"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
-   
 </Application>

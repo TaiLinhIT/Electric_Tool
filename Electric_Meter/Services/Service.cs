@@ -1,5 +1,6 @@
 using System.Windows;
 
+using Electric_Meter.Dto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
@@ -167,6 +168,16 @@ namespace Electric_Meter.Services
                 return new List<Device>();
             }
         }
+        public async Task<List<LatestSensorByDeviceYear>> GetLatestSensorByDeviceYear(int year)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+
+            return await _context.Set<LatestSensorByDeviceYear>()
+                .FromSqlInterpolated($"EXEC GetLatestSensorByDeviceYear @year={year}")
+                .ToListAsync();
+        }
+
 
         public async Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid)
         {

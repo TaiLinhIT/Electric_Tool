@@ -109,7 +109,7 @@ namespace Electric_Meter.MVVM.ViewModels
             LstLanguage = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
             SelectedBaudrate = _appSetting.Baudrate;
             LstBaurate = new([1200, 9600, 19200, 38400, 115200]);
-            LstPort = new(["COM1", "COM2", "COM3"]);
+            LstPort = new(["COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM10"]);
             LstResendData = new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
             #endregion
             // Inject các phụ thuộc

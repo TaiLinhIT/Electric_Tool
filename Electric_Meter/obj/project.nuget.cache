@@ -1,13 +1,61 @@
 {
   "version": 2,
-  "dgSpecHash": "16ToxIMmTa4=",
+  "dgSpecHash": "mt6KBU4desY=",
   "success": true,
   "projectFilePath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\fontawesome\\4.7.0\\fontawesome.4.7.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\fontawesome.wpf\\4.7.0.9\\fontawesome.wpf.4.7.0.9.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\livecharts\\0.9.7\\livecharts.0.9.7.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\livecharts.wpf\\0.9.7\\livecharts.wpf.0.9.7.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks\\6.2.1\\mahapps.metro.iconpacks.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.bootstrapicons\\6.2.1\\mahapps.metro.iconpacks.bootstrapicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.boxicons\\6.2.1\\mahapps.metro.iconpacks.boxicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.boxicons2\\6.2.1\\mahapps.metro.iconpacks.boxicons2.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.circumicons\\6.2.1\\mahapps.metro.iconpacks.circumicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.codicons\\6.2.1\\mahapps.metro.iconpacks.codicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.coolicons\\6.2.1\\mahapps.metro.iconpacks.coolicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.core\\6.2.1\\mahapps.metro.iconpacks.core.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.entypo\\6.2.1\\mahapps.metro.iconpacks.entypo.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.evaicons\\6.2.1\\mahapps.metro.iconpacks.evaicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.feathericons\\6.2.1\\mahapps.metro.iconpacks.feathericons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.fileicons\\6.2.1\\mahapps.metro.iconpacks.fileicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.fontaudio\\6.2.1\\mahapps.metro.iconpacks.fontaudio.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.fontawesome\\6.2.1\\mahapps.metro.iconpacks.fontawesome.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.fontawesome5\\6.2.1\\mahapps.metro.iconpacks.fontawesome5.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.fontawesome6\\6.2.1\\mahapps.metro.iconpacks.fontawesome6.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.fontisto\\6.2.1\\mahapps.metro.iconpacks.fontisto.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.forkawesome\\6.2.1\\mahapps.metro.iconpacks.forkawesome.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.gameicons\\6.2.1\\mahapps.metro.iconpacks.gameicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.ionicons\\6.2.1\\mahapps.metro.iconpacks.ionicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.jamicons\\6.2.1\\mahapps.metro.iconpacks.jamicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.keyruneicons\\6.2.1\\mahapps.metro.iconpacks.keyruneicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.lucide\\6.2.1\\mahapps.metro.iconpacks.lucide.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.material\\6.2.1\\mahapps.metro.iconpacks.material.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.materialdesign\\6.2.1\\mahapps.metro.iconpacks.materialdesign.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.materiallight\\6.2.1\\mahapps.metro.iconpacks.materiallight.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.memoryicons\\6.2.1\\mahapps.metro.iconpacks.memoryicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.microns\\6.2.1\\mahapps.metro.iconpacks.microns.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.mingcuteicons\\6.2.1\\mahapps.metro.iconpacks.mingcuteicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.modern\\6.2.1\\mahapps.metro.iconpacks.modern.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.mynauiicons\\6.2.1\\mahapps.metro.iconpacks.mynauiicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.octicons\\6.2.1\\mahapps.metro.iconpacks.octicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.phosphoricons\\6.2.1\\mahapps.metro.iconpacks.phosphoricons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.picolicons\\6.2.1\\mahapps.metro.iconpacks.picolicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.pixelarticons\\6.2.1\\mahapps.metro.iconpacks.pixelarticons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.radixicons\\6.2.1\\mahapps.metro.iconpacks.radixicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.remixicon\\6.2.1\\mahapps.metro.iconpacks.remixicon.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.rpgawesome\\6.2.1\\mahapps.metro.iconpacks.rpgawesome.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.simpleicons\\6.2.1\\mahapps.metro.iconpacks.simpleicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.typicons\\6.2.1\\mahapps.metro.iconpacks.typicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.unicons\\6.2.1\\mahapps.metro.iconpacks.unicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.vaadinicons\\6.2.1\\mahapps.metro.iconpacks.vaadinicons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.weathericons\\6.2.1\\mahapps.metro.iconpacks.weathericons.6.2.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mahapps.metro.iconpacks.zondicons\\6.2.1\\mahapps.metro.iconpacks.zondicons.6.2.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\messagepack\\2.5.192\\messagepack.2.5.192.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\messagepack.annotations\\2.5.192\\messagepack.annotations.2.5.192.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
@@ -144,5 +192,42 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\wpf-ui.abstractions\\4.0.3\\wpf-ui.abstractions.4.0.3.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\wpf-ui.dependencyinjection\\4.0.3\\wpf-ui.dependencyinjection.4.0.3.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'FontAwesome.WPF 4.7.0.9' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "libraryId": "FontAwesome.WPF",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'LiveCharts 0.9.7' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "libraryId": "LiveCharts",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'LiveCharts.Wpf 0.9.7' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Linh\\Project\\Electric_Tool\\Electric_Meter\\Electric_Meter.csproj",
+      "libraryId": "LiveCharts.Wpf",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    }
+  ]
 }

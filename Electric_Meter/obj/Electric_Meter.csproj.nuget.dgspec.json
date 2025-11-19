@@ -55,6 +55,22 @@
               "target": "Package",
               "version": "[8.4.0, )"
             },
+            "FontAwesome": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "FontAwesome.WPF": {
+              "target": "Package",
+              "version": "[4.7.0.9, )"
+            },
+            "LiveCharts.Wpf": {
+              "target": "Package",
+              "version": "[0.9.7, )"
+            },
+            "MahApps.Metro.IconPacks": {
+              "target": "Package",
+              "version": "[6.2.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.0, )"

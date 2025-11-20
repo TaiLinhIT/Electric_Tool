@@ -362,3 +362,9 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\refint\Ele
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.pdb
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.genruntimeconfig.cache
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\ref\Electric_Meter.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Hardcodet.NotifyIcon.Wpf.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\GetLatestSensorByDevice.sql
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\GetLatestSensorByDeviceYear.sql
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\Sensordata12monthbydevid.sql

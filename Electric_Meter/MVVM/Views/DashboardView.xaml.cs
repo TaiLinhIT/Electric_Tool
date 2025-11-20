@@ -75,5 +75,7 @@ namespace Electric_Meter.MVVM.Views
             var selectedSeries = (PieSeries)chartPoint.SeriesView; // chartPoint.SeriesView gives the specific series
             selectedSeries.PushOut = 15; // Amount to "explode" the slice
         }
+
+
     }
 }

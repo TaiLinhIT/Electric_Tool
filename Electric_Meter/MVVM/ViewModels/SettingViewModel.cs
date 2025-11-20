@@ -96,17 +96,43 @@ namespace Electric_Meter.MVVM.ViewModels
         private void GetDefaultSetting()
         {
 
-            lstAssembling = new()
-            {
-                new KeyValue { key = "A", value = "Thành Hình A" },
-                new KeyValue { key = "B", value = "Thành Hình B" },
-                new KeyValue { key = "C", value = "Thành Hình C" },
-                new KeyValue { key = "D", value = "Thành Hình D" }
-            };
+            SetupAssemblingList();
 
             lstBaudrate = new() { 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 };
 
             lstPort = new() { "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM10" };
+        }
+        private void SetupAssemblingList()
+        {
+            // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Cập nhật lại danh sách LstAssembling
+                LstAssembling = new()
+                {
+                    new KeyValue { key = "A", value = $"{AssemblingText} A" },
+                    new KeyValue { key = "B", value = $"{AssemblingText} B" },
+                    new KeyValue { key = "C", value = $"{AssemblingText} C" },
+                    new KeyValue { key = "D", value = $"{AssemblingText} D" }
+                };
+
+                // Đảm bảo giữ lại KeyValue đã chọn
+                if (SelectedAssembling != null)
+                {
+                    var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
+
+                    if (newSelected != null)
+                    {
+                        // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
+                        SelectedAssembling = newSelected;
+                    }
+                }
+                // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
+                else
+                {
+                    SelectedAssembling = LstAssembling.FirstOrDefault();
+                }
+            });
         }
         #endregion
         #region [ Methods - Language ]
@@ -120,6 +146,11 @@ namespace Electric_Meter.MVVM.ViewModels
             BaudrateDeviceCommandText = _languageService.GetString("Baudrate");
             PortDeviceCommandText = _languageService.GetString("Port");
             AssemblingCommandText = _languageService.GetString("Assembling");
+            AssemblingText = _languageService.GetString("Assembling");
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                SetupAssemblingList();
+            });
 
 
         }
@@ -134,6 +165,7 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string nameDeviceCommandText;
         [ObservableProperty] private string portDeviceCommandText;
         [ObservableProperty] private string assemblingCommandText;
+        [ObservableProperty] private string assemblingText;
         #endregion
 
         #region [ Methods - Load & Initialization ]

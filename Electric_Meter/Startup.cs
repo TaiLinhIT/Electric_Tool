@@ -1,3 +1,4 @@
+using System.IO;
 using System.IO.Ports;
 
 using Electric_Meter.Configs;
@@ -6,7 +7,7 @@ using Electric_Meter.MVVM.ViewModels;
 using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
 
-using Microsoft.Data.SqlClient; // Cần thiết để bắt SqlException
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ namespace Electric_Meter
 {
     public class Startup
     {
+
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
@@ -53,7 +55,7 @@ namespace Electric_Meter
                     appSetting.ConnectString,
                     sqlOptions =>
                     {
-                        sqlOptions.CommandTimeout(240); // ⏱ Timeout 60 giây
+                        sqlOptions.CommandTimeout(240); // ⏱ Timeout 240 giây
                     }
                 )
             );
@@ -74,8 +76,8 @@ namespace Electric_Meter
             services.AddSingleton<MySerialPortService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddNavigationViewPageProvider();             // từ Wpf.Ui.DependencyInjection
-            services.AddSingleton<INavigationService, NavigationService>(); // từ Wpf.Ui (core)
             services.AddSingleton<LanguageService>();
+
             // UI (MainWindow)
             services.AddSingleton<MainWindow>();
 
@@ -90,13 +92,31 @@ namespace Electric_Meter
         }
 
         /// <summary>
+        /// Đọc nội dung file SQL từ thư mục 'Sql' nằm cùng cấp với file thực thi.
+        /// </summary>
+        private static string ReadSqlFile(string fileName)
+        {
+            // Tạo đường dẫn tuyệt đối đến file: [AppBaseDir]/Sql/[fileName]
+            // AppContext.BaseDirectory trỏ đến thư mục bin/Debug/netcoreappX.X/
+            var filePath = Path.Combine(AppContext.BaseDirectory, "Sql", fileName);
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"ERROR: SQL file not found at path: {filePath}");
+                // Vô hiệu hóa tính năng để tránh lỗi crash nếu file không tồn tại
+                // Tuy nhiên, nếu Stored Proc là bắt buộc thì nên ném ngoại lệ
+                // throw new FileNotFoundException($"SQL file not found at path: {filePath}", filePath);
+                return string.Empty; // Trả về chuỗi rỗng để tránh crash và bỏ qua việc tạo SP
+            }
+
+            return File.ReadAllText(filePath);
+        }
+
+        /// <summary>
         /// Áp dụng migration và seed dữ liệu mặc định khi chạy app
         /// </summary>
         private void ApplyMigrationsAndSeed()
         {
-            using var scope = ServiceProvider.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-
             // Chặn luồng startup cho đến khi database sẵn sàng.
             Task.Run(async () =>
             {
@@ -118,12 +138,11 @@ namespace Electric_Meter
                         {
                             Console.WriteLine("WARNING: Migration failed due to 'object already exists' error. Assuming schema is mostly correct and continuing.");
                             // In lỗi chi tiết
-                            Console.WriteLine($"  Inner Exception: {sqlEx.Message}");
+                            Console.WriteLine($" Inner Exception: {sqlEx.Message}");
                         }
                     }
 
                     // 2. Seed Data
-                    //var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
                     await seeder.SeedAsync();
 
                     // 3. Create Stored Procedures
@@ -133,9 +152,9 @@ namespace Electric_Meter
                 {
                     // Log tất cả các lỗi khác (Seeding, Stored Procedure, hoặc Migration lỗi khác)
                     Console.WriteLine("❌ Database Startup Error:");
-                    Console.WriteLine($"  Message: {ex.Message}");
+                    Console.WriteLine($" Message: {ex.Message}");
                     if (ex.InnerException != null)
-                        Console.WriteLine($"  Inner Exception: {ex.InnerException.Message}");
+                        Console.WriteLine($" Inner Exception: {ex.InnerException.Message}");
 
                     // Throw the exception again to signal a critical startup failure
                     throw;
@@ -144,90 +163,41 @@ namespace Electric_Meter
         }
 
         /// <summary>
-        /// Tạo hoặc cập nhật Stored Procedures.
-        /// (Đã xóa try-catch ở đây để lỗi SQL được xử lý ở ApplyMigrationsAndSeed)
+        /// Tạo hoặc cập nhật Stored Procedures bằng cách đọc từ các file .sql trong thư mục Sql.
         /// </summary>
         private static async Task EnsureStoredProceduresAsync(PowerTempWatchContext db)
         {
-            var sqlLatestSensor = @"
-                    CREATE OR ALTER PROCEDURE GetLatestSensorByDevice
-                        @devid INT
-                    AS
-                    BEGIN
-                        SET NOCOUNT ON;
+            Console.WriteLine("Creating/Updating Stored Procedures from .sql files...");
 
-                        ;WITH LatestData AS
-                        (
-                            SELECT 
-                                devid,
-                                codeid,
-                                value,
-                                day,
-                                logid,
-                                ROW_NUMBER() OVER (
-                                    PARTITION BY devid, codeid 
-                                    ORDER BY logid DESC
-                                ) AS rn
-                            FROM SensorData
-                            WHERE devid = @devid
-                        )
-                        SELECT 
-                            devid,
-                            codeid,
-                            value,
-                            day,
-                            logid -- Đã bổ sung
-                        FROM LatestData
-                        WHERE rn = 1
-                        ORDER BY codeid;
-                    END
-                ";
-            var sqlLatestSensorEachDevice = @"
-                CREATE OR ALTER PROCEDURE GetLatestSensorByDeviceYear
-                @year INT
-            AS
-            BEGIN
-                SET NOCOUNT ON;
+            // 1. Đọc nội dung từ file GetLatestSensorByDevice.sql
+            var sqlLatestSensor = ReadSqlFile("GetLatestSensorByDevice.sql");
+            if (!string.IsNullOrEmpty(sqlLatestSensor))
+            {
+                await db.Database.ExecuteSqlRawAsync(sqlLatestSensor);
+            }
 
-                ;WITH LatestData AS (
-                    SELECT 
-                        sd.devid,
-                        sd.codeid,
-                        sd.value,
-                        sd.day,
-                        ROW_NUMBER() OVER(
-                            PARTITION BY sd.devid, sd.codeid
-                            ORDER BY sd.day DESC
-                        ) AS rn
-                    FROM SensorData sd
-                    WHERE YEAR(sd.day) = @year
-                )
-                SELECT 
-                    ld.devid,
-                    d.name AS device_name,
-                    ROUND(
-                        SUM(CASE WHEN c.name = 'Imp' THEN ld.value ELSE 0 END) +
-                        SUM(CASE WHEN c.name = 'Exp' THEN ld.value ELSE 0 END)
-                    , 2) AS TotalValue
-                FROM LatestData ld
-                JOIN controlcode c 
-                    ON ld.codeid = c.codeid
-                JOIN devices d
-                    ON ld.devid = d.devid
-                WHERE ld.rn = 1
-                  AND c.name IN ('Imp','Exp')
-                GROUP BY ld.devid, d.name
-                ORDER BY ld.devid;
+            // 2. Đọc nội dung từ file GetLatestSensorByDeviceYear.sql
+            var sqlLatestSensorEachDevice = ReadSqlFile("GetLatestSensorByDeviceYear.sql");
+            if (!string.IsNullOrEmpty(sqlLatestSensorEachDevice))
+            {
+                await db.Database.ExecuteSqlRawAsync(sqlLatestSensorEachDevice);
+            }
 
-            END
+            // 3. Đọc nội dung từ file Sensordata12monthbydevid.sql
+            var sqlSensorData12Month = ReadSqlFile("Sensordata12monthbydevid.sql");
+            if (!string.IsNullOrEmpty(sqlSensorData12Month))
+            {
+                await db.Database.ExecuteSqlRawAsync(sqlSensorData12Month);
+            }
 
+            var sqlSensorDataByDateRange = ReadSqlFile("calculate_monthly_device_retio.sql");
+            if (!string.IsNullOrEmpty(sqlSensorDataByDateRange))
+            {
+                await db.Database.ExecuteSqlRawAsync(sqlSensorDataByDateRange);
+            }
+            var sqlCauculateDailyConsumption = ReadSqlFile("calculate_daily_consumption_30_days.sql");
 
-            ";
-            await db.Database.ExecuteSqlRawAsync(sqlLatestSensor);
-            await db.Database.ExecuteSqlRawAsync(sqlLatestSensorEachDevice);
-            Console.WriteLine("Stored Procedure successfully.");
+            Console.WriteLine("Stored Procedure successfully created/updated.");
         }
-
-
     }
 }

@@ -11,6 +11,7 @@
           "CommunityToolkit.Mvvm": "8.4.0",
           "FontAwesome": "4.7.0",
           "FontAwesome.WPF": "4.7.0.9",
+          "Hardcodet.NotifyIcon.Wpf": "2.0.1",
           "LiveCharts.Wpf": "0.9.7",
           "MahApps.Metro.IconPacks": "6.2.1",
           "Microsoft.EntityFrameworkCore": "9.0.0",
@@ -25,7 +26,9 @@
           "Newtonsoft.Json": "13.0.3",
           "System.IO.Ports": "9.0.0",
           "WPF-UI": "4.0.3",
-          "WPF-UI.DependencyInjection": "4.0.3"
+          "WPF-UI.DependencyInjection": "4.0.3",
+          "Microsoft.Data.Tools.Schema.Sql.UnitTesting": "17.0.0.0",
+          "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter": "17.0.0.0"
         },
         "runtime": {
           "Electric_Meter.dll": {}
@@ -80,6 +83,14 @@
           "lib/net40/FontAwesome.WPF.dll": {
             "assemblyVersion": "4.7.0.37774",
             "fileVersion": "4.7.0.9"
+          }
+        }
+      },
+      "Hardcodet.NotifyIcon.Wpf/2.0.1": {
+        "runtime": {
+          "lib/net8.0-windows7.0/Hardcodet.NotifyIcon.Wpf.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.1.2717"
           }
         }
       },
@@ -2512,6 +2523,22 @@
             "fileVersion": "4.0.0.0"
           }
         }
+      },
+      "Microsoft.Data.Tools.Schema.Sql.UnitTesting/17.0.0.0": {
+        "runtime": {
+          "Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll": {
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.14.26.0"
+          }
+        }
+      },
+      "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter/17.0.0.0": {
+        "runtime": {
+          "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll": {
+            "assemblyVersion": "17.0.0.0",
+            "fileVersion": "17.14.26.0"
+          }
+        }
       }
     }
   },
@@ -2555,6 +2582,13 @@
       "sha512": "sha512-SXE080rnyWMm9Dt0BZzMxh89/o9teuSaqL1N+0O/XM/F/HU8JuZA4XaEKxjBigwZPHHU3/udTa0QMYCHkmH43Q==",
       "path": "fontawesome.wpf/4.7.0.9",
       "hashPath": "fontawesome.wpf.4.7.0.9.nupkg.sha512"
+    },
+    "Hardcodet.NotifyIcon.Wpf/2.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dtxmeZXzV2GzSm91aZ3hqzgoeVoARSkDPVCYfhVUNyyKBWYxMgNC0EcLiSYxD4Uc4alq/2qb3SmV8DgAENLRLQ==",
+      "path": "hardcodet.notifyicon.wpf/2.0.1",
+      "hashPath": "hardcodet.notifyicon.wpf.2.0.1.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",
@@ -3829,6 +3863,16 @@
       "sha512": "sha512-A2kWlJaBnCbutqEvGtjhokAVIPxu60I25wM/E7yhXSy3+wu9qdCUXoRGhmR2k2HLGAxeYLGV3iYkmzZllahrtg==",
       "path": "wpf-ui.dependencyinjection/4.0.3",
       "hashPath": "wpf-ui.dependencyinjection.4.0.3.nupkg.sha512"
+    },
+    "Microsoft.Data.Tools.Schema.Sql.UnitTesting/17.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter/17.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

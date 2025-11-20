@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -78,6 +79,7 @@ namespace Electric_Meter.MVVM.ViewModels
             PowerTempWatchContext powerTempWatchContext,
             Service service)
         {
+           
             _languageService = languageService;
 
 
@@ -124,11 +126,8 @@ namespace Electric_Meter.MVVM.ViewModels
 
             // Tạo collection rỗng ban đầu
             Devices = new ObservableCollection<Device>();
-
-
-
-
             TogglePlayPause();
+
         }
         #endregion
 
@@ -150,7 +149,8 @@ namespace Electric_Meter.MVVM.ViewModels
         public ICommand NavigateCommand { get; }
         public ICommand ChangeLanguageCommand { get; }
         public ICommand SettingCommand { get; set; }
-
+        public ICommand OpenCommand { get; }
+        public ICommand ExitCommand { get; }
 
         [RelayCommand]
         private void TogglePlayPause()
@@ -243,7 +243,7 @@ namespace Electric_Meter.MVVM.ViewModels
             _navigationService?.Navigate(typeof(SettingView));
         }
 
-
+      
         #endregion
 
         #region [ Methods - Language ]

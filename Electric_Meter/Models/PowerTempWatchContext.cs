@@ -1,3 +1,5 @@
+using Electric_Meter.Dto;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Electric_Meter.Models;
@@ -18,6 +20,10 @@ public partial class PowerTempWatchContext : DbContext
     public DbSet<SensorData> sensorDatas { get; set; }
     public DbSet<SensorType> sensorTypes { get; set; }
 
+    // Thêm các DbSet cho các Dto trả về từ stored procedure
+    public DbSet<LatestSensorDataDTO> LatestSensorData { get; set; }
+    public DbSet<DailyConsumptionDTO> DailyConsumptions { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,6 +31,8 @@ public partial class PowerTempWatchContext : DbContext
 
 
         OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<LatestSensorDataDTO>().HasNoKey();
+        modelBuilder.Entity<DailyConsumptionDTO>().HasNoKey();
     }
 
 

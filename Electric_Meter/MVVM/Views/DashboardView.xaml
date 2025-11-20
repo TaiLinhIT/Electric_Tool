@@ -45,46 +45,14 @@
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Margin="0 0 0 20">
+            
+
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <TextBlock Text="Primary" Foreground="#888" FontSize="14"/>
-                    <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold"/>
-                </StackPanel>
-                <Border Grid.Column="1" CornerRadius="15" Background="White" Padding="10 5" Margin="0 0 20 0" Effect="{StaticResource CardDropShadow}">
-                    <Grid VerticalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <fa:FontAwesome Grid.Column="0" Icon="Search" Width="16" Height="16" Foreground="#888" Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" Text="Search..." BorderThickness="0" Background="Transparent" Foreground="#888" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="150"/>
-                    </Grid>
-                </Border>
-                <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center">
-                    <Ellipse Width="40" Height="40" Margin="0 0 10 0">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="https://i.pravatar.cc/100?img=68"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <StackPanel>
-                        <TextBlock Text="Friends" FontWeight="Bold"/>
-                        <TextBlock Text="View All" Foreground="#6A1B9A"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -99,7 +67,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Overview" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                            <TextBlock Text="Biểu đồ tổng năng lượng tiêu thụ từng máy" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
                             <TextBlock Grid.Column="1" Text="Monthly" Style="{StaticResource InfoTextBlockStyle}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </Grid>
                         <lvc:CartesianChart Series="{Binding OverviewSeriesCollection}" LegendLocation="Right" Height="180">
@@ -127,147 +95,40 @@
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="1" Background="#FF6F61" CornerRadius="10" Margin="10 0 0 10" Effect="{StaticResource CardDropShadow}">
-                    <Grid Margin="20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Daily Jogging" Foreground="White" FontSize="18" FontWeight="Bold"/>
-                        <TextBlock Grid.Row="1" Text="Total Time" Foreground="White" Opacity="0.7" Margin="0 5 0 0"/>
-                        <TextBlock Grid.Row="2" Text="748 Hr" Foreground="White" FontSize="30" FontWeight="Bold" VerticalAlignment="Bottom"/>
-                        <fa:FontAwesome Icon="Male" Width="50" Height="50" Foreground="White" Opacity="0.3"
-                                        VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-10"/>
-                    </Grid>
+                <Border Grid.Row="0" Grid.Column="1" Background="White" CornerRadius="10" Margin="10 0 0 10" Effect="{StaticResource CardDropShadow}">
+
+                    <StackPanel Margin="15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Biểu đồ tiêu thụ năng lượng hàng tháng" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
+                            <ComboBox Grid.Column="1"
+						      ItemsSource="{Binding LstDevice}"
+						      DisplayMemberPath="name"
+						      SelectedValuePath="devid"
+						      SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						      Foreground="{StaticResource TextColorPrimary}"
+						      Height="32"
+						      VerticalContentAlignment="Center"
+						      Padding="10,0,10,0"
+						      HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        </Grid>
+                        <lvc:CartesianChart Series="{Binding ActivityDurationSeriesCollection}" LegendLocation="Top" Height="200">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="{Binding ActivityDurationLabels}" Foreground="#888" FontWeight="SemiBold"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Duration (Minutes)" Foreground="#888" FontWeight="SemiBold"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </StackPanel>
                 </Border>
-
-                <Grid Grid.Row="1" Grid.Column="0" Margin="0 10 10 0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Background="White" CornerRadius="10" Margin="0 0 5 0" Effect="{StaticResource CardDropShadow}">
-                        <StackPanel Margin="10">
-                            <fa:FontAwesome Icon="Bicycle" Width="30" Height="30" Foreground="#6A1B9A" Margin="0 5"/>
-                            <TextBlock Text="Bicycle Drill" Style="{StaticResource TitleTextBlockStyle}" Margin="0 5"/>
-                            <ProgressBar Value="45" Maximum="100" Height="5" Background="#E0E0E0" BorderThickness="0" Margin="0 10"/>
-                            <TextBlock Text="2 days left" Style="{StaticResource InfoTextBlockStyle}" HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </Border>
-                    <Border Grid.Column="1" Background="White" CornerRadius="10" Margin="5 0" Effect="{StaticResource CardDropShadow}">
-                        <StackPanel Margin="10">
-                            <fa:FontAwesome Icon="Male" Width="30" Height="30" Foreground="#2196F3" Margin="0 5"/>
-                            <TextBlock Text="Jogging Hero" Style="{StaticResource TitleTextBlockStyle}" Margin="0 5"/>
-                            <ProgressBar Value="70" Maximum="100" Height="5" Background="#E0E0E0" BorderThickness="0" Margin="0 10" Foreground="#2196F3"/>
-                            <TextBlock Text="Goal: 10km" Style="{StaticResource InfoTextBlockStyle}" HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </Border>
-                    <Border Grid.Column="2" Background="White" CornerRadius="10" Margin="5 0 0 0" Effect="{StaticResource CardDropShadow}">
-                        <StackPanel Margin="10">
-                            <fa:FontAwesome Icon="Apple" Width="30" Height="30" Foreground="#4CAF50" Margin="0 5"/>
-                            <TextBlock Text="Healthy Busy" Style="{StaticResource TitleTextBlockStyle}" Margin="0 5"/>
-                            <ProgressBar Value="85" Maximum="100" Height="5" Background="#E0E0E0" BorderThickness="0" Margin="0 10" Foreground="#4CAF50"/>
-                            <TextBlock Text="Diet: 30 days" Style="{StaticResource InfoTextBlockStyle}" HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-
-                <Grid Grid.Row="1" Grid.Column="1" Margin="10 10 0 0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Border Grid.Row="0" Background="White" CornerRadius="10" Margin="0 0 0 5" Effect="{StaticResource CardDropShadow}">
-                        <StackPanel Margin="15">
-                            <Grid Margin="0 0 0 10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Friends" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <Button Content="Online" Style="{StaticResource ActionButtonStyle}" Background="#4CAF50"/>
-                                    <Button Content="Activities" Style="{StaticResource ActionButtonStyle}" Background="#2196F3" Margin="5 0 0 0"/>
-                                </StackPanel>
-                            </Grid>
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <StackPanel>
-                                    <Grid Margin="0 5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Ellipse Width="30" Height="30" Margin="0 0 10 0">
-                                            <Ellipse.Fill>
-                                                <ImageBrush ImageSource="https://i.pravatar.cc/100?img=1"/>
-                                            </Ellipse.Fill>
-                                        </Ellipse>
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="John Doe" FontWeight="SemiBold"/>
-                                            <TextBlock Text="Active 20 min ago" Style="{StaticResource InfoTextBlockStyle}"/>
-                                        </StackPanel>
-                                        <fa:FontAwesome Grid.Column="2" Icon="Comment" Width="16" Height="16" Foreground="#6A1B9A" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <Grid Margin="0 5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Ellipse Width="30" Height="30" Margin="0 0 10 0">
-                                            <Ellipse.Fill>
-                                                <ImageBrush ImageSource="https://i.pravatar.cc/100?img=2"/>
-                                            </Ellipse.Fill>
-                                        </Ellipse>
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Jane Smith" FontWeight="SemiBold"/>
-                                            <TextBlock Text="Offline" Style="{StaticResource InfoTextBlockStyle}"/>
-                                        </StackPanel>
-                                        <fa:FontAwesome Grid.Column="2" Icon="Comment" Width="16" Height="16" Foreground="#888" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <Grid Margin="0 5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Ellipse Width="30" Height="30" Margin="0 0 10 0">
-                                            <Ellipse.Fill>
-                                                <ImageBrush ImageSource="https://i.pravatar.cc/100?img=3"/>
-                                            </Ellipse.Fill>
-                                        </Ellipse>
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Peter Jones" FontWeight="SemiBold"/>
-                                            <TextBlock Text="Active Now" Style="{StaticResource InfoTextBlockStyle}"/>
-                                        </StackPanel>
-                                        <fa:FontAwesome Grid.Column="2" Icon="Comment" Width="16" Height="16" Foreground="#6A1B9A" VerticalAlignment="Center"/>
-                                    </Grid>
-                                </StackPanel>
-                            </ScrollViewer>
-                        </StackPanel>
-                    </Border>
-                    <Border Grid.Row="1" Background="White" CornerRadius="10" Margin="0 5 0 0" Effect="{StaticResource CardDropShadow}">
-                        <StackPanel Margin="15">
-                            <Grid Margin="0 0 0 5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Live Map" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
-                                <TextBlock Grid.Column="1" Text="View" Foreground="#6A1B9A" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </Grid>
-                            <Image Source="https://via.placeholder.com/250x100.png?text=Live+Map" Stretch="UniformToFill" Height="100"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
             </Grid>
 
-            <Grid Grid.Row="2" Margin="0 20 0 0">
+            <Grid Grid.Row="1" Margin="0 20 0 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -275,7 +136,7 @@
                 <Border Grid.Column="0" Background="White" CornerRadius="10" Margin="0 0 10 0" Effect="{StaticResource CardDropShadow}">
                     <StackPanel Margin="15">
                         <TextBlock Text="Weekly Weight Progress" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
-                        <lvc:CartesianChart Series="{Binding WeightSeriesCollection}" LegendLocation="Right" Height="100">
+                        <lvc:CartesianChart Series="{Binding WeightSeriesCollection}" LegendLocation="Right" Height="150">
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis Labels="{Binding WeightLabels}" Foreground="#888" FontWeight="SemiBold"/>
                             </lvc:CartesianChart.AxisX>
@@ -298,19 +159,6 @@
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="2" Background="White" CornerRadius="10" Margin="10 0 0 0" Effect="{StaticResource CardDropShadow}">
-                    <StackPanel Margin="15">
-                        <TextBlock Text="Daily Activity Duration (Min)" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
-                        <lvc:CartesianChart Series="{Binding ActivityDurationSeriesCollection}" LegendLocation="Top" Height="100">
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding ActivityDurationLabels}" Foreground="#888" FontWeight="SemiBold"/>
-                            </lvc:CartesianChart.AxisX>
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Duration (Minutes)" Foreground="#888" FontWeight="SemiBold"/>
-                            </lvc:CartesianChart.AxisY>
-                        </lvc:CartesianChart>
-                    </StackPanel>
-                </Border>
             </Grid>
         </Grid>
     </Border>

@@ -236,9 +236,15 @@ namespace Electric_Meter.MVVM.ViewModels
             ImportEnergyText = _languageService.GetString("IMPORT ENERGY");
             TotalEnergyText = _languageService.GetString("TOTAL ENERGY");
 
+            // Thành hình
+            AssemblingText = _languageService.GetString("Assembling");
             // Khác
             SearchKeywordText = _languageService.GetString("Search keyword");
             SelectDevicePlaceholderText = _languageService.GetString("Select device...");
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                SetupAssemblingList();
+            });
 
 
         }
@@ -260,21 +266,48 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string totalEnergyText;
         [ObservableProperty] private string searchKeywordText;
         [ObservableProperty] private string selectDevicePlaceholderText;
+        [ObservableProperty] private string assemblingText;
         #endregion
         #region [ Method ]
         private void GetDefaultSetting()
         {
 
-            LstAssembling = new()
-            {
-                new KeyValue { key = "A", value = "Thành Hình A" },
-                new KeyValue { key = "B", value = "Thành Hình B" },
-                new KeyValue { key = "C", value = "Thành Hình C" },
-                new KeyValue { key = "D", value = "Thành Hình D" }
-            };
+            SetupAssemblingList();
             LstDevice = new ObservableCollection<Device>();
             SelectedAssembling = LstAssembling.FirstOrDefault();
             SearchQuery = string.Empty;
+        }
+        private void SetupAssemblingList()
+        {
+            // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Cập nhật lại danh sách LstAssembling
+                LstAssembling = new()
+                {
+                    new KeyValue { key = "A", value = $"{AssemblingText} A" },
+                    new KeyValue { key = "B", value = $"{AssemblingText} B" },
+                    new KeyValue { key = "C", value = $"{AssemblingText} C" },
+                    new KeyValue { key = "D", value = $"{AssemblingText} D" }
+                };
+
+                // Đảm bảo giữ lại KeyValue đã chọn
+                if (SelectedAssembling != null)
+                {
+                    var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
+
+                    if (newSelected != null)
+                    {
+                        // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
+                        SelectedAssembling = newSelected;
+                    }
+                }
+                // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
+                else
+                {
+                    SelectedAssembling = LstAssembling.FirstOrDefault();
+                }
+            });
         }
         partial void OnSelectedAssemblingChanged(KeyValue value)
         {

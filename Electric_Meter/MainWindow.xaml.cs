@@ -21,7 +21,8 @@ namespace Electric_Meter
             INavigationViewPageProvider pageProvider)
         {
             InitializeComponent();
-
+            // Ẩn cửa sổ khi chạy app
+            this.Hide();
             DataContext = viewModel;
             _navigationService = navigationService;
             _pageProvider = pageProvider;
@@ -36,6 +37,8 @@ namespace Electric_Meter
                 RootNavigationView.SetPageProviderService(_pageProvider);
             };
         }
+        
+
     }
 }
 

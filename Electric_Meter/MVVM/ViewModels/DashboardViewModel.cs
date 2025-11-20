@@ -3,6 +3,9 @@ using System.Windows.Media;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
+using Electric_Meter.Dto;
+using Electric_Meter.Services;
+
 using LiveCharts;
 using LiveCharts.Defaults; // Needed for ObservableValue
 using LiveCharts.Wpf;
@@ -13,6 +16,9 @@ namespace Electric_Meter.MVVM.ViewModels
 {
     public partial class DashboardViewModel : ObservableObject
     {
+        #region [ Fields - Private Dependencies ]
+        private readonly Service _services;
+        #endregion
         #region [ Observable Properties ]
         [ObservableProperty] private SeriesCollection overviewSeriesCollection;
         [ObservableProperty] private string[] _overviewLabels;
@@ -23,8 +29,9 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string[] _activityDurationLabels;
         #endregion
         #region [ constructor ]
-        public DashboardViewModel()
+        public DashboardViewModel(Service services)
         {
+            _services = services;
             InitializeOverviewChart();
             InitializeWeightChart();
             InitializeCaloriesChart();
@@ -47,8 +54,9 @@ namespace Electric_Meter.MVVM.ViewModels
         public Func<ChartPoint, string> CaloriesPointLabel { get; set; }
 
         #region [ function ]
-        private void InitializeOverviewChart()
+        private async Task InitializeOverviewChart()
         {
+            List<LatestSensorByDeviceYear> lst = await _services.GetLatestSensorByDeviceYear(2025);
             OverviewSeriesCollection = new SeriesCollection
             {
                 new RowSeries

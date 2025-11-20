@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:tb="http://www.hardcodet.net/taskbar"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     mc:Ignorable="d"
@@ -12,7 +13,18 @@
     Width="1100" 
     Height="600"
     WindowStartupLocation="CenterScreen">
-
+    <Window.Resources>
+        <tb:TaskbarIcon x:Key="ElectricMeterTrayIcon"
+                IconSource="/Assets/electric.ico"
+                ToolTipText="Electric Meter">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Open" Command="{Binding OpenCommand}" />
+                    <MenuItem Header="Exit" Command="{Binding ExitCommand}" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

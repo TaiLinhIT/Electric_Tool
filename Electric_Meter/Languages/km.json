@@ -28,5 +28,11 @@
     "IMPORT ENERGY": "ថាមពលនាំចូល",
     "TOTAL ENERGY": "ថាមពលសរុប",
     "Search keyword": "ពាក្យគន្លឹះស្វែងរក",
-    "Select device...": "ជ្រើសរើសឧបករណ៍..."
+    "Select device...": "ជ្រើសរើសឧបករណ៍...",
+    "Compare energy consumption levels": "ប្រៀបធៀបកម្រិតការប្រើថាមពល",
+    "Monthly energy consumption": "ការប្រើថាមពលប្រចាំខែ",
+    "Energy consumption rate in 30 days": "អត្រាការប្រើថាមពលក្នុងរយៈពេល 30 ថ្ងៃ",
+    "Energy consumption in 30 days": "ការប្រើថាមពលក្នុងរយៈពេល 30 ថ្ងៃ",
+    "Month": "ខែ",
+    "Year": "ឆ្នាំ"
 }

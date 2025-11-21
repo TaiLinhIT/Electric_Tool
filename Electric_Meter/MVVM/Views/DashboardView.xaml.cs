@@ -76,6 +76,5 @@ namespace Electric_Meter.MVVM.Views
             selectedSeries.PushOut = 15; // Amount to "explode" the slice
         }
 
-
     }
 }

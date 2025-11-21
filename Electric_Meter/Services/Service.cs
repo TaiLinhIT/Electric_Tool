@@ -173,8 +173,12 @@ namespace Electric_Meter.Services
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
 
+            // 1. Định nghĩa tham số SQL
+            var yearParam = new SqlParameter("@year", year);
+
+            // 2. Sử dụng FromSqlRaw
             return await _context.Set<LatestSensorByDeviceYear>()
-                .FromSqlInterpolated($"EXEC GetLatestSensorByDeviceYear @year={year}")
+                .FromSqlRaw("EXEC GetLatestSensorByDeviceYear @year", yearParam)
                 .ToListAsync();
         }
 
@@ -187,6 +191,30 @@ namespace Electric_Meter.Services
             return await _context.sensorDatas
             .FromSqlInterpolated($"EXEC GetLatestSensorByDevice @devid={devid}")
             .ToListAsync();
+        }
+
+        public async Task<List<DailyConsumptionDTO>> GetDailyConsumptionDTOs(int devid)
+        {
+
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            var devidCurrent = new SqlParameter("@devid", devid);
+            return await _context.Set<DailyConsumptionDTO>()
+                .FromSqlRaw($"EXEC GetDailyConsumption @devid", devidCurrent)
+                .ToListAsync();
+
+
+        }
+
+        public async Task<List<TotalConsumptionPercentageDeviceDTO>> GetRatioMonthlyDevice(int month, int year)
+        {
+
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            return await _context.Set<TotalConsumptionPercentageDeviceDTO>()
+                .FromSqlInterpolated($"EXEC GetRatioMonthlyDevice @month={month}, @year={year}")
+                .ToListAsync();
+
         }
     }
 

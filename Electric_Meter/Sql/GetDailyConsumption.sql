@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE calculate_daily_consumption_30_days (@devid INT)
+CREATE OR ALTER PROCEDURE GetDailyConsumption (@devid INT)
 AS
 BEGIN
     -- 1. Xác định ngày bắt đầu và ngày kết thúc
@@ -10,11 +10,11 @@ BEGIN
     -- 2. Tạo chuỗi 30 ngày hoàn chỉnh (Recursive CTE)
     -- Đảm bảo có đủ 30 ngày liên tục trong kết quả
     WITH DateSeries AS (
-        SELECT @NgayBatDau AS Ngay
+        SELECT @NgayBatDau AS dayData
         UNION ALL
-        SELECT DATEADD(day, 1, Ngay)
+        SELECT DATEADD(day, 1, dayData)
         FROM DateSeries
-        WHERE DATEADD(day, 1, Ngay) <= @NgayKetThuc -- Bao gồm ngày hôm nay
+        WHERE DATEADD(day, 1, dayData) <= @NgayKetThuc -- Bao gồm ngày hôm nay
     ),
     
     -- 3. Tính toán mức tiêu thụ thực tế (Consumption) cho mỗi ngày
@@ -46,14 +46,14 @@ BEGIN
     
     -- 4. LEFT JOIN chuỗi 30 ngày với dữ liệu tính toán và tổng hợp
     SELECT
-        S.Ngay,
+        S.dayData,
         -- Tổng hợp mức tăng của Imp và Exp, gán 0 cho các ngày không có dữ liệu
-        COALESCE(C.MucTangImp, 0) + COALESCE(C.MucTangExp, 0) AS TongMucTieuThuTrongNgay
+        COALESCE(C.MucTangImp, 0) + COALESCE(C.MucTangExp, 0) AS TotalDailyConsumption
     FROM
         DateSeries AS S
     LEFT JOIN
-        DailyConsumption AS C ON S.Ngay = C.NgayThucTe
+        DailyConsumption AS C ON S.dayData = C.NgayThucTe
     ORDER BY
-        S.Ngay
+        S.dayData
     OPTION (MAXRECURSION 31); -- Đảm bảo đủ 30 ngày
 END;

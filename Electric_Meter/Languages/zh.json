@@ -29,5 +29,10 @@
     "TOTAL ENERGY": "总电能",
     "Search keyword": "搜索关键词",
     "Select device...": "选择设备...",
-    "Assembling": "装配"
+    "Compare energy consumption levels": "比较能耗水平",
+    "Monthly energy consumption": "每月能耗",
+    "Energy consumption rate in 30 days": "30天内的能耗率",
+    "Energy consumption in 30 days": "30天内的能耗",
+    "Month": "月",
+    "Year": "年"
 }

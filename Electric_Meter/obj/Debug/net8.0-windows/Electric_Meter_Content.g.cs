@@ -18,6 +18,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/controlcode.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/devices.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/sensortype.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getdailyconsumption.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getlatestsensorbydevice.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getlatestsensorbydeviceyear.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/sensordata12monthbydevid.sql")]

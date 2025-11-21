@@ -19,11 +19,11 @@
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="TextColorPrimary" Color="#fafafa"/>
+            <SolidColorBrush x:Key="TextColorPrimary" Color="#0a0a0a"/>
             <SolidColorBrush x:Key="TextColorSecondary" Color="#fafafa"/>
-            <SolidColorBrush x:Key="BackgroundColor" Color="#0a0a0a"/>
+            <SolidColorBrush x:Key="BackgroundPrimaryColor" Color="#fafafa"/>
+            <SolidColorBrush x:Key="BackgroundSecondaryColor" Color="#0a0a0a"/>
             <SolidColorBrush x:Key="BorderColor" Color="#fafafa"/>
-            <SolidColorBrush x:Key="AccentColor" Color="#fafafa"/>
 
             <!-- Effects -->
             <DropShadowEffect x:Key="WindowDropShadow"

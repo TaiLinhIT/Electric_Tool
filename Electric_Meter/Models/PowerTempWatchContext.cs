@@ -21,8 +21,9 @@ public partial class PowerTempWatchContext : DbContext
     public DbSet<SensorType> sensorTypes { get; set; }
 
     // Thêm các DbSet cho các Dto trả về từ stored procedure
-    public DbSet<LatestSensorDataDTO> LatestSensorData { get; set; }
-    public DbSet<DailyConsumptionDTO> DailyConsumptions { get; set; }
+    //public DbSet<LatestSensorByDeviceYear> LatestSensorByDeviceYears { get; set; }
+    //public DbSet<LatestSensorDataDTO> LatestSensorData { get; set; }
+    //public DbSet<DailyConsumptionDTO> DailyConsumptions { get; set; }
 
 
 
@@ -31,8 +32,10 @@ public partial class PowerTempWatchContext : DbContext
 
 
         OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<LatestSensorByDeviceYear>().HasNoKey();
         modelBuilder.Entity<LatestSensorDataDTO>().HasNoKey();
         modelBuilder.Entity<DailyConsumptionDTO>().HasNoKey();
+        modelBuilder.Entity<TotalConsumptionPercentageDeviceDTO>().HasNoKey();
     }
 
 

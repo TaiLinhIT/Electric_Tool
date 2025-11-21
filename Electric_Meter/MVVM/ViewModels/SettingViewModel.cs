@@ -11,7 +11,6 @@ using Electric_Meter.Models;
 using Electric_Meter.Services;
 
 using Microsoft.EntityFrameworkCore;
-
 // Lưu ý: Đảm bảo rằng lớp RelayCommand cũ trong Electric_Meter.Core đã được loại bỏ 
 // hoặc bạn đã xóa using Electric_Meter.Core; để tránh xung đột.
 

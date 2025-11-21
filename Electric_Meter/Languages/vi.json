@@ -28,6 +28,11 @@
     "IMPORT ENERGY": "NĂNG LƯỢNG NHẬP",
     "TOTAL ENERGY": "TỔNG NĂNG LƯỢNG",
     "Search keyword": "Nhập từ khóa tìm kiếm",
-    "Select device...": "Chọn thiết bị..."
-
+    "Select device...": "Chọn thiết bị...",
+    "Compare energy consumption levels": "So sánh mức tiêu thụ năng lượng",
+    "Monthly energy consumption": "Tiêu thụ năng lượng hàng tháng",
+    "Energy consumption rate in 30 days": "Tỷ lệ tiêu thụ năng lượng trong 30 ngày",
+    "Energy consumption in 30 days": "Tiêu thụ năng lượng trong 30 ngày",
+    "Month": "Tháng",
+    "Year": "Năm"
 }

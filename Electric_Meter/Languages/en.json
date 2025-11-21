@@ -28,5 +28,13 @@
     "IMPORT ENERGY": "IMPORT ENERGY",
     "TOTAL ENERGY": "TOTAL ENERGY",
     "Search keyword": "Search keyword",
-    "Select device...": "Select device..."
+    "Select device...": "Select device...",
+    "Compare energy consumption levels": "Compare energy consumption levels",
+    "Monthly energy consumption": "Monthly energy consumption",
+    "Energy consumption rate in 30 days": "Energy consumption rate in 30 days",
+    "Energy consumption in 30 days": "Energy consumption in 30 days",
+    "Month": "Month",
+    "Year": "Year"
+
+
 }

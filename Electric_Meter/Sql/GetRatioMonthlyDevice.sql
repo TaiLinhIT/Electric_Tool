@@ -1,10 +1,10 @@
-CREATE OR ALTER PROCEDURE calculate_monthly_device_ratio (@Thang INT, @Nam INT)
+CREATE OR ALTER PROCEDURE GetRatioMonthlyDevice (@month INT, @year INT)
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     -- 1. Xác định ngày bắt đầu và ngày kết thúc của tháng đã nhập
-    -- DATEFROMPARTS(year, month, day) - Lấy ngày đầu tháng
-    DECLARE @NgayBatDau DATE = DATEFROMPARTS(@Nam, @Thang, 1);
-    -- EOMONTH() - Lấy ngày cuối tháng
+    DECLARE @NgayBatDau DATE = DATEFROMPARTS(@year, @month, 1);
     DECLARE @NgayKetThuc DATE = EOMONTH(@NgayBatDau);
 
     -- 2. Tính Mức tiêu thụ tuyệt đối (Max - Min của Imp + Exp) cho mỗi device
@@ -22,7 +22,6 @@ BEGIN
         INNER JOIN
             ControlCode AS B ON A.CodeID = B.CodeID
         WHERE
-            -- Lọc theo tháng và năm cụ thể
             A.day >= @NgayBatDau 
             AND A.day <= @NgayKetThuc
             AND B.Name IN ('Imp', 'Exp')
@@ -33,25 +32,25 @@ BEGIN
     FinalCalculation AS (
         SELECT
             devid,
-            -- Tính tổng mức tiêu thụ/sản xuất của device đó
-            (MucTangImp + MucTangExp) AS TongMucTieuThu,
-            -- Dùng Window Function để tính tổng tiêu thụ của TẤT CẢ các device trong tháng
+            (MucTangImp + MucTangExp) AS TotalConsumption,
             SUM(MucTangImp + MucTangExp) OVER () AS TongTieuThuTatCa
         FROM
             DeviceConsumption
         WHERE
-            -- Đảm bảo chỉ tính các thiết bị có dữ liệu hợp lệ (không phải NULL nếu có lỗi)
             (MucTangImp + MucTangExp) IS NOT NULL
-            AND (MucTangImp + MucTangExp) > 0 -- Loại bỏ thiết bị không có thay đổi
+            AND (MucTangImp + MucTangExp) > 0 
     )
-    -- 4. Tính tỷ lệ phần trăm và trả về kết quả
+    -- 4. JOIN với bảng devices để lấy tên và tính tỷ lệ phần trăm
     SELECT
-        devid AS MaThietBi,
-        TongMucTieuThu,
-        -- Tính tỷ lệ phần trăm (nhân 100 và làm tròn 2 chữ số thập phân)
-        ROUND((TongMucTieuThu * 100.0) / TongTieuThuTatCa, 2) AS TiLePhanTram
+        FC.devid,
+        D.name AS DeviceName, -- <--- LẤY TÊN THIẾT BỊ
+        FC.TotalConsumption,
+        -- Tính tỷ lệ phần trăm
+        ROUND((FC.TotalConsumption * 100.0) / FC.TongTieuThuTatCa, 2) AS Percentage
     FROM
-        FinalCalculation
+        FinalCalculation AS FC
+    INNER JOIN 
+        devices AS D ON FC.devid = D.devid -- <--- THỰC HIỆN JOIN Ở ĐÂY
     ORDER BY
-        TiLePhanTram DESC;
+        Percentage DESC;
 END;

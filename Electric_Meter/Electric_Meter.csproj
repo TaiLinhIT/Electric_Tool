@@ -29,6 +29,7 @@
     <None Remove="SeedData\devices.json" />
     <None Remove="SeedData\dv_Device.json" />
     <None Remove="SeedData\sensorType.json" />
+    <None Remove="Sql\GetDailyConsumption.sql" />
     <None Remove="Sql\GetLatestSensorByDevice.sql" />
     <None Remove="Sql\GetLatestSensorByDeviceYear.sql" />
     <None Remove="Sql\Sensordata12monthbydevid.sql" />
@@ -62,6 +63,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SeedData\sensorType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sql\GetDailyConsumption.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Sql\GetLatestSensorByDevice.sql">

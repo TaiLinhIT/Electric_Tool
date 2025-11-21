@@ -190,12 +190,16 @@ namespace Electric_Meter
                 await db.Database.ExecuteSqlRawAsync(sqlSensorData12Month);
             }
 
-            var sqlSensorDataByDateRange = ReadSqlFile("calculate_monthly_device_retio.sql");
+            var sqlSensorDataByDateRange = ReadSqlFile("GetRatioMonthlyDevice.sql");
             if (!string.IsNullOrEmpty(sqlSensorDataByDateRange))
             {
                 await db.Database.ExecuteSqlRawAsync(sqlSensorDataByDateRange);
             }
-            var sqlCauculateDailyConsumption = ReadSqlFile("calculate_daily_consumption_30_days.sql");
+            var sqlCauculateDailyConsumption = ReadSqlFile("GetDailyConsumption.sql");
+            if (!string.IsNullOrEmpty(sqlCauculateDailyConsumption))
+            {
+                await db.Database.ExecuteSqlRawAsync(sqlCauculateDailyConsumption);
+            }
 
             Console.WriteLine("Stored Procedure successfully created/updated.");
         }

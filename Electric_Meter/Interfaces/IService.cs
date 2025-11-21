@@ -1,3 +1,4 @@
+using Electric_Meter.Dto;
 using Electric_Meter.Models;
 
 namespace Electric_Meter.Interfaces
@@ -15,5 +16,8 @@ namespace Electric_Meter.Interfaces
         Task<List<Device>> GetActiveDevicesAsync();
         Task<List<Device>> GetDeviceByIdAsync(int devid);
         Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid);
+        Task<List<DailyConsumptionDTO>> GetDailyConsumptionDTOs(int devid);
+        Task<List<LatestSensorByDeviceYear>> GetLatestSensorByDeviceYear(int year);
+        Task<List<TotalConsumptionPercentageDeviceDTO>> GetRatioMonthlyDevice(int month, int year);
     }
 }

@@ -34,14 +34,14 @@
             <Setter Property="Foreground" Value="#333"/>
         </Style>
         <Style x:Key="InfoTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#888"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
             <Setter Property="FontSize" Value="12"/>
         </Style>
         <DropShadowEffect x:Key="CardDropShadow" ShadowDepth="1" Direction="270" Color="#CCCCCC" Opacity="0.5" BlurRadius="5"/>
 
     </UserControl.Resources>
 
-    <Border CornerRadius="20" Background="#F0F2F5" Effect="{StaticResource CardDropShadow}">
+    <Border CornerRadius="10" Background="#F0F2F5" Effect="{StaticResource CardDropShadow}">
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -60,68 +60,81 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" Background="White" CornerRadius="10" Margin="0 0 10 10" Effect="{StaticResource CardDropShadow}">
+                <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource BackgroundPrimaryColor}" CornerRadius="10" Margin="0 0 10 10" Effect="{StaticResource CardDropShadow}">
                     <StackPanel Margin="15">
                         <Grid Margin="0 0 0 10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Biểu đồ tổng năng lượng tiêu thụ từng máy" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
-                            <TextBlock Grid.Column="1" Text="Monthly" Style="{StaticResource InfoTextBlockStyle}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ChartBarText}" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Column="1" Text="{Binding YearText}" Style="{StaticResource InfoTextBlockStyle}" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                            <ComboBox Grid.Column="2" ItemsSource="{Binding LstYearBarChart}"
+                                        SelectedItem="{Binding SelectedYearBarChart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Foreground="{StaticResource TextColorPrimary}"
+                                        Height="32"
+                                        VerticalContentAlignment="Center"
+                                        Padding="10,0,10,0"
+                                        HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         </Grid>
-                        <lvc:CartesianChart Series="{Binding OverviewSeriesCollection}" LegendLocation="Right" Height="180">
+                        <lvc:CartesianChart Series="{Binding ChartBarSeriesCollection}" LegendLocation="Right" Height="200">
+
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding OverviewLabels}" Foreground="#888" FontWeight="SemiBold"/>
+                                <lvc:Axis 
+                                    Title="Total Consumption (kWh)"
+                                    LabelFormatter="{Binding ChartBarFormatter}"  
+                                    Foreground="{StaticResource TextColorPrimary}" 
+                                    FontWeight="SemiBold"/>         
                             </lvc:CartesianChart.AxisX>
+
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Value" LabelFormatter="{Binding OverviewFormatter}" Foreground="#888" FontWeight="SemiBold"/>
+                                <lvc:Axis 
+                                    Title="Thiết Bị"
+                                    Labels="{Binding LstChartBarLabels}"                                   
+                                    Foreground="{StaticResource TextColorPrimary}" 
+                                    FontWeight="SemiBold" />
                             </lvc:CartesianChart.AxisY>
+
                         </lvc:CartesianChart>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
-                            <StackPanel Margin="10 0">
-                                <TextBlock Text="Total Time" Style="{StaticResource InfoTextBlockStyle}"/>
-                                <TextBlock Text="748 Hr" FontSize="18" FontWeight="Bold" Foreground="#333"/>
-                            </StackPanel>
-                            <StackPanel Margin="10 0">
-                                <TextBlock Text="Total Steps" Style="{StaticResource InfoTextBlockStyle}"/>
-                                <TextBlock Text="12K" FontSize="18" FontWeight="Bold" Foreground="#333"/>
-                            </StackPanel>
-                            <StackPanel Margin="10 0">
-                                <TextBlock Text="Target" Style="{StaticResource InfoTextBlockStyle}"/>
-                                <TextBlock Text="20K" FontSize="18" FontWeight="Bold" Foreground="#333"/>
-                            </StackPanel>
-                        </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="1" Background="White" CornerRadius="10" Margin="10 0 0 10" Effect="{StaticResource CardDropShadow}">
+                <Border Grid.Row="0" Grid.Column="1" Background="{StaticResource BackgroundPrimaryColor}" CornerRadius="10" Margin="10 0 0 10" Effect="{StaticResource CardDropShadow}">
 
                     <StackPanel Margin="15">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Biểu đồ tiêu thụ năng lượng hàng tháng" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
-                            <ComboBox Grid.Column="1"
-						      ItemsSource="{Binding LstDevice}"
-						      DisplayMemberPath="name"
-						      SelectedValuePath="devid"
-						      SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBlock Text="{Binding ChartColumnText}" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
+                            <TextBlock Grid.Column="1" Text="{Binding MonthText}" Style="{StaticResource InfoTextBlockStyle}" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                            <ComboBox Grid.Column="2"
+						      ItemsSource="{Binding LstMonthColumnChart}"
+						      SelectedItem="{Binding SelectedMonthColumnChart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						      Foreground="{StaticResource TextColorPrimary}"
 						      Height="32"
 						      VerticalContentAlignment="Center"
 						      Padding="10,0,10,0"
 						      HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Column="3" Text="{Binding YearText}" Style="{StaticResource InfoTextBlockStyle}" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                            <ComboBox Grid.Column="4" ItemsSource="{Binding LstYearColumnChart}"
+                                      SelectedItem="{Binding SelectedYearColumnChart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Foreground="{StaticResource TextColorPrimary}"
+                                      Height="32"
+                                      VerticalContentAlignment="Center"
+                                      Padding="10,0,10,0"
+                                      HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                         </Grid>
-                        <lvc:CartesianChart Series="{Binding ActivityDurationSeriesCollection}" LegendLocation="Top" Height="200">
+                        <lvc:CartesianChart Series="{Binding ChartColumnSeriesCollection}" LegendLocation="Top" Height="200">
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding ActivityDurationLabels}" Foreground="#888" FontWeight="SemiBold"/>
+                                <lvc:Axis Labels="{Binding LstChartColumnLabels}" Foreground="{StaticResource TextColorPrimary}" FontWeight="SemiBold"/>
                             </lvc:CartesianChart.AxisX>
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Duration (Minutes)" Foreground="#888" FontWeight="SemiBold"/>
-                            </lvc:CartesianChart.AxisY>
+                            
                         </lvc:CartesianChart>
                     </StackPanel>
                 </Border>
@@ -133,29 +146,70 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Background="White" CornerRadius="10" Margin="0 0 10 0" Effect="{StaticResource CardDropShadow}">
+                <Border Grid.Column="0" Background="{StaticResource BackgroundPrimaryColor}" CornerRadius="10" Margin="0 0 10 0" Effect="{StaticResource CardDropShadow}">
                     <StackPanel Margin="15">
-                        <TextBlock Text="Weekly Weight Progress" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
-                        <lvc:CartesianChart Series="{Binding WeightSeriesCollection}" LegendLocation="Right" Height="150">
+                        <Grid Margin="0 0 0 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding ChartLineText}" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Column="1" Text="{Binding DeviceNameText}" Style="{StaticResource InfoTextBlockStyle}" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                            <ComboBox Grid.Column="2" ItemsSource="{Binding LstDeviceChartLine}"
+                                SelectedItem="{Binding SelectedDeviceChartLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Foreground="{StaticResource TextColorPrimary}"
+                                DisplayMemberPath="name"
+                                SelectedValuePath="devid"
+                                Height="32"
+                                VerticalContentAlignment="Center"
+                                Padding="10,0,10,0"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        </Grid>
+                        <lvc:CartesianChart Series="{Binding ChartLineSeriesCollection}" LegendLocation="Right" Height="200">
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding WeightLabels}" Foreground="#888" FontWeight="SemiBold"/>
+                                <lvc:Axis Labels="{Binding LstChartLineLabels}" Foreground="{StaticResource TextColorPrimary}" FontWeight="SemiBold"/>
                             </lvc:CartesianChart.AxisX>
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="Weight (kg)" LabelFormatter="{Binding WeightFormatter}" Foreground="#888" FontWeight="SemiBold"/>
-                            </lvc:CartesianChart.AxisY>
+                            
                         </lvc:CartesianChart>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Background="White" CornerRadius="10" Margin="5 0 5 0" Effect="{StaticResource CardDropShadow}">
+                <Border Grid.Column="1" Background="{StaticResource BackgroundPrimaryColor}" CornerRadius="10" Margin="5 0 5 0" Effect="{StaticResource CardDropShadow}">
                     <StackPanel Margin="15">
-                        <TextBlock Text="Calories Burned Distribution" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
-                        <lvc:PieChart Series="{Binding CaloriesSeriesCollection}" InnerRadius="20" Hoverable="True"
-                                      DataClick="PieChart_OnDataClick" LegendLocation="Right" Height="90">
-                            <lvc:PieChart.DataTooltip>
-                                <lvc:DefaultTooltip/>
-                            </lvc:PieChart.DataTooltip>
-                        </lvc:PieChart>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding ChartPieText}" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 10"/>
+                            <TextBlock Grid.Column="1" Text="{Binding MonthText}" Style="{StaticResource InfoTextBlockStyle}" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                            <ComboBox Grid.Column="2"
+                                  ItemsSource="{Binding LstMonthPieChart}"
+                                  SelectedItem="{Binding SelectedMonthPieChart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Foreground="{StaticResource TextColorPrimary}"
+                                  Height="32"
+                                  VerticalContentAlignment="Center"
+                                  Padding="10,0,10,0"
+                                  HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Column="3" Text="{Binding YearText}" Style="{StaticResource InfoTextBlockStyle}" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                            <ComboBox Grid.Column="4" ItemsSource="{Binding LstYearPieChart}"
+                                  SelectedItem="{Binding SelectedYearPieChart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Foreground="{StaticResource TextColorPrimary}"
+                                  Height="32"
+                                  VerticalContentAlignment="Center"
+                                  Padding="10,0,10,0"
+                                  HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                        </Grid>
+                            <lvc:PieChart Series="{Binding ChartPieSeriesCollection}" InnerRadius="20" Hoverable="True"
+                                          DataClick="PieChart_OnDataClick" LegendLocation="Right" Height="200">
+                                <lvc:PieChart.DataTooltip>
+                                    <lvc:DefaultTooltip/>
+                                </lvc:PieChart.DataTooltip>
+                            </lvc:PieChart>
                     </StackPanel>
                 </Border>
 

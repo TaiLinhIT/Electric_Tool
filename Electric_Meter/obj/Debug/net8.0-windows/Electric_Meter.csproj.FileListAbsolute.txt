@@ -12,6 +12,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\SeedData\s
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\GetDailyConsumption.sql
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\GetLatestSensorByDevice.sql
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\GetLatestSensorByDeviceYear.sql
+D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\GetRatioMonthlyDevice.sql
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Sql\Sensordata12monthbydevid.sql
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.deps.json
 D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Electric_Meter.runtimeconfig.json

@@ -1,0 +1,6 @@
+@Electric_Meter_WebAPI_HostAddress = http://localhost:5251
+
+GET {{Electric_Meter_WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

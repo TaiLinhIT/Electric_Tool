@@ -6,6 +6,7 @@ namespace Electric_Meter.Configs
         public int TimeReloadData { get; set; }
         public int TimeSaveToDataBase { get; set; }
         public int TimeSendRequest { get; set; }
+        public int TimeOutReceive { get; set; }
         public Dictionary<string, string> Requests { get; set; } // Danh sách các yêu cầu
         public string CurrentArea { get; set; }
         public string Port { get; set; }

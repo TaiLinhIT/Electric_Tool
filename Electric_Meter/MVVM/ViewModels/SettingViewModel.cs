@@ -355,9 +355,9 @@ namespace Electric_Meter.MVVM.ViewModels
             }
 
             if (string.IsNullOrWhiteSpace(AddressDevice.ToString()) ||
-                !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1 || addr > 50)
+                !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1 )
             {
-                ErrorMessage = "AddressDevice must be a number between 1 and 50.";
+                ErrorMessage = "AddressDevice must be more than 1";
                 return false;
             }
 

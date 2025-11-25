@@ -82,7 +82,6 @@
 
                             <lvc:CartesianChart.AxisX>
                                 <lvc:Axis 
-                                    Title="Total Consumption (kWh)"
                                     LabelFormatter="{Binding ChartBarFormatter}"  
                                     Foreground="{StaticResource TextColorPrimary}" 
                                     FontWeight="SemiBold"/>         
@@ -90,7 +89,6 @@
 
                             <lvc:CartesianChart.AxisY>
                                 <lvc:Axis 
-                                    Title="Thiết Bị"
                                     Labels="{Binding LstChartBarLabels}"                                   
                                     Foreground="{StaticResource TextColorPrimary}" 
                                     FontWeight="SemiBold" />

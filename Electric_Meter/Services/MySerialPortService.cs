@@ -331,7 +331,7 @@ namespace Electric_Meter.Services
         {
             try
             {
-                int timeoutSeconds = _appSetting.TimeSendRequest; // đảm bảo bạn đã config nó trong appsettings.json
+                int timeoutSeconds = _appSetting.TimeOutReceive; // đảm bảo bạn đã config nó trong appsettings.json
 
                 await Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationToken);
 
@@ -523,7 +523,7 @@ namespace Electric_Meter.Services
                             value = item.Value.Value,
                             day = now
                         };
-                        //Tool.Log($"→ Đang lưu: devid={sensorData.devid}, codeid={sensorData.codeid}, value={sensorData.value}, day={sensorData.day}");
+                        Tool.Log($"→ Đang lưu: devid={sensorData.devid}, codeid={sensorData.codeid}, value={sensorData.value}, day={sensorData.day}");
 
                         // Gọi và kiểm tra kết quả lưu
                         bool isSaved = await _service.InsertToSensorDataAsync(sensorData);

@@ -32,6 +32,7 @@
     <None Remove="Sql\GetDailyConsumption.sql" />
     <None Remove="Sql\GetLatestSensorByDevice.sql" />
     <None Remove="Sql\GetLatestSensorByDeviceYear.sql" />
+    <None Remove="Sql\GetRatioMonthlyDevice.sql" />
     <None Remove="Sql\Sensordata12monthbydevid.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +73,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Sql\GetLatestSensorByDeviceYear.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sql\GetRatioMonthlyDevice.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Sql\Sensordata12monthbydevid.sql">

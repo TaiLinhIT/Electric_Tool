@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -19,6 +20,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Fields - Private Dependencies ]
         private readonly Service _services;
         private readonly LanguageService _languageService;
+        private readonly DispatcherTimer _updateTimer;
         #endregion
         #region [ Observable Properties ]
         [ObservableProperty] private List<int> lstYearBarChart;
@@ -55,6 +57,10 @@ namespace Electric_Meter.MVVM.ViewModels
             _languageService = languageService;
             _languageService.LanguageChanged += UpdateTexts;
             UpdateTexts();
+            _updateTimer = new DispatcherTimer();
+            _updateTimer.Interval = TimeSpan.FromSeconds(50); // Cập nhật mỗi 5 phút
+            _updateTimer.Tick += UpdateChartsOnTimerTick;
+            _updateTimer.Start();
         }
 
         #endregion
@@ -401,7 +407,37 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
         #endregion
+        #region [ Methods - Update Timer ]
+        private void UpdateChartsOnTimerTick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Timer ticked. Updating charts...");
 
+            // 1. Cập nhật Chart Bar (Nếu có SelectedYearBarChart)
+            if (SelectedYearBarChart != 0)
+            {
+                InitializeChartBarAsyncWrapper(SelectedYearBarChart);
+            }
+
+            // 2. Cập nhật Chart Column (Nếu có SelectedMonthColumnChart và SelectedYearColumnChart)
+            if (SelectedMonthColumnChart != 0 && SelectedYearColumnChart != 0)
+            {
+                InitializeChartColumnAsyncWrapper(SelectedMonthColumnChart, SelectedYearColumnChart);
+            }
+
+            // 3. Cập nhật Chart Pie (Nếu có SelectedMonthPieChart và SelectedYearPieChart)
+            if (SelectedMonthPieChart != 0 && SelectedYearPieChart != 0)
+            {
+                InitializeChartPieAsyncWrapper(SelectedMonthPieChart, SelectedYearPieChart);
+            }
+
+            // 4. Cập nhật Chart Line (Nếu có SelectedDeviceChartLine)
+            if (SelectedDeviceChartLine != null)
+            {
+                InitializeChartLineAsyncWrapper(SelectedDeviceChartLine.devid);
+            }
+
+        }
+        #endregion
 
         #region [ Language Texts ]
         [ObservableProperty] private string chartBarText;

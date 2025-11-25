@@ -21,6 +21,7 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getdailyconsumption.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getlatestsensorbydevice.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getlatestsensorbydeviceyear.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getratiomonthlydevice.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/sensordata12monthbydevid.sql")]
 
 

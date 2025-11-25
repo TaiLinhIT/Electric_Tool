@@ -26,7 +26,10 @@ namespace Electric_Meter.Services
         {
             try
             {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
                 device.activeid = 0;
+                _context.devices.Update(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -42,6 +45,8 @@ namespace Electric_Meter.Services
         {
             try
             {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
                 _context.devices.Update(device);
                 await _context.SaveChangesAsync();
                 return 1;
@@ -60,6 +65,8 @@ namespace Electric_Meter.Services
         {
             try
             {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
                 await _context.devices.AddAsync(device);
                 await _context.SaveChangesAsync();
                 return 1;
@@ -101,6 +108,7 @@ namespace Electric_Meter.Services
 
                 try
                 {
+                    Tool.Log($"→ Bắt đầu thêm SensorData cho codeid {data.codeid}");
                     await dbContext.sensorDatas.AddAsync(data);
                     var result = await dbContext.SaveChangesAsync();
 

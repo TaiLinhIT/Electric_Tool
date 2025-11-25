@@ -34,6 +34,9 @@ namespace Electric_Meter
 
                 // 3️⃣ Mở MainWindow sau khi seed xong
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                //var dashborad = _serviceProvider.GetRequiredService<DashboardView>();
+                //mainWindow.MainContent.Content = dashboard;
+
                 mainWindow.Show();
             }
             catch (Exception ex)
@@ -42,6 +45,6 @@ namespace Electric_Meter
                 Shutdown();
             }
         }
-        
+
     }
 }

@@ -74,15 +74,7 @@
                     <ComboBox.ToolTip>Baudrate</ComboBox.ToolTip>
                 </ComboBox>
 
-                <!-- Reload data-->
-                <ComboBox
-                    Width="140"
-                    Margin="0,0,10,0"
-                    DockPanel.Dock="Left"
-                    ItemsSource="{Binding LstSenddata}"
-                    SelectedItem="{Binding SelectedSenddata}">
-                    <ComboBox.ToolTip>Baudrate</ComboBox.ToolTip>
-                </ComboBox>
+                
                 
                 <!-- Right: Play/Pause -->
                 <ui:Button

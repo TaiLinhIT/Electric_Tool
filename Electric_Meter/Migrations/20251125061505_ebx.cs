@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Electric_Meter.Migrations
 {
     /// <inheritdoc />
-    public partial class fornew : Migration
+    public partial class ebx : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,15 +91,6 @@ namespace Electric_Meter.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LatestSensorDataDTO",
-                columns: table => new
-                {
-                },
-                constraints: table =>
-                {
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SensorData",
                 columns: table => new
                 {
@@ -159,9 +150,6 @@ namespace Electric_Meter.Migrations
 
             migrationBuilder.DropTable(
                 name: "LatestSensorByDeviceYear");
-
-            migrationBuilder.DropTable(
-                name: "LatestSensorDataDTO");
 
             migrationBuilder.DropTable(
                 name: "SensorData");

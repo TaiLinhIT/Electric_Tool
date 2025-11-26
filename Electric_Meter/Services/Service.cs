@@ -138,6 +138,13 @@ namespace Electric_Meter.Services
             var lstDevice = _context.devices.Where(x => x.activeid == 1 && x.typeid == 7).ToList();
             return lstDevice;
         }
+        public List<Controlcode> GetControlCodeListByDevid(int devid)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            var lstControlCode = _context.controlcodes.Where(x => x.devid == devid).ToList();
+            return lstControlCode;
+        }
 
         public List<Device> GetDevicesByAssembling(string key)
         {
@@ -223,6 +230,62 @@ namespace Electric_Meter.Services
                 .FromSqlInterpolated($"EXEC GetRatioMonthlyDevice @month={month}, @year={year}")
                 .ToListAsync();
 
+        }
+
+        public async Task<int> InsertToControlcode(Controlcode code)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                await _context.controlcodes.AddAsync(code);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return 0;
+            }
+
+        }
+
+        public async Task<int> EditToControlcode(Controlcode code)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                 _context.controlcodes.Update(code);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return 0;
+            }
+        }
+
+        public async Task<int> DeleteToControlcode(Controlcode code)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                code.activeid = 0;
+                _context.controlcodes.Update(code);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return 0;
+            }
         }
     }
 

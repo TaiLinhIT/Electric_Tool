@@ -8,10 +8,10 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     mc:Ignorable="d"
     Title="Electric Meter Interface"
-    MinWidth="1100" 
-    MinHeight="600"
-    Width="1100" 
-    Height="600"
+    MinWidth="1200" 
+    MinHeight="1000"
+    Width="1150" 
+    Height="1000"
     WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <tb:TaskbarIcon x:Key="ElectricMeterTrayIcon"
@@ -32,7 +32,7 @@
         </Grid.RowDefinitions>
 
         <!-- 🟦 Top toolbar -->
-        <Border Background="#FFFF" Padding="8" BorderBrush="#fefefe" BorderThickness="0,0,0,1">
+        <Border Style="{StaticResource BorderTopToolbar}">
             <DockPanel LastChildFill="False">
 
                 <!-- Left: Help button -->

@@ -13,6 +13,9 @@ namespace Electric_Meter.Configs
         public int Baudrate { get; set; }
         public int TotalMachine { get; set; }
         public List<string> AutoActions { get; set; }
-        public float ResistanceCoefficient { get; set; }
+        public float FactorImp { get; set; }
+        public float FactorU { get; set; }
+        public float FactorI { get; set; }
+        public float FactorP { get; set; }
     }
 }

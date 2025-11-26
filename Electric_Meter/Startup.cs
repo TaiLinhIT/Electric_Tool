@@ -134,7 +134,7 @@ namespace Electric_Meter
                             await db.Database.MigrateAsync();
                         }
                         // Bắt lỗi cụ thể "Đối tượng đã tồn tại" và bỏ qua lỗi này (chỉ trong trường hợp development)
-                        catch (SqlException sqlEx) when (sqlEx.Message.Contains("已存在") || sqlEx.Message.Contains("already exists"))
+                        catch (SqlException sqlEx)
                         {
                             Console.WriteLine("WARNING: Migration failed due to 'object already exists' error. Assuming schema is mostly correct and continuing.");
                             // In lỗi chi tiết

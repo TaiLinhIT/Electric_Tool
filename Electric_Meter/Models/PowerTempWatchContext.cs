@@ -33,9 +33,10 @@ public partial class PowerTempWatchContext : DbContext
 
         OnModelCreatingPartial(modelBuilder);
         modelBuilder.Entity<LatestSensorByDeviceYear>().HasNoKey();
-        modelBuilder.Entity<LatestSensorDataDTO>().HasNoKey();
+        modelBuilder.Entity<LatestSensorDataDTO>().HasNoKey().ToView(null);
         modelBuilder.Entity<DailyConsumptionDTO>().HasNoKey();
         modelBuilder.Entity<TotalConsumptionPercentageDeviceDTO>().HasNoKey();
+
     }
 
 

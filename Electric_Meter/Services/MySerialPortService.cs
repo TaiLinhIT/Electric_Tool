@@ -376,10 +376,16 @@ namespace Electric_Meter.Services
                     double actualValue;
 
                     // Phân loại theo tên
-                    if (requestName.StartsWith("U") || requestName.StartsWith("Exp") || requestName.StartsWith("Imp") || requestName.StartsWith("P"))
-                        actualValue = rawValue * _appSetting.ResistanceCoefficient; //actualValue = rawValue / 10.0;
+                    if (requestName.StartsWith("U"))
+                    {
+                        actualValue = rawValue * _appSetting.FactorU;
+                    }else if (requestName.StartsWith("Exp") || requestName.StartsWith("Imp"))
+                    {
+                        actualValue = rawValue * _appSetting.FactorImp;
+                    }else if (requestName.StartsWith("P"))
+                        actualValue = rawValue * _appSetting.FactorP;
                     else if (requestName.StartsWith("I"))
-                        actualValue = rawValue / 1000.0;
+                        actualValue = rawValue * _appSetting.FactorI;
                     else
                     {
                         Tool.Log($"Unknown request type for {requestName} at address {address}.");

@@ -5,225 +5,331 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
 			 mc:Ignorable="d"
-			 d:DesignWidth="900" Height="650"
+			 d:DesignWidth="900" Height="900"
 			 Background="#FFF">
-    <UserControl.Resources>
-        <!-- Style chung, theo tone sáng của WPF UI (Giữ nguyên) -->
-        <Style TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#222"/>
-            <Setter Property="Background" Value="#F2F2F2"/>
-            <Setter Property="BorderBrush" Value="#D0D0D0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-								Background="{TemplateBinding Background}"
-								CornerRadius="6"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center"
-											  VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <!-- Hover: sáng hơn một chút -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#E6E6E6"/>
-                            </Trigger>
-                            <!-- Pressed: hơi tối xuống -->
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#DADADA"/>
-                            </Trigger>
-                            <!-- Disabled: xám mờ -->
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.6"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- START: Style mới cho các nút hành động (Add, Edit, Delete) có màu nền đậm -->
-        <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Width" Value="140"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Foreground" Value="#111827"/>
-            <!-- Màu chữ mặc định -->
-            <Setter Property="Background" Value="#6B7280"/>
-            <!-- Màu nền mặc định (Gray) -->
-            <Setter Property="BorderBrush" Value="#9CA3AF"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-								Background="{TemplateBinding Background}"
-								CornerRadius="6"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center"
-											  VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <!-- Hover: Sáng hơn, tăng độ tương phản -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#9CA3AF"/>
-                                <Setter Property="Foreground" Value="#000000"/>
-                            </Trigger>
-                            <!-- Pressed: Tối xuống, tăng độ tương phản -->
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#4B5563"/>
-                                <Setter Property="Foreground" Value="#FFFFFF"/>
-                            </Trigger>
-                            <!-- Disabled: xám mờ -->
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.6"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!-- END: Style mới cho các nút hành động -->
-
-    </UserControl.Resources>
-
-
     <Grid Margin="10">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="180" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border  Grid.Row="0" Style="{StaticResource BorderContent}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="180"/>
+                </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Border Background="#F9F9F9" CornerRadius="6" Padding="15" BorderBrush="#DDD" BorderThickness="0.5">
-                <Grid Margin="0,5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="{Binding AddressDeviceCommandText}" Grid.Row="0" Grid.Column="0"
-							   VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"
-							 Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							 VerticalContentAlignment="Center"
-							 Padding="2,0,2,0"
-							 VerticalAlignment="Center" Height="28"/>
+                    <TextBlock Grid.Row="0" Text="{Binding DetailDeviceText}"
+                                Style="{StaticResource H3}"
+                                />
 
-                    <TextBlock Text="{Binding NameDeviceCommandText}" Grid.Row="0" Grid.Column="2"
-							   VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="3"
-							 Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
-							 VerticalContentAlignment="Center"
-							 Padding="2,0,2,0"
-							 VerticalAlignment="Center" Height="28"/>
+                    <Border Grid.Row="1" Style="{StaticResource BorderContent}">
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="{Binding BaudrateDeviceCommandText}" Grid.Row="1" Grid.Column="0"
-							   VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
-                    <ComboBox Grid.Row="1" Grid.Column="1"
-							  ItemsSource="{Binding LstBaudrate}"
-							  SelectedItem="{Binding SelectedBaudrate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							  VerticalContentAlignment="Center"
-							  Padding="2,0,2,0"
-							  Height="28"/>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
 
-                    <TextBlock Text="{Binding PortDeviceCommandText}" Grid.Row="1" Grid.Column="2"
-							   VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
-                    <ComboBox Grid.Row="1" Grid.Column="3"
-							  ItemsSource="{Binding LstPort}"
-							  SelectedItem="{Binding SelectedPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							  VerticalContentAlignment="Center"
-							  Padding="2,0,2,0"
-							  Height="28"/>
+                            <TextBlock Text="{Binding AddressDeviceCommandText}" Grid.Row="0" Grid.Column="0" Style="{StaticResource  Content Textblock}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1"
+							        Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource Content TextBox}"
+							        />
 
-                    <TextBlock Text="{Binding AssemblingCommandText}" Grid.Row="2" Grid.Column="0"
-							   VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1"
-							  ItemsSource="{Binding LstAssembling}"
-							  DisplayMemberPath="value"
-							  SelectedValuePath="key"
-							  SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							  VerticalContentAlignment="Center"
-							  Padding="2,0,2,0"
-							  Height="28"/>
+                            <TextBlock Text="{Binding NameDeviceCommandText}" Grid.Row="0" Grid.Column="2" Style="{StaticResource  Content Textblock}"/>
+                            <TextBox Grid.Row="0" Grid.Column="3"
+							        Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource Content TextBox}"
+							        />
 
+                            <TextBlock Text="{Binding BaudrateDeviceCommandText}" Grid.Row="1" Grid.Column="0" Style="{StaticResource Content Textblock}"/>
+                            <ComboBox Grid.Row="1" Grid.Column="1"
+							        ItemsSource="{Binding LstBaudrate}"
+							        SelectedItem="{Binding SelectedBaudrate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource Content Combobox}"
+							        />
+
+                            <TextBlock Text="{Binding PortDeviceCommandText}" Grid.Row="1" Grid.Column="2" Style="{StaticResource Content Textblock}"/>
+                            <ComboBox Grid.Row="1" Grid.Column="3"
+							        ItemsSource="{Binding LstPort}"
+							        SelectedItem="{Binding SelectedPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource Content Combobox}"
+							        />
+
+                            <TextBlock Text="{Binding AssemblingCommandText}" Grid.Row="2" Grid.Column="0" Style="{StaticResource Content Textblock}"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1"
+							        ItemsSource="{Binding LstAssembling}"
+							        DisplayMemberPath="value"
+							        SelectedValuePath="key"
+							        SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource Content Combobox}"
+							        />
+
+
+                        </Grid>
+                    </Border>
+                    <TextBlock Grid.Row="2" Text="{Binding ListDeviceText}"
+                                Style="{StaticResource H3}"
+                                />
+                    <DataGrid x:Name="DeviceGrid"
+                                            Grid.Row="3"
+					                        ItemsSource="{Binding DeviceList, UpdateSourceTrigger=PropertyChanged}"
+					                        AutoGenerateColumns="False"
+					                        IsReadOnly="True"
+					                        CanUserAddRows="False"
+					                        SelectionMode="Single"
+					                        SelectedItem="{Binding SelectedDevice, UpdateSourceTrigger=PropertyChanged}"
+					                        HeadersVisibility="Column"
+					                        BorderThickness="1"
+					                        BorderBrush="#CCC"
+					                        RowHeight="32"
+					                        Margin="10">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="{Binding AddressDeviceCommandText}" Binding="{Binding address}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding name}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding BaudrateDeviceCommandText}" Binding="{Binding baudrate}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding PortDeviceCommandText}" Binding="{Binding port}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding AssemblingCommandText}" Binding="{Binding assembling}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                 </Grid>
-            </Border>
+                <StackPanel Grid.Column="1"
+	Orientation="Vertical"
+	HorizontalAlignment="Center"
+	VerticalAlignment="Top"
+	Margin="10,15,0,0">
 
-            <DataGrid x:Name="DeviceGrid"
-                      Grid.Row="2"
-					  ItemsSource="{Binding DeviceList, UpdateSourceTrigger=PropertyChanged}"
-					  AutoGenerateColumns="False"
-					  IsReadOnly="True"
-					  CanUserAddRows="False"
-					  SelectionMode="Single"
-					  SelectedItem="{Binding SelectedDevice, UpdateSourceTrigger=PropertyChanged}"
-					  HeadersVisibility="Column"
-					  BorderThickness="1"
-					  BorderBrush="#CCC"
-					  RowHeight="32"
-					  Margin="0,5,0,0">
+                    <!-- Áp dụng Style mới cho các nút bên phải -->
+                    <Button Content="{Binding AddDeviceCommandText}"
+	Command="{Binding AddDeviceCommand}"
+	ToolTip="{Binding AddDeviceCommandText}"
+	Margin="0,0,0,10"
+	/>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="{Binding AddressDeviceCommandText}" Binding="{Binding address}" Width="*"/>
-                    <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding name}" Width="*"/>
-                    <DataGridTextColumn Header="{Binding BaudrateDeviceCommandText}" Binding="{Binding baudrate}" Width="*"/>
-                    <DataGridTextColumn Header="{Binding PortDeviceCommandText}" Binding="{Binding port}" Width="*"/>
-                    <DataGridTextColumn Header="{Binding AssemblingCommandText}" Binding="{Binding assembling}" Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+                    <Button Content="{Binding EditDeviceCommandText}"
+	Command="{Binding EditDeviceCommand}"
+	ToolTip="{Binding EditDeviceCommandText}"
+	IsEnabled="{Binding IsEnableBtnEditDevice}" Margin="0,0,0,10"
+	/>
 
-        <StackPanel Grid.Column="1"
-					Orientation="Vertical"
-					HorizontalAlignment="Center"
-					VerticalAlignment="Top"
-					Margin="10,15,0,0">
+                    <Button Content="{Binding DeleteDeviceCommandText}"
+	Command="{Binding DeleteDeviceCommand}"
+	ToolTip="{Binding DeleteDeviceCommandText}"
+	/>
 
-            <!-- Áp dụng Style mới cho các nút bên phải -->
-            <Button Content="{Binding AddDeviceCommandText}"
-					Command="{Binding AddDeviceCommand}"
-					ToolTip="{Binding AddDeviceCommandText}"
-					Margin="0,0,0,10"
-					Style="{StaticResource ActionButtonStyle}"/>
+                </StackPanel>
+            </Grid>
 
-            <Button Content="{Binding EditDeviceCommandText}"
-					Command="{Binding EditDeviceCommand}"
-					ToolTip="{Binding EditDeviceCommandText}"
-					IsEnabled="{Binding IsEnableBtnEditDevice}" Margin="0,0,0,10"
-					Style="{StaticResource ActionButtonStyle}"/>
+        </Border>
+        <Border  Grid.Row="1" Style="{StaticResource BorderContent}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="180"/>
+                </Grid.ColumnDefinitions>
 
-            <Button Content="{Binding DeleteDeviceCommandText}"
-					Command="{Binding DeleteDeviceCommand}"
-					ToolTip="{Binding DeleteDeviceCommandText}"
-					Style="{StaticResource ActionButtonStyle}"/>
+                <Grid Grid.Column="0">
 
-        </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{Binding DetailControlCodeText}"
+                    Style="{StaticResource H3}"
+                    />
+                    <Border Grid.Row="1" Style="{StaticResource BorderContent}">
+                        <Grid Margin="10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- CỘT 1 -->
+                            <Grid Grid.Column="0" Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- CodeId -->
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Width="120" Text="{Binding CodeIdCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding CodeId}"/>
+                                </StackPanel>
+
+                                <!-- DevId -->
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Width="120" Text="{Binding DevIdCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding DevId}"/>
+                                </StackPanel>
+
+                                <!-- Code -->
+                                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                    <TextBlock Width="120" Text="{Binding CodeCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding Code}"/>
+                                </StackPanel>
+
+                                <!-- ActiveId -->
+                                <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                    <TextBlock Width="120" Text="{Binding ActiveIdCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding ActiveId}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- CỘT 2 -->
+                            <Grid Grid.Column="1" Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Width="120" Text="{Binding CodeTypeIdCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding CodeTypeId}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Width="120" Text="{Binding NameCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding Name}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                    <TextBlock Width="120" Text="{Binding FactorCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding Factor}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                    <TextBlock Width="120" Text="{Binding TypeIdCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding TypeId}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- CỘT 3 -->
+                            <Grid Grid.Column="2" Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Width="120" Text="{Binding HighCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding High}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Width="120" Text="{Binding LowCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding Low}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                    <TextBlock Width="120" Text="{Binding IfShowCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding IfShow}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                    <TextBlock Width="120" Text="{Binding IfCalCommandText}" VerticalAlignment="Center"/>
+                                    <TextBox Width="150" Text="{Binding IfCal}"/>
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
+
+                    </Border>
+                    <TextBlock Grid.Row="2" Text="{Binding ListControlCodeText}"
+            Style="{StaticResource H3}"
+            />
+                    <DataGrid x:Name="ControlcodeGrid"
+                        Grid.Row="3"
+					    ItemsSource="{Binding ControlCodeList, UpdateSourceTrigger=PropertyChanged}"
+					    AutoGenerateColumns="False"
+					    IsReadOnly="True"
+					    CanUserAddRows="False"
+					    SelectionMode="Single"
+					    SelectedItem="{Binding SelectedControlCode, UpdateSourceTrigger=PropertyChanged}"
+					    HeadersVisibility="Column"
+					    BorderThickness="1"
+					    BorderBrush="#CCC"
+					    RowHeight="32"
+					    Margin="0,5,0,0">
+                        
+    <DataGrid.Columns>
+                            <DataGridTextColumn Header="{Binding CodeIdCommandText}" Binding="{Binding codeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding DevIdCommandText}" Binding="{Binding devid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding CodeCommandText}" Binding="{Binding code}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding ActiveIdCommandText}" Binding="{Binding activeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding CodeTypeIdCommandText}" Binding="{Binding codetypeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameCommandText}" Binding="{Binding codetypeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding FactorCommandText}" Binding="{Binding codetypeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding TypeIdCommandText}" Binding="{Binding typeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding HighCommandText}" Binding="{Binding high}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding LowCommandText}" Binding="{Binding low}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding IfShowCommandText}" Binding="{Binding ifshow}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding IfCalCommandText}" Binding="{Binding ifcal}" Width="*"/>
+    </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+                <StackPanel Grid.Column="1"
+	Orientation="Vertical"
+	HorizontalAlignment="Center"
+	VerticalAlignment="Top"
+	Margin="10,15,0,0">
+
+                    <!-- Áp dụng Style mới cho các nút bên phải -->
+                    <Button Content="{Binding AddControlCodeCommandText}"
+	Command="{Binding AddControlCodeCommand}"
+	ToolTip="{Binding AddControlCodeCommandText}"
+	Margin="0,0,0,10"
+	/>
+
+                    <Button Content="{Binding EditControlCodeCommandText}"
+	Command="{Binding EditControlCodeCommand}"
+	ToolTip="{Binding EditControlCodeCommandText}"
+	IsEnabled="{Binding IsEnableBtnEditControlCode}" Margin="0,0,0,10"
+	/>
+
+                    <Button Content="{Binding DeleteControlCodeCommandText}"
+	Command="{Binding DeleteControlCodeCommand}"
+	ToolTip="{Binding DeleteControlCodeCommandText}"
+	/>
+
+                </StackPanel>
+            </Grid>
+
+        </Border>
+
     </Grid>
+
+
 </UserControl>

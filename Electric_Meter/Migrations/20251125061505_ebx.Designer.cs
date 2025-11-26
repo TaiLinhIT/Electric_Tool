@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Electric_Meter.Migrations
 {
     [DbContext(typeof(PowerTempWatchContext))]
-    [Migration("20251125042637_fornew")]
-    partial class fornew
+    [Migration("20251125061505_ebx")]
+    partial class ebx
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,9 @@ namespace Electric_Meter.Migrations
 
             modelBuilder.Entity("Electric_Meter.Dto.LatestSensorDataDTO", b =>
                 {
-                    b.ToTable("LatestSensorDataDTO");
+                    b.ToTable((string)null);
+
+                    b.ToView(null, (string)null);
                 });
 
             modelBuilder.Entity("Electric_Meter.Dto.TotalConsumptionPercentageDeviceDTO", b =>

@@ -1,0 +1,1262 @@
+07:48:30 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+07:48:30 - Lỗi gửi request Exp_Address_110: The port is closed.
+07:48:30 - Lỗi gửi request Exp_Address_1: The port is closed.
+07:48:31 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+07:48:31 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+07:48:40 - Lỗi gửi request Ia_Address_110: The port is closed.
+07:48:40 - Lỗi gửi request Ia_Address_1: The port is closed.
+07:48:50 - Lỗi gửi request Ib_Address_110: The port is closed.
+07:48:50 - Lỗi gửi request Ib_Address_1: The port is closed.
+07:49:00 - Lỗi gửi request Ic_Address_110: The port is closed.
+07:49:00 - Lỗi gửi request Ic_Address_1: The port is closed.
+07:49:10 - Lỗi gửi request Imp_Address_110: The port is closed.
+07:49:10 - Lỗi gửi request Imp_Address_1: The port is closed.
+07:49:20 - Lỗi gửi request Pa_Address_110: The port is closed.
+07:49:20 - Lỗi gửi request Pa_Address_1: The port is closed.
+07:49:30 - Lỗi gửi request Pb_Address_110: The port is closed.
+07:49:30 - Lỗi gửi request Pb_Address_1: The port is closed.
+07:49:40 - Lỗi gửi request Pc_Address_110: The port is closed.
+07:49:40 - Lỗi gửi request Pc_Address_1: The port is closed.
+07:49:50 - Lỗi gửi request Pt_Address_110: The port is closed.
+07:49:50 - Lỗi gửi request Pt_Address_1: The port is closed.
+07:50:00 - Lỗi gửi request Ua_Address_110: The port is closed.
+07:50:00 - Lỗi gửi request Ua_Address_1: The port is closed.
+07:50:10 - Lỗi gửi request Ub_Address_110: The port is closed.
+07:50:10 - Lỗi gửi request Ub_Address_1: The port is closed.
+07:50:20 - Lỗi gửi request Uc_Address_110: The port is closed.
+07:50:20 - Lỗi gửi request Uc_Address_1: The port is closed.
+07:50:30 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+07:50:30 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:11:14 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+08:11:14 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:11:14 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:11:15 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+08:11:15 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+08:11:24 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:11:24 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:11:34 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:11:34 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:11:44 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:11:45 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:11:55 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:11:55 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:12:05 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:12:05 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:12:15 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:12:15 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:12:25 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:12:25 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:12:35 - Lỗi gửi request Pt_Address_110: The port is closed.
+08:12:35 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:12:45 - Lỗi gửi request Ua_Address_110: The port is closed.
+08:12:45 - Lỗi gửi request Ua_Address_1: The port is closed.
+08:18:23 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+08:18:23 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:18:23 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:18:23 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+08:18:23 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+08:18:33 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:18:33 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:23:29 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+08:23:29 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:23:29 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:23:30 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+08:23:30 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+08:23:39 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:23:39 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:23:49 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:23:49 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:23:59 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:23:59 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:24:09 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:24:09 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:24:19 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:24:19 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:24:29 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:24:29 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:24:39 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:24:39 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:24:49 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:24:49 - Lỗi gửi request Pt_Address_110: The port is closed.
+08:24:59 - Lỗi gửi request Ua_Address_1: The port is closed.
+08:24:59 - Lỗi gửi request Ua_Address_110: The port is closed.
+08:25:09 - Lỗi gửi request Ub_Address_1: The port is closed.
+08:25:09 - Lỗi gửi request Ub_Address_110: The port is closed.
+08:25:19 - Lỗi gửi request Uc_Address_1: The port is closed.
+08:25:19 - Lỗi gửi request Uc_Address_110: The port is closed.
+08:25:29 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:25:29 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:30:29 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:30:29 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:30:39 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:30:40 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:30:50 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:30:50 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:31:00 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:31:00 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:31:10 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:31:10 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:31:20 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:31:20 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:31:30 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:31:30 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:31:40 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:31:40 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:31:50 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:31:50 - Lỗi gửi request Pt_Address_110: The port is closed.
+08:32:00 - Lỗi gửi request Ua_Address_1: The port is closed.
+08:32:00 - Lỗi gửi request Ua_Address_110: The port is closed.
+08:32:10 - Lỗi gửi request Ub_Address_1: The port is closed.
+08:32:10 - Lỗi gửi request Ub_Address_110: The port is closed.
+08:32:20 - Lỗi gửi request Uc_Address_1: The port is closed.
+08:32:20 - Lỗi gửi request Uc_Address_110: The port is closed.
+08:32:30 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:32:30 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:37:30 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:37:30 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:37:40 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:37:40 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:37:50 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:37:50 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:38:00 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:38:00 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:38:10 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:38:10 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:38:20 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:38:20 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:38:30 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:38:30 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:38:40 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:38:40 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:38:50 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:38:50 - Lỗi gửi request Pt_Address_110: The port is closed.
+08:39:00 - Lỗi gửi request Ua_Address_1: The port is closed.
+08:39:00 - Lỗi gửi request Ua_Address_110: The port is closed.
+08:39:10 - Lỗi gửi request Ub_Address_1: The port is closed.
+08:39:10 - Lỗi gửi request Ub_Address_110: The port is closed.
+08:39:20 - Lỗi gửi request Uc_Address_1: The port is closed.
+08:39:20 - Lỗi gửi request Uc_Address_110: The port is closed.
+08:39:30 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:39:30 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:44:30 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:44:30 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:44:40 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:44:40 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:44:50 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:44:50 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:45:00 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:45:00 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:45:10 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:45:10 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:45:20 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:45:20 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:45:30 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:45:30 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:45:40 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:45:41 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:45:51 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:45:51 - Lỗi gửi request Pt_Address_110: The port is closed.
+08:46:01 - Lỗi gửi request Ua_Address_1: The port is closed.
+08:46:01 - Lỗi gửi request Ua_Address_110: The port is closed.
+08:46:11 - Lỗi gửi request Ub_Address_1: The port is closed.
+08:46:11 - Lỗi gửi request Ub_Address_110: The port is closed.
+08:46:21 - Lỗi gửi request Uc_Address_1: The port is closed.
+08:46:21 - Lỗi gửi request Uc_Address_110: The port is closed.
+08:46:31 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:46:31 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:51:31 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:51:31 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:51:41 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:51:41 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:51:51 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:51:51 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:52:01 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:52:01 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:52:11 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:52:11 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:52:21 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:52:21 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:52:31 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:52:31 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:52:41 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:52:41 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:52:51 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:52:51 - Lỗi gửi request Pt_Address_110: The port is closed.
+08:53:01 - Lỗi gửi request Ua_Address_1: The port is closed.
+08:53:01 - Lỗi gửi request Ua_Address_110: The port is closed.
+08:53:11 - Lỗi gửi request Ub_Address_1: The port is closed.
+08:53:11 - Lỗi gửi request Ub_Address_110: The port is closed.
+08:53:21 - Lỗi gửi request Uc_Address_1: The port is closed.
+08:53:21 - Lỗi gửi request Uc_Address_110: The port is closed.
+08:53:31 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:53:31 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+08:58:31 - Lỗi gửi request Exp_Address_1: The port is closed.
+08:58:31 - Lỗi gửi request Exp_Address_110: The port is closed.
+08:58:41 - Lỗi gửi request Ia_Address_1: The port is closed.
+08:58:41 - Lỗi gửi request Ia_Address_110: The port is closed.
+08:58:51 - Lỗi gửi request Ib_Address_1: The port is closed.
+08:58:51 - Lỗi gửi request Ib_Address_110: The port is closed.
+08:59:01 - Lỗi gửi request Ic_Address_1: The port is closed.
+08:59:01 - Lỗi gửi request Ic_Address_110: The port is closed.
+08:59:11 - Lỗi gửi request Imp_Address_1: The port is closed.
+08:59:11 - Lỗi gửi request Imp_Address_110: The port is closed.
+08:59:21 - Lỗi gửi request Pa_Address_1: The port is closed.
+08:59:21 - Lỗi gửi request Pa_Address_110: The port is closed.
+08:59:31 - Lỗi gửi request Pb_Address_1: The port is closed.
+08:59:31 - Lỗi gửi request Pb_Address_110: The port is closed.
+08:59:41 - Lỗi gửi request Pc_Address_1: The port is closed.
+08:59:41 - Lỗi gửi request Pc_Address_110: The port is closed.
+08:59:51 - Lỗi gửi request Pt_Address_1: The port is closed.
+08:59:51 - Lỗi gửi request Pt_Address_110: The port is closed.
+09:00:01 - Lỗi gửi request Ua_Address_1: The port is closed.
+09:00:01 - Lỗi gửi request Ua_Address_110: The port is closed.
+09:00:11 - Lỗi gửi request Ub_Address_1: The port is closed.
+09:00:11 - Lỗi gửi request Ub_Address_110: The port is closed.
+09:00:21 - Lỗi gửi request Uc_Address_1: The port is closed.
+09:00:21 - Lỗi gửi request Uc_Address_110: The port is closed.
+09:00:31 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:00:31 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:29:07 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+09:29:07 - Lỗi gửi request Exp_Address_1: The port is closed.
+09:29:07 - Lỗi gửi request Exp_Address_110: The port is closed.
+09:29:07 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:29:07 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:29:19 - Lỗi gửi request Ia_Address_1: The port is closed.
+09:29:19 - Lỗi gửi request Ia_Address_110: The port is closed.
+09:31:47 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+09:31:47 - Lỗi gửi request Exp_Address_110: The port is closed.
+09:31:47 - Lỗi gửi request Exp_Address_1: The port is closed.
+09:31:47 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:31:47 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:37:47 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+09:37:47 - Lỗi gửi request Exp_Address_110: The port is closed.
+09:37:48 - Lỗi gửi request Exp_Address_1: The port is closed.
+09:37:48 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:37:48 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:37:58 - Lỗi gửi request Ia_Address_110: The port is closed.
+09:37:58 - Lỗi gửi request Ia_Address_1: The port is closed.
+09:38:08 - Lỗi gửi request Ib_Address_110: The port is closed.
+09:38:08 - Lỗi gửi request Ib_Address_1: The port is closed.
+09:38:18 - Lỗi gửi request Ic_Address_110: The port is closed.
+09:38:18 - Lỗi gửi request Ic_Address_1: The port is closed.
+09:38:28 - Lỗi gửi request Imp_Address_110: The port is closed.
+09:38:28 - Lỗi gửi request Imp_Address_1: The port is closed.
+09:38:38 - Lỗi gửi request Pa_Address_110: The port is closed.
+09:38:38 - Lỗi gửi request Pa_Address_1: The port is closed.
+09:38:48 - Lỗi gửi request Pb_Address_110: The port is closed.
+09:38:48 - Lỗi gửi request Pb_Address_1: The port is closed.
+09:38:58 - Lỗi gửi request Pc_Address_110: The port is closed.
+09:38:58 - Lỗi gửi request Pc_Address_1: The port is closed.
+09:39:08 - Lỗi gửi request Pt_Address_110: The port is closed.
+09:39:08 - Lỗi gửi request Pt_Address_1: The port is closed.
+09:39:18 - Lỗi gửi request Ua_Address_110: The port is closed.
+09:39:18 - Lỗi gửi request Ua_Address_1: The port is closed.
+09:39:28 - Lỗi gửi request Ub_Address_110: The port is closed.
+09:39:28 - Lỗi gửi request Ub_Address_1: The port is closed.
+09:39:38 - Lỗi gửi request Uc_Address_110: The port is closed.
+09:39:38 - Lỗi gửi request Uc_Address_1: The port is closed.
+09:39:48 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:39:48 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:44:48 - Lỗi gửi request Exp_Address_110: The port is closed.
+09:44:48 - Lỗi gửi request Exp_Address_1: The port is closed.
+09:44:58 - Lỗi gửi request Ia_Address_110: The port is closed.
+09:44:58 - Lỗi gửi request Ia_Address_1: The port is closed.
+09:45:08 - Lỗi gửi request Ib_Address_110: The port is closed.
+09:45:08 - Lỗi gửi request Ib_Address_1: The port is closed.
+09:45:18 - Lỗi gửi request Ic_Address_110: The port is closed.
+09:45:18 - Lỗi gửi request Ic_Address_1: The port is closed.
+09:45:28 - Lỗi gửi request Imp_Address_110: The port is closed.
+09:45:28 - Lỗi gửi request Imp_Address_1: The port is closed.
+09:45:38 - Lỗi gửi request Pa_Address_110: The port is closed.
+09:45:38 - Lỗi gửi request Pa_Address_1: The port is closed.
+09:45:48 - Lỗi gửi request Pb_Address_110: The port is closed.
+09:45:48 - Lỗi gửi request Pb_Address_1: The port is closed.
+09:45:58 - Lỗi gửi request Pc_Address_110: The port is closed.
+09:45:58 - Lỗi gửi request Pc_Address_1: The port is closed.
+09:46:08 - Lỗi gửi request Pt_Address_110: The port is closed.
+09:46:08 - Lỗi gửi request Pt_Address_1: The port is closed.
+09:46:18 - Lỗi gửi request Ua_Address_110: The port is closed.
+09:46:18 - Lỗi gửi request Ua_Address_1: The port is closed.
+09:46:28 - Lỗi gửi request Ub_Address_110: The port is closed.
+09:46:28 - Lỗi gửi request Ub_Address_1: The port is closed.
+09:46:38 - Lỗi gửi request Uc_Address_110: The port is closed.
+09:46:38 - Lỗi gửi request Uc_Address_1: The port is closed.
+09:46:48 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:46:48 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:51:48 - Lỗi gửi request Exp_Address_110: The port is closed.
+09:51:48 - Lỗi gửi request Exp_Address_1: The port is closed.
+09:51:58 - Lỗi gửi request Ia_Address_110: The port is closed.
+09:51:58 - Lỗi gửi request Ia_Address_1: The port is closed.
+09:52:08 - Lỗi gửi request Ib_Address_110: The port is closed.
+09:52:08 - Lỗi gửi request Ib_Address_1: The port is closed.
+09:52:18 - Lỗi gửi request Ic_Address_110: The port is closed.
+09:52:18 - Lỗi gửi request Ic_Address_1: The port is closed.
+09:52:28 - Lỗi gửi request Imp_Address_110: The port is closed.
+09:52:28 - Lỗi gửi request Imp_Address_1: The port is closed.
+09:52:38 - Lỗi gửi request Pa_Address_110: The port is closed.
+09:52:38 - Lỗi gửi request Pa_Address_1: The port is closed.
+09:52:49 - Lỗi gửi request Pb_Address_110: The port is closed.
+09:52:49 - Lỗi gửi request Pb_Address_1: The port is closed.
+09:52:59 - Lỗi gửi request Pc_Address_110: The port is closed.
+09:52:59 - Lỗi gửi request Pc_Address_1: The port is closed.
+09:53:09 - Lỗi gửi request Pt_Address_110: The port is closed.
+09:53:09 - Lỗi gửi request Pt_Address_1: The port is closed.
+09:53:19 - Lỗi gửi request Ua_Address_110: The port is closed.
+09:53:19 - Lỗi gửi request Ua_Address_1: The port is closed.
+09:53:29 - Lỗi gửi request Ub_Address_110: The port is closed.
+09:53:29 - Lỗi gửi request Ub_Address_1: The port is closed.
+09:53:39 - Lỗi gửi request Uc_Address_110: The port is closed.
+09:53:39 - Lỗi gửi request Uc_Address_1: The port is closed.
+09:53:49 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:53:49 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:57:37 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+09:57:37 - Lỗi gửi request Exp_Address_110: The port is closed.
+09:57:37 - Lỗi gửi request Exp_Address_1: The port is closed.
+09:57:38 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:57:38 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+09:57:47 - Lỗi gửi request Ia_Address_110: The port is closed.
+09:57:48 - Lỗi gửi request Ia_Address_1: The port is closed.
+09:57:58 - Lỗi gửi request Ib_Address_110: The port is closed.
+09:57:58 - Lỗi gửi request Ib_Address_1: The port is closed.
+09:58:08 - Lỗi gửi request Ic_Address_110: The port is closed.
+09:58:08 - Lỗi gửi request Ic_Address_1: The port is closed.
+09:58:18 - Lỗi gửi request Imp_Address_110: The port is closed.
+09:58:18 - Lỗi gửi request Imp_Address_1: The port is closed.
+09:58:28 - Lỗi gửi request Pa_Address_110: The port is closed.
+09:58:28 - Lỗi gửi request Pa_Address_1: The port is closed.
+09:58:38 - Lỗi gửi request Pb_Address_110: The port is closed.
+09:58:38 - Lỗi gửi request Pb_Address_1: The port is closed.
+09:58:48 - Lỗi gửi request Pc_Address_110: The port is closed.
+09:58:48 - Lỗi gửi request Pc_Address_1: The port is closed.
+09:58:58 - Lỗi gửi request Pt_Address_110: The port is closed.
+09:58:58 - Lỗi gửi request Pt_Address_1: The port is closed.
+09:59:08 - Lỗi gửi request Ua_Address_110: The port is closed.
+09:59:08 - Lỗi gửi request Ua_Address_1: The port is closed.
+09:59:18 - Lỗi gửi request Ub_Address_110: The port is closed.
+09:59:18 - Lỗi gửi request Ub_Address_1: The port is closed.
+09:59:28 - Lỗi gửi request Uc_Address_110: The port is closed.
+09:59:28 - Lỗi gửi request Uc_Address_1: The port is closed.
+09:59:38 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+09:59:38 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:04:38 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:04:38 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:04:48 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:04:48 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:04:58 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:04:58 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:05:08 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:05:08 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:05:18 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:05:18 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:05:28 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:05:28 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:05:38 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:05:38 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:05:48 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:05:48 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:05:58 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:05:58 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:06:08 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:06:08 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:06:18 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:06:18 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:06:28 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:06:28 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:06:38 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:06:38 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:08:59 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+10:08:59 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:08:59 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:08:59 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+10:08:59 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+10:09:46 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+10:09:46 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:09:46 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:09:47 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+10:09:47 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+10:09:56 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:09:56 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:10:06 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:10:06 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:10:16 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:10:16 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:10:26 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:10:26 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:10:36 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:10:36 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:10:46 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:10:46 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:10:56 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:10:56 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:11:06 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:11:06 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:11:16 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:11:17 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:11:27 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:11:27 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:11:37 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:11:37 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:11:47 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:11:47 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:16:47 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:16:47 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:16:57 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:16:57 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:17:07 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:17:07 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:17:17 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:17:17 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:17:27 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:17:27 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:17:37 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:17:37 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:17:47 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:17:47 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:17:57 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:17:57 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:18:07 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:18:07 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:18:17 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:18:17 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:18:27 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:18:27 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:18:37 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:18:37 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:18:47 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:18:47 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:23:47 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:23:47 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:23:57 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:23:57 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:24:07 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:24:07 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:24:17 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:24:17 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:24:27 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:24:27 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:24:37 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:24:37 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:24:47 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:24:47 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:24:57 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:24:57 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:25:07 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:25:07 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:25:17 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:25:17 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:25:27 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:25:27 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:25:37 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:25:37 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:25:47 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:25:47 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:30:47 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:30:47 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:30:57 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:30:57 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:31:07 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:31:07 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:31:18 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:31:18 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:31:28 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:31:28 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:31:38 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:31:38 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:31:48 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:31:48 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:31:58 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:31:58 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:32:08 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:32:08 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:32:18 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:32:18 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:32:28 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:32:28 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:32:38 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:32:38 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:32:48 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:32:48 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:37:48 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:37:48 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:37:58 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:37:58 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:38:08 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:38:08 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:38:18 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:38:18 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:38:28 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:38:28 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:38:38 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:38:38 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:38:48 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:38:48 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:38:58 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:38:58 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:39:08 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:39:08 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:39:18 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:39:18 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:39:28 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:39:28 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:39:38 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:39:38 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:39:48 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:39:48 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:44:48 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:44:48 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:44:58 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:44:58 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:45:08 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:45:08 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:45:18 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:45:18 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:45:28 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:45:28 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:45:38 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:45:38 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:45:48 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:45:48 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:45:58 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:45:58 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:46:08 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:46:09 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:46:19 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:46:19 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:46:29 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:46:29 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:46:39 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:46:39 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:46:49 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:46:49 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:51:49 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:51:49 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:51:59 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:51:59 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:52:09 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:52:09 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:52:19 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:52:19 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:52:29 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:52:29 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:52:39 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:52:39 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:52:49 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:52:49 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:52:59 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:52:59 - Lỗi gửi request Pc_Address_1: The port is closed.
+10:53:09 - Lỗi gửi request Pt_Address_110: The port is closed.
+10:53:09 - Lỗi gửi request Pt_Address_1: The port is closed.
+10:53:19 - Lỗi gửi request Ua_Address_110: The port is closed.
+10:53:19 - Lỗi gửi request Ua_Address_1: The port is closed.
+10:53:29 - Lỗi gửi request Ub_Address_110: The port is closed.
+10:53:29 - Lỗi gửi request Ub_Address_1: The port is closed.
+10:53:39 - Lỗi gửi request Uc_Address_110: The port is closed.
+10:53:39 - Lỗi gửi request Uc_Address_1: The port is closed.
+10:53:49 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:53:49 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+10:58:49 - Lỗi gửi request Exp_Address_110: The port is closed.
+10:58:49 - Lỗi gửi request Exp_Address_1: The port is closed.
+10:58:59 - Lỗi gửi request Ia_Address_110: The port is closed.
+10:58:59 - Lỗi gửi request Ia_Address_1: The port is closed.
+10:59:09 - Lỗi gửi request Ib_Address_110: The port is closed.
+10:59:09 - Lỗi gửi request Ib_Address_1: The port is closed.
+10:59:19 - Lỗi gửi request Ic_Address_110: The port is closed.
+10:59:19 - Lỗi gửi request Ic_Address_1: The port is closed.
+10:59:29 - Lỗi gửi request Imp_Address_110: The port is closed.
+10:59:29 - Lỗi gửi request Imp_Address_1: The port is closed.
+10:59:39 - Lỗi gửi request Pa_Address_110: The port is closed.
+10:59:39 - Lỗi gửi request Pa_Address_1: The port is closed.
+10:59:49 - Lỗi gửi request Pb_Address_110: The port is closed.
+10:59:49 - Lỗi gửi request Pb_Address_1: The port is closed.
+10:59:59 - Lỗi gửi request Pc_Address_110: The port is closed.
+10:59:59 - Lỗi gửi request Pc_Address_1: The port is closed.
+11:00:09 - Lỗi gửi request Pt_Address_110: The port is closed.
+11:00:09 - Lỗi gửi request Pt_Address_1: The port is closed.
+11:00:19 - Lỗi gửi request Ua_Address_110: The port is closed.
+11:00:19 - Lỗi gửi request Ua_Address_1: The port is closed.
+11:00:29 - Lỗi gửi request Ub_Address_110: The port is closed.
+11:00:29 - Lỗi gửi request Ub_Address_1: The port is closed.
+11:00:39 - Lỗi gửi request Uc_Address_110: The port is closed.
+11:00:39 - Lỗi gửi request Uc_Address_1: The port is closed.
+11:00:49 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:00:49 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:05:49 - Lỗi gửi request Exp_Address_110: The port is closed.
+11:05:49 - Lỗi gửi request Exp_Address_1: The port is closed.
+11:05:59 - Lỗi gửi request Ia_Address_110: The port is closed.
+11:05:59 - Lỗi gửi request Ia_Address_1: The port is closed.
+11:06:09 - Lỗi gửi request Ib_Address_110: The port is closed.
+11:06:09 - Lỗi gửi request Ib_Address_1: The port is closed.
+11:06:19 - Lỗi gửi request Ic_Address_110: The port is closed.
+11:06:20 - Lỗi gửi request Ic_Address_1: The port is closed.
+11:06:30 - Lỗi gửi request Imp_Address_110: The port is closed.
+11:06:30 - Lỗi gửi request Imp_Address_1: The port is closed.
+11:06:40 - Lỗi gửi request Pa_Address_110: The port is closed.
+11:06:40 - Lỗi gửi request Pa_Address_1: The port is closed.
+11:06:50 - Lỗi gửi request Pb_Address_110: The port is closed.
+11:06:50 - Lỗi gửi request Pb_Address_1: The port is closed.
+11:07:00 - Lỗi gửi request Pc_Address_110: The port is closed.
+11:07:00 - Lỗi gửi request Pc_Address_1: The port is closed.
+11:07:10 - Lỗi gửi request Pt_Address_110: The port is closed.
+11:07:10 - Lỗi gửi request Pt_Address_1: The port is closed.
+11:07:20 - Lỗi gửi request Ua_Address_110: The port is closed.
+11:07:20 - Lỗi gửi request Ua_Address_1: The port is closed.
+11:07:30 - Lỗi gửi request Ub_Address_110: The port is closed.
+11:07:30 - Lỗi gửi request Ub_Address_1: The port is closed.
+11:07:40 - Lỗi gửi request Uc_Address_110: The port is closed.
+11:07:40 - Lỗi gửi request Uc_Address_1: The port is closed.
+11:07:50 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:07:50 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:12:50 - Lỗi gửi request Exp_Address_110: The port is closed.
+11:12:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+11:13:00 - Lỗi gửi request Ia_Address_110: The port is closed.
+11:13:00 - Lỗi gửi request Ia_Address_1: The port is closed.
+11:13:10 - Lỗi gửi request Ib_Address_110: The port is closed.
+11:13:10 - Lỗi gửi request Ib_Address_1: The port is closed.
+11:13:20 - Lỗi gửi request Ic_Address_110: The port is closed.
+11:13:20 - Lỗi gửi request Ic_Address_1: The port is closed.
+11:13:30 - Lỗi gửi request Imp_Address_110: The port is closed.
+11:13:30 - Lỗi gửi request Imp_Address_1: The port is closed.
+11:13:40 - Lỗi gửi request Pa_Address_110: The port is closed.
+11:13:40 - Lỗi gửi request Pa_Address_1: The port is closed.
+11:13:50 - Lỗi gửi request Pb_Address_110: The port is closed.
+11:13:50 - Lỗi gửi request Pb_Address_1: The port is closed.
+11:14:00 - Lỗi gửi request Pc_Address_110: The port is closed.
+11:14:00 - Lỗi gửi request Pc_Address_1: The port is closed.
+11:14:10 - Lỗi gửi request Pt_Address_110: The port is closed.
+11:14:10 - Lỗi gửi request Pt_Address_1: The port is closed.
+11:14:20 - Lỗi gửi request Ua_Address_110: The port is closed.
+11:14:20 - Lỗi gửi request Ua_Address_1: The port is closed.
+11:14:30 - Lỗi gửi request Ub_Address_110: The port is closed.
+11:14:30 - Lỗi gửi request Ub_Address_1: The port is closed.
+11:14:40 - Lỗi gửi request Uc_Address_110: The port is closed.
+11:14:40 - Lỗi gửi request Uc_Address_1: The port is closed.
+11:14:50 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:14:50 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:19:50 - Lỗi gửi request Exp_Address_110: The port is closed.
+11:19:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+11:20:00 - Lỗi gửi request Ia_Address_110: The port is closed.
+11:20:00 - Lỗi gửi request Ia_Address_1: The port is closed.
+11:20:10 - Lỗi gửi request Ib_Address_110: The port is closed.
+11:20:10 - Lỗi gửi request Ib_Address_1: The port is closed.
+11:20:20 - Lỗi gửi request Ic_Address_110: The port is closed.
+11:20:20 - Lỗi gửi request Ic_Address_1: The port is closed.
+11:20:52 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+11:20:52 - Lỗi gửi request Exp_Address_1: The port is closed.
+11:20:52 - Lỗi gửi request Exp_Address_110: The port is closed.
+11:20:52 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+11:20:52 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+11:21:02 - Lỗi gửi request Ia_Address_1: The port is closed.
+11:21:02 - Lỗi gửi request Ia_Address_110: The port is closed.
+11:21:12 - Lỗi gửi request Ib_Address_1: The port is closed.
+11:21:12 - Lỗi gửi request Ib_Address_110: The port is closed.
+11:21:22 - Lỗi gửi request Ic_Address_1: The port is closed.
+11:21:22 - Lỗi gửi request Ic_Address_110: The port is closed.
+11:21:32 - Lỗi gửi request Imp_Address_1: The port is closed.
+11:21:32 - Lỗi gửi request Imp_Address_110: The port is closed.
+11:21:42 - Lỗi gửi request Pa_Address_1: The port is closed.
+11:21:42 - Lỗi gửi request Pa_Address_110: The port is closed.
+11:21:52 - Lỗi gửi request Pb_Address_1: The port is closed.
+11:21:52 - Lỗi gửi request Pb_Address_110: The port is closed.
+11:22:02 - Lỗi gửi request Pc_Address_1: The port is closed.
+11:22:02 - Lỗi gửi request Pc_Address_110: The port is closed.
+11:22:12 - Lỗi gửi request Pt_Address_1: The port is closed.
+11:22:12 - Lỗi gửi request Pt_Address_110: The port is closed.
+11:22:22 - Lỗi gửi request Ua_Address_1: The port is closed.
+11:22:22 - Lỗi gửi request Ua_Address_110: The port is closed.
+11:22:32 - Lỗi gửi request Ub_Address_1: The port is closed.
+11:22:32 - Lỗi gửi request Ub_Address_110: The port is closed.
+11:22:42 - Lỗi gửi request Uc_Address_1: The port is closed.
+11:22:42 - Lỗi gửi request Uc_Address_110: The port is closed.
+11:22:52 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:22:52 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:27:52 - Lỗi gửi request Exp_Address_1: The port is closed.
+11:27:52 - Lỗi gửi request Exp_Address_110: The port is closed.
+11:28:02 - Lỗi gửi request Ia_Address_1: The port is closed.
+11:28:02 - Lỗi gửi request Ia_Address_110: The port is closed.
+11:28:12 - Lỗi gửi request Ib_Address_1: The port is closed.
+11:28:12 - Lỗi gửi request Ib_Address_110: The port is closed.
+11:28:22 - Lỗi gửi request Ic_Address_1: The port is closed.
+11:28:22 - Lỗi gửi request Ic_Address_110: The port is closed.
+11:28:32 - Lỗi gửi request Imp_Address_1: The port is closed.
+11:28:32 - Lỗi gửi request Imp_Address_110: The port is closed.
+11:28:42 - Lỗi gửi request Pa_Address_1: The port is closed.
+11:28:42 - Lỗi gửi request Pa_Address_110: The port is closed.
+11:28:52 - Lỗi gửi request Pb_Address_1: The port is closed.
+11:28:52 - Lỗi gửi request Pb_Address_110: The port is closed.
+11:29:02 - Lỗi gửi request Pc_Address_1: The port is closed.
+11:29:02 - Lỗi gửi request Pc_Address_110: The port is closed.
+11:29:12 - Lỗi gửi request Pt_Address_1: The port is closed.
+11:29:12 - Lỗi gửi request Pt_Address_110: The port is closed.
+11:29:22 - Lỗi gửi request Ua_Address_1: The port is closed.
+11:29:22 - Lỗi gửi request Ua_Address_110: The port is closed.
+11:29:32 - Lỗi gửi request Ub_Address_1: The port is closed.
+11:29:32 - Lỗi gửi request Ub_Address_110: The port is closed.
+11:29:42 - Lỗi gửi request Uc_Address_1: The port is closed.
+11:29:42 - Lỗi gửi request Uc_Address_110: The port is closed.
+11:29:52 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:29:52 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+11:34:52 - Lỗi gửi request Exp_Address_1: The port is closed.
+11:34:52 - Lỗi gửi request Exp_Address_110: The port is closed.
+11:35:02 - Lỗi gửi request Ia_Address_1: The port is closed.
+11:35:02 - Lỗi gửi request Ia_Address_110: The port is closed.
+11:35:12 - Lỗi gửi request Ib_Address_1: The port is closed.
+11:35:12 - Lỗi gửi request Ib_Address_110: The port is closed.
+11:35:22 - Lỗi gửi request Ic_Address_1: The port is closed.
+11:35:23 - Lỗi gửi request Ic_Address_110: The port is closed.
+11:35:33 - Lỗi gửi request Imp_Address_1: The port is closed.
+11:35:33 - Lỗi gửi request Imp_Address_110: The port is closed.
+11:35:43 - Lỗi gửi request Pa_Address_1: The port is closed.
+11:35:43 - Lỗi gửi request Pa_Address_110: The port is closed.
+11:35:53 - Lỗi gửi request Pb_Address_1: The port is closed.
+11:35:53 - Lỗi gửi request Pb_Address_110: The port is closed.
+13:26:50 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+13:26:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+13:26:50 - Lỗi gửi request Exp_Address_110: The port is closed.
+13:26:50 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+13:26:50 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+13:27:00 - Lỗi gửi request Ia_Address_1: The port is closed.
+13:27:00 - Lỗi gửi request Ia_Address_110: The port is closed.
+13:27:10 - Lỗi gửi request Ib_Address_1: The port is closed.
+13:27:10 - Lỗi gửi request Ib_Address_110: The port is closed.
+13:30:50 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+13:30:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+13:30:50 - Lỗi gửi request Exp_Address_110: The port is closed.
+13:30:50 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+13:30:50 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+13:31:00 - Lỗi gửi request Ia_Address_1: The port is closed.
+13:31:00 - Lỗi gửi request Ia_Address_110: The port is closed.
+13:31:10 - Lỗi gửi request Ib_Address_1: The port is closed.
+13:31:10 - Lỗi gửi request Ib_Address_110: The port is closed.
+13:31:20 - Lỗi gửi request Ic_Address_1: The port is closed.
+13:31:20 - Lỗi gửi request Ic_Address_110: The port is closed.
+13:31:30 - Lỗi gửi request Imp_Address_1: The port is closed.
+13:31:30 - Lỗi gửi request Imp_Address_110: The port is closed.
+13:31:40 - Lỗi gửi request Pa_Address_1: The port is closed.
+13:31:40 - Lỗi gửi request Pa_Address_110: The port is closed.
+13:31:50 - Lỗi gửi request Pb_Address_1: The port is closed.
+13:31:50 - Lỗi gửi request Pb_Address_110: The port is closed.
+13:32:00 - Lỗi gửi request Pc_Address_1: The port is closed.
+13:32:00 - Lỗi gửi request Pc_Address_110: The port is closed.
+13:32:10 - Lỗi gửi request Pt_Address_1: The port is closed.
+13:32:10 - Lỗi gửi request Pt_Address_110: The port is closed.
+13:32:20 - Lỗi gửi request Ua_Address_1: The port is closed.
+13:32:20 - Lỗi gửi request Ua_Address_110: The port is closed.
+13:32:30 - Lỗi gửi request Ub_Address_1: The port is closed.
+13:32:30 - Lỗi gửi request Ub_Address_110: The port is closed.
+13:32:40 - Lỗi gửi request Uc_Address_1: The port is closed.
+13:32:40 - Lỗi gửi request Uc_Address_110: The port is closed.
+13:32:50 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+13:32:50 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+13:37:50 - Lỗi gửi request Exp_Address_1: The port is closed.
+13:37:50 - Lỗi gửi request Exp_Address_110: The port is closed.
+13:38:00 - Lỗi gửi request Ia_Address_1: The port is closed.
+13:38:00 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:05:14 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+14:05:14 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:05:14 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:05:15 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+14:05:15 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+14:05:24 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:05:24 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:05:34 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:05:34 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:05:44 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:05:44 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:05:54 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:05:54 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:06:04 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:06:04 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:06:14 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:06:14 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:06:24 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:06:24 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:06:34 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:06:34 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:06:44 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:06:44 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:06:54 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:06:54 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:07:04 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:07:04 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:07:14 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:07:14 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:12:14 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:12:14 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:12:24 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:12:24 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:12:34 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:12:34 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:12:44 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:12:45 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:12:55 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:12:55 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:13:05 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:13:05 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:13:15 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:13:15 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:13:25 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:13:25 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:13:35 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:13:35 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:13:45 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:13:45 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:13:55 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:13:55 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:14:05 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:14:05 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:14:15 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:14:15 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:19:15 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:19:15 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:19:25 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:19:25 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:19:35 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:19:35 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:19:45 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:19:45 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:19:55 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:19:55 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:20:05 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:20:05 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:20:15 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:20:15 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:20:25 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:20:25 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:20:35 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:20:35 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:20:45 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:20:45 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:20:55 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:20:55 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:21:05 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:21:05 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:21:15 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:21:15 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:26:15 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:26:15 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:26:25 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:26:25 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:26:35 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:26:35 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:26:45 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:26:45 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:26:55 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:26:55 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:27:05 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:27:05 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:27:15 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:27:15 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:27:25 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:27:25 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:27:35 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:27:35 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:27:45 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:27:45 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:27:55 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:27:55 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:28:05 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:28:06 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:28:15 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:28:16 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:33:16 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:33:16 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:33:26 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:33:26 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:33:36 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:33:36 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:33:46 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:33:46 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:33:56 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:33:56 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:34:06 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:34:06 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:34:16 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:34:16 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:34:26 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:34:26 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:34:36 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:34:36 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:34:46 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:34:46 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:34:56 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:34:56 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:35:06 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:35:06 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:35:16 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:35:16 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:40:16 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:40:16 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:40:26 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:40:26 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:40:36 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:40:36 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:40:46 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:40:46 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:40:56 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:40:56 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:41:06 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:41:06 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:41:16 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:41:16 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:41:26 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:41:26 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:41:36 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:41:36 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:41:46 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:41:46 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:41:56 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:41:56 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:42:06 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:42:06 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:42:16 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:42:16 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:47:16 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:47:16 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:47:26 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:47:26 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:47:36 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:47:36 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:47:46 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:47:46 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:47:56 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:47:56 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:48:06 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:48:07 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:48:17 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:48:17 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:48:27 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:48:27 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:48:37 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:48:37 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:48:47 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:48:47 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:48:57 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:48:57 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:49:07 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:49:07 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:49:17 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:49:17 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:54:17 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:54:17 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:54:27 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:54:27 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:54:37 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:54:37 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:54:47 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:54:47 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:54:57 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:54:57 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:55:07 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:55:07 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:55:17 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:55:17 - Lỗi gửi request Pb_Address_1: The port is closed.
+14:55:27 - Lỗi gửi request Pc_Address_110: The port is closed.
+14:55:27 - Lỗi gửi request Pc_Address_1: The port is closed.
+14:55:37 - Lỗi gửi request Pt_Address_110: The port is closed.
+14:55:37 - Lỗi gửi request Pt_Address_1: The port is closed.
+14:55:47 - Lỗi gửi request Ua_Address_110: The port is closed.
+14:55:47 - Lỗi gửi request Ua_Address_1: The port is closed.
+14:55:57 - Lỗi gửi request Ub_Address_110: The port is closed.
+14:55:57 - Lỗi gửi request Ub_Address_1: The port is closed.
+14:56:07 - Lỗi gửi request Uc_Address_110: The port is closed.
+14:56:07 - Lỗi gửi request Uc_Address_1: The port is closed.
+14:56:17 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:56:17 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+14:58:59 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+14:58:59 - Lỗi gửi request Exp_Address_110: The port is closed.
+14:58:59 - Lỗi gửi request Exp_Address_1: The port is closed.
+14:59:00 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+14:59:00 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+14:59:09 - Lỗi gửi request Ia_Address_110: The port is closed.
+14:59:09 - Lỗi gửi request Ia_Address_1: The port is closed.
+14:59:19 - Lỗi gửi request Ib_Address_110: The port is closed.
+14:59:19 - Lỗi gửi request Ib_Address_1: The port is closed.
+14:59:29 - Lỗi gửi request Ic_Address_110: The port is closed.
+14:59:29 - Lỗi gửi request Ic_Address_1: The port is closed.
+14:59:39 - Lỗi gửi request Imp_Address_110: The port is closed.
+14:59:39 - Lỗi gửi request Imp_Address_1: The port is closed.
+14:59:49 - Lỗi gửi request Pa_Address_110: The port is closed.
+14:59:49 - Lỗi gửi request Pa_Address_1: The port is closed.
+14:59:59 - Lỗi gửi request Pb_Address_110: The port is closed.
+14:59:59 - Lỗi gửi request Pb_Address_1: The port is closed.
+15:00:09 - Lỗi gửi request Pc_Address_110: The port is closed.
+15:00:09 - Lỗi gửi request Pc_Address_1: The port is closed.
+15:00:20 - Lỗi gửi request Pt_Address_110: The port is closed.
+15:00:20 - Lỗi gửi request Pt_Address_1: The port is closed.
+15:00:30 - Lỗi gửi request Ua_Address_110: The port is closed.
+15:00:30 - Lỗi gửi request Ua_Address_1: The port is closed.
+15:00:40 - Lỗi gửi request Ub_Address_110: The port is closed.
+15:00:40 - Lỗi gửi request Ub_Address_1: The port is closed.
+15:03:25 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+15:03:25 - Lỗi gửi request Exp_Address_1: The port is closed.
+15:03:25 - Lỗi gửi request Exp_Address_110: The port is closed.
+15:03:26 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+15:03:26 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+15:03:35 - Lỗi gửi request Ia_Address_1: The port is closed.
+15:03:35 - Lỗi gửi request Ia_Address_110: The port is closed.
+15:03:45 - Lỗi gửi request Ib_Address_1: The port is closed.
+15:03:45 - Lỗi gửi request Ib_Address_110: The port is closed.
+15:03:55 - Lỗi gửi request Ic_Address_1: The port is closed.
+15:03:55 - Lỗi gửi request Ic_Address_110: The port is closed.
+15:04:05 - Lỗi gửi request Imp_Address_1: The port is closed.
+15:04:05 - Lỗi gửi request Imp_Address_110: The port is closed.
+15:04:15 - Lỗi gửi request Pa_Address_1: The port is closed.
+15:04:15 - Lỗi gửi request Pa_Address_110: The port is closed.
+15:04:25 - Lỗi gửi request Pb_Address_1: The port is closed.
+15:04:25 - Lỗi gửi request Pb_Address_110: The port is closed.
+15:04:35 - Lỗi gửi request Pc_Address_1: The port is closed.
+15:04:35 - Lỗi gửi request Pc_Address_110: The port is closed.
+15:04:45 - Lỗi gửi request Pt_Address_1: The port is closed.
+15:04:45 - Lỗi gửi request Pt_Address_110: The port is closed.
+15:04:55 - Lỗi gửi request Ua_Address_1: The port is closed.
+15:04:55 - Lỗi gửi request Ua_Address_110: The port is closed.
+15:05:05 - Lỗi gửi request Ub_Address_1: The port is closed.
+15:05:05 - Lỗi gửi request Ub_Address_110: The port is closed.
+15:05:15 - Lỗi gửi request Uc_Address_1: The port is closed.
+15:05:15 - Lỗi gửi request Uc_Address_110: The port is closed.
+15:05:25 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+15:05:25 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+15:14:44 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+15:14:44 - Lỗi gửi request Exp_Address_110: The port is closed.
+15:14:44 - Lỗi gửi request Exp_Address_1: The port is closed.
+15:14:44 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+15:14:44 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+15:14:54 - Lỗi gửi request Ia_Address_110: The port is closed.
+15:14:54 - Lỗi gửi request Ia_Address_1: The port is closed.
+15:15:04 - Lỗi gửi request Ib_Address_110: The port is closed.
+15:15:04 - Lỗi gửi request Ib_Address_1: The port is closed.
+15:15:14 - Lỗi gửi request Ic_Address_110: The port is closed.
+15:15:14 - Lỗi gửi request Ic_Address_1: The port is closed.
+15:15:24 - Lỗi gửi request Imp_Address_110: The port is closed.
+15:15:24 - Lỗi gửi request Imp_Address_1: The port is closed.
+15:15:34 - Lỗi gửi request Pa_Address_110: The port is closed.
+15:15:34 - Lỗi gửi request Pa_Address_1: The port is closed.
+15:15:44 - Lỗi gửi request Pb_Address_110: The port is closed.
+15:15:44 - Lỗi gửi request Pb_Address_1: The port is closed.
+15:15:54 - Lỗi gửi request Pc_Address_110: The port is closed.
+15:15:54 - Lỗi gửi request Pc_Address_1: The port is closed.
+15:16:04 - Lỗi gửi request Pt_Address_110: The port is closed.
+15:16:04 - Lỗi gửi request Pt_Address_1: The port is closed.
+15:16:14 - Lỗi gửi request Ua_Address_110: The port is closed.
+15:16:14 - Lỗi gửi request Ua_Address_1: The port is closed.
+15:16:24 - Lỗi gửi request Ub_Address_110: The port is closed.
+15:16:24 - Lỗi gửi request Ub_Address_1: The port is closed.
+15:16:34 - Lỗi gửi request Uc_Address_110: The port is closed.
+15:16:34 - Lỗi gửi request Uc_Address_1: The port is closed.
+15:16:44 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+15:16:44 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+15:17:43 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+15:17:43 - Lỗi gửi request Exp_Address_110: The port is closed.
+15:17:43 - Lỗi gửi request Exp_Address_1: The port is closed.
+15:17:44 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+15:17:44 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+15:17:53 - Lỗi gửi request Ia_Address_110: The port is closed.
+15:17:53 - Lỗi gửi request Ia_Address_1: The port is closed.
+15:18:03 - Lỗi gửi request Ib_Address_110: The port is closed.
+15:18:03 - Lỗi gửi request Ib_Address_1: The port is closed.
+15:18:13 - Lỗi gửi request Ic_Address_110: The port is closed.
+15:18:13 - Lỗi gửi request Ic_Address_1: The port is closed.
+15:18:23 - Lỗi gửi request Imp_Address_110: The port is closed.
+15:18:23 - Lỗi gửi request Imp_Address_1: The port is closed.
+15:18:33 - Lỗi gửi request Pa_Address_110: The port is closed.
+15:18:33 - Lỗi gửi request Pa_Address_1: The port is closed.
+15:18:43 - Lỗi gửi request Pb_Address_110: The port is closed.
+15:18:43 - Lỗi gửi request Pb_Address_1: The port is closed.
+15:18:53 - Lỗi gửi request Pc_Address_110: The port is closed.
+15:18:53 - Lỗi gửi request Pc_Address_1: The port is closed.
+15:19:03 - Lỗi gửi request Pt_Address_110: The port is closed.
+15:19:03 - Lỗi gửi request Pt_Address_1: The port is closed.
+15:19:13 - Lỗi gửi request Ua_Address_110: The port is closed.
+15:19:13 - Lỗi gửi request Ua_Address_1: The port is closed.
+15:19:23 - Lỗi gửi request Ub_Address_110: The port is closed.
+15:19:23 - Lỗi gửi request Ub_Address_1: The port is closed.
+15:19:33 - Lỗi gửi request Uc_Address_110: The port is closed.
+15:19:33 - Lỗi gửi request Uc_Address_1: The port is closed.
+15:19:43 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+15:19:43 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+15:24:43 - Lỗi gửi request Exp_Address_110: The port is closed.
+15:24:44 - Lỗi gửi request Exp_Address_1: The port is closed.
+15:24:54 - Lỗi gửi request Ia_Address_110: The port is closed.
+15:24:54 - Lỗi gửi request Ia_Address_1: The port is closed.
+15:25:04 - Lỗi gửi request Ib_Address_110: The port is closed.
+15:25:04 - Lỗi gửi request Ib_Address_1: The port is closed.
+15:25:14 - Lỗi gửi request Ic_Address_110: The port is closed.
+15:25:14 - Lỗi gửi request Ic_Address_1: The port is closed.
+15:25:24 - Lỗi gửi request Imp_Address_110: The port is closed.
+15:25:24 - Lỗi gửi request Imp_Address_1: The port is closed.
+15:25:34 - Lỗi gửi request Pa_Address_110: The port is closed.
+15:25:34 - Lỗi gửi request Pa_Address_1: The port is closed.
+15:25:44 - Lỗi gửi request Pb_Address_110: The port is closed.
+15:25:44 - Lỗi gửi request Pb_Address_1: The port is closed.
+15:25:54 - Lỗi gửi request Pc_Address_110: The port is closed.
+15:25:54 - Lỗi gửi request Pc_Address_1: The port is closed.
+15:26:04 - Lỗi gửi request Pt_Address_110: The port is closed.
+15:26:04 - Lỗi gửi request Pt_Address_1: The port is closed.
+16:06:10 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+16:06:10 - Lỗi gửi request Exp_Address_110: The port is closed.
+16:06:10 - Lỗi gửi request Exp_Address_1: The port is closed.
+16:06:11 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+16:06:11 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+16:06:20 - Lỗi gửi request Ia_Address_110: The port is closed.
+16:06:20 - Lỗi gửi request Ia_Address_1: The port is closed.
+16:06:30 - Lỗi gửi request Ib_Address_110: The port is closed.
+16:06:30 - Lỗi gửi request Ib_Address_1: The port is closed.
+16:06:40 - Lỗi gửi request Ic_Address_110: The port is closed.
+16:06:40 - Lỗi gửi request Ic_Address_1: The port is closed.
+16:06:50 - Lỗi gửi request Imp_Address_110: The port is closed.
+16:06:50 - Lỗi gửi request Imp_Address_1: The port is closed.
+16:07:00 - Lỗi gửi request Pa_Address_110: The port is closed.
+16:07:00 - Lỗi gửi request Pa_Address_1: The port is closed.
+16:07:10 - Lỗi gửi request Pb_Address_110: The port is closed.
+16:07:10 - Lỗi gửi request Pb_Address_1: The port is closed.
+16:07:20 - Lỗi gửi request Pc_Address_110: The port is closed.
+16:07:20 - Lỗi gửi request Pc_Address_1: The port is closed.
+16:07:30 - Lỗi gửi request Pt_Address_110: The port is closed.
+16:07:30 - Lỗi gửi request Pt_Address_1: The port is closed.
+16:07:40 - Lỗi gửi request Ua_Address_110: The port is closed.
+16:07:40 - Lỗi gửi request Ua_Address_1: The port is closed.
+16:07:50 - Lỗi gửi request Ub_Address_110: The port is closed.
+16:07:50 - Lỗi gửi request Ub_Address_1: The port is closed.
+16:08:00 - Lỗi gửi request Uc_Address_110: The port is closed.
+16:08:01 - Lỗi gửi request Uc_Address_1: The port is closed.
+16:08:11 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+16:08:11 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+16:13:11 - Lỗi gửi request Exp_Address_110: The port is closed.
+16:13:11 - Lỗi gửi request Exp_Address_1: The port is closed.
+16:13:21 - Lỗi gửi request Ia_Address_110: The port is closed.
+16:13:21 - Lỗi gửi request Ia_Address_1: The port is closed.
+16:13:31 - Lỗi gửi request Ib_Address_110: The port is closed.
+16:13:31 - Lỗi gửi request Ib_Address_1: The port is closed.
+16:13:41 - Lỗi gửi request Ic_Address_110: The port is closed.
+16:13:41 - Lỗi gửi request Ic_Address_1: The port is closed.
+16:13:51 - Lỗi gửi request Imp_Address_110: The port is closed.
+16:13:51 - Lỗi gửi request Imp_Address_1: The port is closed.
+16:14:01 - Lỗi gửi request Pa_Address_110: The port is closed.
+16:14:01 - Lỗi gửi request Pa_Address_1: The port is closed.
+16:14:11 - Lỗi gửi request Pb_Address_110: The port is closed.
+16:14:11 - Lỗi gửi request Pb_Address_1: The port is closed.
+16:14:21 - Lỗi gửi request Pc_Address_110: The port is closed.
+16:14:21 - Lỗi gửi request Pc_Address_1: The port is closed.
+16:14:31 - Lỗi gửi request Pt_Address_110: The port is closed.
+16:14:31 - Lỗi gửi request Pt_Address_1: The port is closed.
+16:14:41 - Lỗi gửi request Ua_Address_110: The port is closed.
+16:14:41 - Lỗi gửi request Ua_Address_1: The port is closed.
+16:14:51 - Lỗi gửi request Ub_Address_110: The port is closed.
+16:14:51 - Lỗi gửi request Ub_Address_1: The port is closed.
+16:15:01 - Lỗi gửi request Uc_Address_110: The port is closed.
+16:15:01 - Lỗi gửi request Uc_Address_1: The port is closed.
+16:15:11 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+16:15:11 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+16:20:11 - Lỗi gửi request Exp_Address_110: The port is closed.
+16:20:11 - Lỗi gửi request Exp_Address_1: The port is closed.
+16:20:21 - Lỗi gửi request Ia_Address_110: The port is closed.
+16:20:21 - Lỗi gửi request Ia_Address_1: The port is closed.
+16:20:31 - Lỗi gửi request Ib_Address_110: The port is closed.
+16:20:31 - Lỗi gửi request Ib_Address_1: The port is closed.
+16:20:41 - Lỗi gửi request Ic_Address_110: The port is closed.
+16:20:41 - Lỗi gửi request Ic_Address_1: The port is closed.
+16:20:51 - Lỗi gửi request Imp_Address_110: The port is closed.
+16:20:51 - Lỗi gửi request Imp_Address_1: The port is closed.
+16:21:01 - Lỗi gửi request Pa_Address_110: The port is closed.
+16:21:01 - Lỗi gửi request Pa_Address_1: The port is closed.
+16:21:11 - Lỗi gửi request Pb_Address_110: The port is closed.
+16:21:11 - Lỗi gửi request Pb_Address_1: The port is closed.
+16:21:21 - Lỗi gửi request Pc_Address_110: The port is closed.
+16:21:21 - Lỗi gửi request Pc_Address_1: The port is closed.
+16:21:31 - Lỗi gửi request Pt_Address_110: The port is closed.
+16:21:31 - Lỗi gửi request Pt_Address_1: The port is closed.
+16:21:41 - Lỗi gửi request Ua_Address_110: The port is closed.
+16:21:41 - Lỗi gửi request Ua_Address_1: The port is closed.
+16:21:51 - Lỗi gửi request Ub_Address_110: The port is closed.
+16:21:51 - Lỗi gửi request Ub_Address_1: The port is closed.
+16:22:01 - Lỗi gửi request Uc_Address_110: The port is closed.
+16:22:01 - Lỗi gửi request Uc_Address_1: The port is closed.
+16:22:11 - Máy 110: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+16:22:11 - Máy 1: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...
+16:22:41 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in D:\Linh\Project\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 59
+16:22:41 - Lỗi gửi request Exp_Address_110: The port is closed.
+16:22:41 - Lỗi gửi request Exp_Address_1: The port is closed.
+16:22:42 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+16:22:42 - Lỗi khi tải dữ liệu cho devid 5: A second operation was started on this context instance before a previous operation completed. This is usually caused by different threads concurrently using the same instance of DbContext. For more information on how to avoid threading issues with DbContext, see https://go.microsoft.com/fwlink/?linkid=2097913.
+16:22:51 - Lỗi gửi request Ia_Address_110: The port is closed.
+16:22:51 - Lỗi gửi request Ia_Address_1: The port is closed.

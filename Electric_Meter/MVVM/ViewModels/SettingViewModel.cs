@@ -66,8 +66,12 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private bool isEnabledBtnAddDevice;
         [ObservableProperty] private bool isEnableBtnEditDevice;
         [ObservableProperty] private bool isEnabledBtnDeleteDevice;
+        [ObservableProperty] private bool isEnabledBtnAddControlCode;
+        [ObservableProperty] private bool isEnabledBtnEditControlCode;
+        [ObservableProperty] private bool isEnabledBtnDeleteControlCode;
         [ObservableProperty] private string errorMessage;
-        [ObservableProperty] private Device selectedDevice;
+        [ObservableProperty] private Device selectedDevice;//  phải có cái này mới có onselectedchange
+        [ObservableProperty] private Controlcode selectedControlCode;
 
         #endregion
 
@@ -77,8 +81,22 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private KeyValue selectedAssembling;
         [ObservableProperty] private string selectedChooseAssembling;
         [ObservableProperty] private ObservableCollection<Device> deviceList = new();
+        [ObservableProperty] private ObservableCollection<Controlcode> controlCodeList = new();
         #endregion
-
+        #region [ Properties - Controlcode Configuration ]
+        [ObservableProperty] private int codeId;
+        [ObservableProperty] private int devId;
+        [ObservableProperty] private string code;
+        [ObservableProperty] private int activeId;
+        [ObservableProperty] private string codeTypeId;
+        [ObservableProperty] private string name;
+        [ObservableProperty] private double factor;
+        [ObservableProperty] private int? typeId;
+        [ObservableProperty] private decimal? high;
+        [ObservableProperty] private decimal? low;
+        [ObservableProperty] private int? ifShow;
+        [ObservableProperty] private int? ifCal;
+        #endregion
         #region [ Properties - Communication Settings ]
         [ObservableProperty] private string selectedPort;
         [ObservableProperty] private int selectedBaudrate;
@@ -140,12 +158,34 @@ namespace Electric_Meter.MVVM.ViewModels
             AddDeviceCommandText = _languageService.GetString("Add a new device");
             EditDeviceCommandText = _languageService.GetString("Edit device");
             DeleteDeviceCommandText = _languageService.GetString("Delete device");
+            AddControlCodeCommandText = _languageService.GetString("Add a new controlcode");
+            EditControlCodeCommandText = _languageService.GetString("Edit controlcode");
+            DeleteControlCodeCommandText = _languageService.GetString("Delete controlcode");
             NameDeviceCommandText = _languageService.GetString("Name device");
             AddressDeviceCommandText = _languageService.GetString("Address device");
             BaudrateDeviceCommandText = _languageService.GetString("Baudrate");
             PortDeviceCommandText = _languageService.GetString("Port");
             AssemblingCommandText = _languageService.GetString("Assembling");
             AssemblingText = _languageService.GetString("Assembling");
+            DetailControlCodeText = _languageService.GetString("Detail controlcode");
+            ListControlCodeText = _languageService.GetString("List controlcode");
+            DetailDeviceText = _languageService.GetString("Detail device");
+            ListDeviceText = _languageService.GetString("List device");
+            AddControlCodeCommandText = _languageService.GetString("Add a new controlcode");
+            EditControlCodeCommandText = _languageService.GetString("Edit controlcode");
+            DeleteControlCodeCommandText = _languageService.GetString("Delete controlcode");
+            CodeIdCommandText = _languageService.GetString("CodeId");
+            DevIdCommandText = _languageService.GetString("DevId");
+            CodeCommandText = _languageService.GetString("Code");
+            ActiveIdCommandText = _languageService.GetString("ActiveId");
+            CodeTypeIdCommandText = _languageService.GetString("CodeTypeId");
+            NameCommandText = _languageService.GetString("Name");
+            FactorCommandText = _languageService.GetString("Factor");
+            TypeIdCommandText = _languageService.GetString("TypeId");
+            HighCommandText = _languageService.GetString("High");
+            LowCommandText = _languageService.GetString("Low");
+            IfShowCommandText = _languageService.GetString("IfShow");
+            IfCalCommandText = _languageService.GetString("IfCal");
             Application.Current.Dispatcher.Invoke(() =>
             {
                 SetupAssemblingList();
@@ -165,6 +205,26 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string portDeviceCommandText;
         [ObservableProperty] private string assemblingCommandText;
         [ObservableProperty] private string assemblingText;
+
+        [ObservableProperty] private string detailControlCodeText;
+        [ObservableProperty] private string listControlCodeText;
+        [ObservableProperty] private string detailDeviceText;
+        [ObservableProperty] private string listDeviceText;
+        [ObservableProperty] private string addControlCodeCommandText;
+        [ObservableProperty] private string editControlCodeCommandText;
+        [ObservableProperty] private string deleteControlCodeCommandText;
+        [ObservableProperty] private string codeIdCommandText;
+        [ObservableProperty] private string devIdCommandText;
+        [ObservableProperty] private string codeCommandText;
+        [ObservableProperty] private string activeIdCommandText;
+        [ObservableProperty] private string codeTypeIdCommandText;
+        [ObservableProperty] private string nameCommandText;
+        [ObservableProperty] private string factorCommandText;
+        [ObservableProperty] private string typeIdCommandText;
+        [ObservableProperty] private string highCommandText;
+        [ObservableProperty] private string lowCommandText;
+        [ObservableProperty] private string ifShowCommandText;
+        [ObservableProperty] private string ifCalCommandText;
         #endregion
 
         #region [ Methods - Load & Initialization ]
@@ -179,6 +239,19 @@ namespace Electric_Meter.MVVM.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading devices: " + ex.Message);
+            }
+        }
+        private void LoadControlCodeList(int devid)
+        {
+            try
+            {
+                var controlcodes = _service.GetControlCodeListByDevid(devid);
+                ControlCodeList = new(controlcodes);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Error loading control code: " + ex.Message);
             }
         }
 
@@ -200,7 +273,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 IsEnableBtnEditDevice = false;
                 return;
             }
-
+            LoadControlCodeList(value.devid);
             // Gán dữ liệu từ dòng đang chọn sang các input
             NameDevice = value.name;
             AddressDevice = value.address;
@@ -218,7 +291,41 @@ namespace Electric_Meter.MVVM.ViewModels
 
         }
 
-
+        partial void OnSelectedControlCodeChanged(Controlcode value)
+        {
+            if (value == null)
+            {
+                CodeId = 0;
+                DevId = 0;
+                Code = string.Empty;
+                ActiveId = 0;
+                CodeTypeId = string.Empty;
+                Name = string.Empty;
+                Factor = 0;
+                TypeId = 0;
+                High = 0;
+                Low = 0;
+                IfShow = 0;
+                IfCal = 0;
+                return;
+            }
+            // Gán dữ liệu từ dòng đang chọn sang các input
+            CodeId = value.codeid;
+            DevId = value.devid;
+            Code = value.code;
+            ActiveId = value.activeid;
+            CodeTypeId = value.codetypeid;
+            Name = value.name;
+            Factor = value.factor;
+            TypeId = value.typeid;
+            High = value.high;
+            Low = value.low;
+            IfShow = value.ifshow;
+            IfCal = value.ifcal;
+            AddControlCodeCommand.NotifyCanExecuteChanged();
+            EditControlCodeCommand.NotifyCanExecuteChanged();
+            DeleteControlCodeCommand.NotifyCanExecuteChanged();
+        }
         #endregion
 
 
@@ -337,6 +444,70 @@ namespace Electric_Meter.MVVM.ViewModels
         private bool CanExecuteDeleteDevice() => SelectedDevice != null; // ✅ chỉ bật khi chọn thiết bị
         #endregion
 
+        #region [ Command Logic - Add Control Code ]
+        [RelayCommand(CanExecute = nameof(CanExecuteAddControlCode))]
+        private async Task AddControlCode()
+        {
+            try
+            {
+                var newControlCode = new Controlcode
+                {
+                    code = Code,
+                    activeid = ActiveId,
+                    codetypeid = CodeTypeId,
+                    name = Name,
+                    factor = Factor,
+                    typeid = TypeId,
+                    high = High,
+                    low = Low,
+                    ifshow = IfShow,
+                    ifcal = IfCal
+                };
+                await _service.InsertToControlcode(newControlCode);
+                MessageBox.Show("Control Code added successfully!");
+                LoadControlCodeList(SelectedDevice.devid);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+
+            }
+        }
+        private bool CanExecuteAddControlCode() => true; // Chỉ bật khi có thiết bị được chọn
+        #endregion
+        #region [ Command Logic - Edit Control Code ]
+        [RelayCommand(CanExecute = nameof(CanExecuteEditControlCode))]
+        private async Task EditControlCode()
+        {
+            try
+            {
+                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.codeid);
+                if (find == null)
+                {
+                    MessageBox.Show("Control Code not found.");
+                    return;
+                }
+                find.code = Code;
+                find.activeid = ActiveId;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private bool CanExecuteEditControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
+        #endregion
+        #region [ Command Logic - Delete Control Code ]
+        [RelayCommand(CanExecute = nameof(CanExecuteDeleteControlCode))]
+        private async Task DeleteControlCode()
+        {
+            // Thêm logic xóa Control Code ở đây
+        }
+        private bool CanExecuteDeleteControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
+        #endregion
+
 
         #region [ Helper / Validation ]
         // Giữ nguyên hàm ValidateDeviceInput
@@ -355,7 +526,7 @@ namespace Electric_Meter.MVVM.ViewModels
             }
 
             if (string.IsNullOrWhiteSpace(AddressDevice.ToString()) ||
-                !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1 )
+                !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1)
             {
                 ErrorMessage = "AddressDevice must be more than 1";
                 return false;

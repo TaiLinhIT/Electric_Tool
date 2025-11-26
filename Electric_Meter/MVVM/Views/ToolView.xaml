@@ -6,49 +6,13 @@
 			 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
 			 xmlns:local="clr-namespace:Electric_Meter.MVVM.Views"
 			 mc:Ignorable="d"
-			 
              MinHeight="480"
              MinWidth="800">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
-        <SolidColorBrush x:Key="TextColorPrimary" Color="#fafafa"/>
-        <SolidColorBrush x:Key="TextColorSecondary" Color="#fafafa"/>
-        <SolidColorBrush x:Key="BackgroundColor" Color="#0a0a0a"/>
-        <SolidColorBrush x:Key="BorderColor" Color="#fafafa"/>
-        <SolidColorBrush x:Key="AccentColor" Color="#fafafa"/>
-
-        <Style x:Key="BoardLabelStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <!-- Margin bên phải 20px để tạo khoảng cách với cột giá trị -->
-            <Setter Property="Margin" Value="0,10,20,10"/>
-        </Style>
-
-        <Style x:Key="BoardValueStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
-            <Setter Property="FontSize" Value="32"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-        </Style>
-
-        <Style x:Key="BoardUnitStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextColorPrimary}"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="8,0,0,0"/>
-            <Setter Property="Opacity" Value="0.8"/>
-        </Style>
     </UserControl.Resources>
-
     <Border Margin="16"
-			Background="{StaticResource BackgroundColor}"
-			BorderBrush="{StaticResource BorderColor}"
 			BorderThickness="0.5"
 			CornerRadius="10" Padding="30">
         <Grid>
@@ -59,12 +23,12 @@
 
             <StackPanel Grid.Row="0" Margin="0,0,0,20">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
-                    <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0" Foreground="{StaticResource AccentColor}" FontSize="14"/>
+                    <ui:SymbolIcon Symbol="Clock24" Margin="0,0,6,0"  FontSize="14"/>
                     <TextBlock Text="{Binding CurrentTime, StringFormat='HH:mm:ss dd/MM/yyyy'}"
 								   FontSize="12"
 								   FontWeight="Medium"
 								   VerticalAlignment="Center"
-								   Foreground="{StaticResource TextColorPrimary}"/>
+								   />
                 </StackPanel>
 
                 <Grid>
@@ -80,8 +44,6 @@
 								  DisplayMemberPath="name"
 								  SelectedValuePath="devid"
 								  SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-								  Foreground="{StaticResource TextColorPrimary}"
-								  Background="{StaticResource BackgroundColor}" BorderBrush="{StaticResource BorderColor}"
 								  Height="32"
 								  VerticalContentAlignment="Center"
 								  Padding="10,0,10,0"
@@ -95,8 +57,6 @@
 								  VerticalContentAlignment="Center"
 								  Padding="10,0,10,0"
 								  Height="32"
-								  Foreground="{StaticResource TextColorPrimary}"
-								  Background="{StaticResource BackgroundColor}" BorderBrush="{StaticResource BorderColor}"
 								  HorizontalAlignment="Right"/>
                 </Grid>
             </StackPanel>
@@ -125,42 +85,42 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding PhaseAVoltageText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding PhaseAVoltageText}" />
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Ua}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Ua}"  />
+                        <TextBlock Text="V"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PhaseBVoltageText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PhaseBVoltageText}" />
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Ub}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Ub}"  />
+                        <TextBlock Text="V"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding PhaseCVoltageText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding PhaseCVoltageText}" />
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Uc}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="V" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Uc}"  />
+                        <TextBlock Text="V"  />
                     </StackPanel>
 
-                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1" Fill="{StaticResource BorderColor}" Margin="0,15"/>
+                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Height="1"  Margin="0,15"/>
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding PhaseACurrentText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding PhaseACurrentText}" />
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Ia}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Ia}"  />
+                        <TextBlock Text="A"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding PhaseBCurrentText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding PhaseBCurrentText}" />
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Ib}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Ib}"  />
+                        <TextBlock Text="A"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding PhaseCCurrentText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding PhaseCCurrentText}" />
                     <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Ic}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="A" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Ic}"  />
+                        <TextBlock Text="A"  />
                     </StackPanel>
 
                 </Grid>
@@ -184,62 +144,61 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding TotalPowerText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding TotalPowerText}" />
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Pt}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Pt}"  />
+                        <TextBlock Text="kW"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PhaseAPowerText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PhaseAPowerText}" />
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Pa}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Pa}"  />
+                        <TextBlock Text="kW"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding PhaseBPowerText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding PhaseBPowerText}" />
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Pb}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Pb}"  />
+                        <TextBlock Text="kW"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding PhaseCPowerText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding PhaseCPowerText}" />
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Pc}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kW" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Pc}"  />
+                        <TextBlock Text="kW"  />
                     </StackPanel>
 
-                    <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1" Fill="{StaticResource BorderColor}" Margin="0,15"/>
+                    <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Height="1"  Margin="0,15"/>
 
-                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding ExportEnergyText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding ExportEnergyText}" />
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Exp}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Exp}"  />
+                        <TextBlock Text="kWh"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding ImportEnergyText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding ImportEnergyText}" />
                     <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Imp}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Imp}"  />
+                        <TextBlock Text="kWh"  />
                     </StackPanel>
 
-                    <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding TotalEnergyText}" Style="{StaticResource BoardLabelStyle}"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding TotalEnergyText}" />
                     <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{Binding Total}" Style="{StaticResource BoardValueStyle}" />
-                        <TextBlock Text="kWh" Style="{StaticResource BoardUnitStyle}" />
+                        <TextBlock Text="{Binding Total}"  />
+                        <TextBlock Text="kWh"  />
                     </StackPanel>
 
                 </Grid>
             </Grid>
 
             <Border Grid.RowSpan="2"
-					Background="{StaticResource BackgroundColor}"
 					Opacity="0.8"
 					Panel.ZIndex="100"
 					Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ui:ProgressRing IsIndeterminate="True"
 								 Width="50"
 								 Height="50"
-								 Foreground="{StaticResource AccentColor}"
+								 
 								 HorizontalAlignment="Center"
 								 VerticalAlignment="Center"/>
             </Border>

@@ -131,12 +131,11 @@ namespace Electric_Meter.Services
             }
         }
 
-        public List<Device> GetDevicesList()
+        public List<DeviceVM> GetDevicesList()
         {
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            var lstDevice = _context.devices.Where(x => x.activeid == 1 && x.typeid == 7).ToList();
-            return lstDevice;
+            var lstDevice = 
         }
         public List<Controlcode> GetControlCodeListByDevid(int devid)
         {

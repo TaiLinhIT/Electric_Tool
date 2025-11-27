@@ -4,14 +4,21 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:conv="clr-namespace:Electric_Meter.Converters"
 			 mc:Ignorable="d"
 			 d:DesignWidth="900" Height="900"
 			 Background="#FFF">
+    <UserControl.Resources>
+        <conv:ActiveIdMultiLanguageConverter x:Key="ActiveIdMultiLanguageConverter"/>
+    </UserControl.Resources>
+
+
+
     <Grid Margin="10">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="400"/>
+            <RowDefinition Height="500"/>
         </Grid.RowDefinitions>
         <Border  Grid.Row="0" Style="{StaticResource BorderContent}">
             <Grid>
@@ -26,7 +33,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Text="{Binding DetailDeviceText}"
@@ -36,73 +43,79 @@
                     <Border Grid.Row="1" Style="{StaticResource BorderContent}">
                         <Grid Margin="0,5">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="40"/>
-                                <RowDefinition Height="40"/>
-                                <RowDefinition Height="40"/>
-                                <RowDefinition Height="40"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="{Binding AddressDeviceCommandText}" Grid.Row="0" Grid.Column="0" Style="{StaticResource  Content Textblock}"/>
-                            <TextBox Grid.Row="0" Grid.Column="1"
-							        Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Width="120" Text="{Binding AddressDeviceCommandText}" Style="{StaticResource  Content Textblock}"/>
+                                    <TextBox Width="150" Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource Content TextBox}"
-							        />
-
-                            <TextBlock Text="{Binding NameDeviceCommandText}" Grid.Row="0" Grid.Column="2" Style="{StaticResource  Content Textblock}"/>
-                            <TextBox Grid.Row="0" Grid.Column="3"
-							        Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
+                                />
+                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Width="120" Text="{Binding NameDeviceCommandText}" Style="{StaticResource  Content Textblock}"/>
+                                    <TextBox Width="150" Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource Content TextBox}"
-							        />
+                                    />
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Width="120" Text="{Binding BaudrateDeviceCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox Width="150"
+	                                    ItemsSource="{Binding LstBaudrate}"
+	                                    SelectedItem="{Binding SelectedBaudrate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource Content Combobox}"
+	                                    />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBlock Text="{Binding PortDeviceCommandText}" Width="120" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox Width="150"
+                                        ItemsSource="{Binding LstPort}"
+                                        SelectedItem="{Binding SelectedPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource Content Combobox}"
+                                        />
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Text="{Binding AssemblingCommandText}" Width="120" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox Width="150"
+							                ItemsSource="{Binding LstAssembling}"
+							                DisplayMemberPath="value"
+							                SelectedValuePath="key"
+							                SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource Content Combobox}"
+							                />
 
-                            <TextBlock Text="{Binding BaudrateDeviceCommandText}" Grid.Row="1" Grid.Column="0" Style="{StaticResource Content Textblock}"/>
-                            <ComboBox Grid.Row="1" Grid.Column="1"
-							        ItemsSource="{Binding LstBaudrate}"
-							        SelectedItem="{Binding SelectedBaudrate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource Content Combobox}"
-							        />
-
-                            <TextBlock Text="{Binding PortDeviceCommandText}" Grid.Row="1" Grid.Column="2" Style="{StaticResource Content Textblock}"/>
-                            <ComboBox Grid.Row="1" Grid.Column="3"
-							        ItemsSource="{Binding LstPort}"
-							        SelectedItem="{Binding SelectedPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource Content Combobox}"
-							        />
-
-                            <TextBlock Text="{Binding AssemblingCommandText}" Grid.Row="2" Grid.Column="0" Style="{StaticResource Content Textblock}"/>
-                            <ComboBox Grid.Row="2" Grid.Column="1"
-							        ItemsSource="{Binding LstAssembling}"
-							        DisplayMemberPath="value"
-							        SelectedValuePath="key"
-							        SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource Content Combobox}"
-							        />
-
-
+                                </StackPanel>
+                            </Grid>
+                            
                         </Grid>
                     </Border>
                     <TextBlock Grid.Row="2" Text="{Binding ListDeviceText}"
                                 Style="{StaticResource H3}"
                                 />
-                    <DataGrid x:Name="DeviceGrid"
+                    <DataGrid x:Name="DeviceGrid" Style="{StaticResource BaseDataGridView}"
                                             Grid.Row="3"
 					                        ItemsSource="{Binding DeviceList, UpdateSourceTrigger=PropertyChanged}"
-					                        AutoGenerateColumns="False"
-					                        IsReadOnly="True"
-					                        CanUserAddRows="False"
-					                        SelectionMode="Single"
 					                        SelectedItem="{Binding SelectedDevice, UpdateSourceTrigger=PropertyChanged}"
-					                        HeadersVisibility="Column"
-					                        BorderThickness="1"
-					                        BorderBrush="#CCC"
-					                        RowHeight="32"
-					                        Margin="10">
+					                        >
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="{Binding AddressDeviceCommandText}" Binding="{Binding address}" Width="*"/>
@@ -110,6 +123,17 @@
                             <DataGridTextColumn Header="{Binding BaudrateDeviceCommandText}" Binding="{Binding baudrate}" Width="*"/>
                             <DataGridTextColumn Header="{Binding PortDeviceCommandText}" Binding="{Binding port}" Width="*"/>
                             <DataGridTextColumn Header="{Binding AssemblingCommandText}" Binding="{Binding assembling}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding ActiveCommandText}">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding Converter="{StaticResource ActiveIdMultiLanguageConverter}">
+                                        <Binding Path="activeid"/>
+                                        <Binding Path="DataContext.ActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                        <Binding Path="DataContext.InActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="{Binding TypeCommandText}" Binding="{Binding typeid}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -153,14 +177,14 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="{Binding DetailControlCodeText}"
+                    <TextBlock Grid.Row="2" Text="{Binding DetailControlCodeText}"
                     Style="{StaticResource H3}"
                     />
-                    <Border Grid.Row="1" Style="{StaticResource BorderContent}">
+                    <Border Grid.Row="3" Style="{StaticResource BorderContent}">
                         <Grid Margin="10">
 
                             <Grid.ColumnDefinitions>
@@ -266,31 +290,32 @@
                         </Grid>
 
                     </Border>
-                    <TextBlock Grid.Row="2" Text="{Binding ListControlCodeText}"
+                    <TextBlock Grid.Row="0" Text="{Binding ListControlCodeText}"
             Style="{StaticResource H3}"
             />
-                    <DataGrid x:Name="ControlcodeGrid"
-                        Grid.Row="3"
+                    <DataGrid x:Name="ControlcodeGrid"  Style="{StaticResource BaseDataGridView}"
+                        Grid.Row="1"
 					    ItemsSource="{Binding ControlCodeList, UpdateSourceTrigger=PropertyChanged}"
-					    AutoGenerateColumns="False"
-					    IsReadOnly="True"
-					    CanUserAddRows="False"
-					    SelectionMode="Single"
+					    
 					    SelectedItem="{Binding SelectedControlCode, UpdateSourceTrigger=PropertyChanged}"
-					    HeadersVisibility="Column"
-					    BorderThickness="1"
-					    BorderBrush="#CCC"
-					    RowHeight="32"
-					    Margin="0,5,0,0">
+					    >
                         
     <DataGrid.Columns>
                             <DataGridTextColumn Header="{Binding CodeIdCommandText}" Binding="{Binding codeid}" Width="*"/>
                             <DataGridTextColumn Header="{Binding DevIdCommandText}" Binding="{Binding devid}" Width="*"/>
                             <DataGridTextColumn Header="{Binding CodeCommandText}" Binding="{Binding code}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding ActiveIdCommandText}" Binding="{Binding activeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding ActiveCommandText}">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding Converter="{StaticResource ActiveIdMultiLanguageConverter}">
+                                        <Binding Path="activeid"/>
+                                        <Binding Path="DataContext.ActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                        <Binding Path="DataContext.InActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Header="{Binding CodeTypeIdCommandText}" Binding="{Binding codetypeid}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding NameCommandText}" Binding="{Binding codetypeid}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding FactorCommandText}" Binding="{Binding codetypeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameCommandText}" Binding="{Binding name}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding FactorCommandText}" Binding="{Binding factor}" Width="*"/>
                             <DataGridTextColumn Header="{Binding TypeIdCommandText}" Binding="{Binding typeid}" Width="*"/>
                             <DataGridTextColumn Header="{Binding HighCommandText}" Binding="{Binding high}" Width="*"/>
                             <DataGridTextColumn Header="{Binding LowCommandText}" Binding="{Binding low}" Width="*"/>

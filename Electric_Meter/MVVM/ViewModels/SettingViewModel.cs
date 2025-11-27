@@ -87,7 +87,7 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private int codeId;
         [ObservableProperty] private int devId;
         [ObservableProperty] private string code;
-        [ObservableProperty] private int activeId;
+        [ObservableProperty] private string active;
         [ObservableProperty] private string codeTypeId;
         [ObservableProperty] private string name;
         [ObservableProperty] private double factor;
@@ -96,6 +96,9 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private decimal? low;
         [ObservableProperty] private int? ifShow;
         [ObservableProperty] private int? ifCal;
+        [ObservableProperty] private int activeid;
+         public string ActiveText => activeid == 1 ? ActiveCommandText : InActiveCommandText;
+
         #endregion
         #region [ Properties - Communication Settings ]
         [ObservableProperty] private string selectedPort;
@@ -150,6 +153,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     SelectedAssembling = LstAssembling.FirstOrDefault();
                 }
             });
+            
         }
         #endregion
         #region [ Methods - Language ]
@@ -177,7 +181,8 @@ namespace Electric_Meter.MVVM.ViewModels
             CodeIdCommandText = _languageService.GetString("CodeId");
             DevIdCommandText = _languageService.GetString("DevId");
             CodeCommandText = _languageService.GetString("Code");
-            ActiveIdCommandText = _languageService.GetString("ActiveId");
+            ActiveCommandText = _languageService.GetString("Active");
+            InActiveCommandText = _languageService.GetString("InActive");
             CodeTypeIdCommandText = _languageService.GetString("CodeTypeId");
             NameCommandText = _languageService.GetString("Name");
             FactorCommandText = _languageService.GetString("Factor");
@@ -216,7 +221,8 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string codeIdCommandText;
         [ObservableProperty] private string devIdCommandText;
         [ObservableProperty] private string codeCommandText;
-        [ObservableProperty] private string activeIdCommandText;
+        [ObservableProperty] private string activeCommandText;
+        [ObservableProperty] private string inActiveCommandText;
         [ObservableProperty] private string codeTypeIdCommandText;
         [ObservableProperty] private string nameCommandText;
         [ObservableProperty] private string factorCommandText;
@@ -235,6 +241,7 @@ namespace Electric_Meter.MVVM.ViewModels
             {
                 var devices = _service.GetDevicesList();
                 DeviceList = new ObservableCollection<Device>(devices);
+
             }
             catch (Exception ex)
             {
@@ -298,7 +305,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 CodeId = 0;
                 DevId = 0;
                 Code = string.Empty;
-                ActiveId = 0;
+                Active = string.Empty;
                 CodeTypeId = string.Empty;
                 Name = string.Empty;
                 Factor = 0;
@@ -313,7 +320,7 @@ namespace Electric_Meter.MVVM.ViewModels
             CodeId = value.codeid;
             DevId = value.devid;
             Code = value.code;
-            ActiveId = value.activeid;
+            //Active = value.activeid;
             CodeTypeId = value.codetypeid;
             Name = value.name;
             Factor = value.factor;
@@ -453,7 +460,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 var newControlCode = new Controlcode
                 {
                     code = Code,
-                    activeid = ActiveId,
+                    //activeid = Active,
                     codetypeid = CodeTypeId,
                     name = Name,
                     factor = Factor,
@@ -489,7 +496,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     return;
                 }
                 find.code = Code;
-                find.activeid = ActiveId;
+                //find.activeid = ActiveId;
             }
             catch (Exception ex)
             {

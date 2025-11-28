@@ -77,7 +77,7 @@ namespace Electric_Meter
             services.AddSingleton<SerialPort>();//new add
             services.AddSingleton<MySerialPortService>();
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddNavigationViewPageProvider();             // từ Wpf.Ui.DependencyInjection
+            services.AddNavigationViewPageProvider();            
             services.AddSingleton<LanguageService>();
 
             // UI (MainWindow)

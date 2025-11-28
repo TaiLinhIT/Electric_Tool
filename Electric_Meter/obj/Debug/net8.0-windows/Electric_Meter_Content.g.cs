@@ -10,5 +10,18 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("appsetting.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/electric.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("languages/en.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("languages/km.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("languages/vi.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("languages/zh.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/activetype.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/controlcode.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/devices.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("seeddata/sensortype.json")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getdailyconsumption.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getlatestsensorbydevice.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getlatestsensorbydeviceyear.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/getratiomonthlydevice.sql")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("sql/sensordata12monthbydevid.sql")]
 
 

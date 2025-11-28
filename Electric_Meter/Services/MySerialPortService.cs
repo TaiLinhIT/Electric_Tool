@@ -1,48 +1,103 @@
-﻿using Electric_Meter.Configs;
-using Electric_Meter.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
-using System.Linq;
+using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+
+using Electric_Meter.Configs;
+using Electric_Meter.Models;
+using Electric_Meter.Utilities;
+
+using Microsoft.EntityFrameworkCore;
+
+using Newtonsoft.Json;
 
 namespace Electric_Meter.Services
 {
     public class MySerialPortService
     {
+        // Định nghĩa Delegate cho Event
+        public event Action<Dictionary<string, double?>> DataUpdated;
+        #region [ Fields (Private data) - Observable Properties ]
+        private readonly HttpClient _httpClient;
+        private readonly Service _service;
+        private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
+        private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
+        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();
+        private HashSet<string> processedRequests = new HashSet<string>();
+        private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
+        private static readonly object lockObject = new object();
         public SerialPort _serialPort;
         public event SerialDataReceivedEventHandler Sdre;
         public string Port;
         public int Baudrate;
         bool _continue;
         Thread readThread;
-        private AppSetting _appsetting;
-        public MySerialPortService()
+        private AppSetting _appSetting;
+        private readonly PowerTempWatchContext _context;
+        #endregion
+        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting, SerialPort serialPort, HttpClient httpClient)
         {
 
-            _appsetting = new AppSetting();
+            _serialPort = serialPort;
+            _context = powerTempWatchContext;
+            _appSetting = appSetting;
+            _service = service;
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri("http://localhost:7099");
+        }
+        public async Task SendDataToServer(string devid)
+        {
+
+            try
+            {
+                var dto = new
+                {
+                    devid = "1",
+                    value = 121,
+                    createdAt = DateTime.Now
+                };
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/Sensor/sensor", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+
+            }
+            catch (HttpRequestException httpEx)
+            {
+                // Bắt lỗi kết nối mạng (Server không chạy, sai địa chỉ, v.v.)
+                Console.WriteLine($"❌ Gửi dữ liệu thất bại (HttpRequestException): Vui lòng kiểm tra Server API (https://localhost:7099) đã chạy chưa. Lỗi: {httpEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"❌ Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+            }
 
         }
-        public void Conn()
+
+        public async Task Conn()
         {
-            _serialPort = new SerialPort();
+
+            //_serialPort = new SerialPort();
             _serialPort.DataReceived += Sdre;
-            
             _serialPort.ErrorReceived += _serialPort_ErrorReceived;
             _serialPort.PinChanged += _serialPort_PinChanged;
-
-            _serialPort.PortName = Port;
-            _serialPort.BaudRate = Baudrate;
+            _serialPort.PortName = _appSetting.Port;
+            _serialPort.BaudRate = _appSetting.Baudrate;
             _serialPort.DataBits = 8;//数据长度：
             _serialPort.StopBits = StopBits.One;//停止位
             _serialPort.Handshake = Handshake.None;
             _serialPort.Parity = Parity.None;//校验方式
             _serialPort.ReadTimeout = 500; //设置超时读取时间
             _serialPort.WriteTimeout = 100;
-
             _serialPort.RtsEnable = true;
+            await SendDataToServer("5");
             try
             {
                 _serialPort.Open();
@@ -53,7 +108,7 @@ namespace Electric_Meter.Services
                 Tool.Log(string.Format("端口{0}打开失败:{1}", Port, e));
             }
         }
-        
+
 
         private void _serialPort_PinChanged(object sender, SerialPinChangedEventArgs e)
         {
@@ -105,7 +160,7 @@ namespace Electric_Meter.Services
             _serialPort.Close();
         }
 
-        public void Write( string hexData)
+        public void Write(string hexData)
         {
             try
             {
@@ -149,12 +204,419 @@ namespace Electric_Meter.Services
             return _serialPort.IsOpen;
         }
 
-        /// <summary>
-        /// Customize hard code
-        /// </summary>
-        /// <param name="bufferb"></param>
-        /// <returns></returns>
-        
+        #region [ Function communication ]
+        public async void StartCommunication()
+        {
+            try
+            {
+                // Bắt event nhận dữ liệu
+                Sdre += SerialPort_DataReceived;
+                // Mở cổng
+                Conn();
+                // Bắt đầu gửi request cho tất cả địa chỉ
+                await SendRequestsToAllAddressesAsync();
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi khi khởi động kết nối: {ex.Message}");
+            }
+        }
 
+        #endregion
+        #region [ Function Datareceived ]
+        private async void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                var serialPort = (SerialPort)sender;
+                int bytesToRead = serialPort.BytesToRead;
+
+                if (bytesToRead > 0)
+                {
+                    byte[] buffer = new byte[bytesToRead];
+                    serialPort.Read(buffer, 0, bytesToRead);
+
+                    string hexString = BitConverter.ToString(buffer).Replace("-", " ");
+
+                    // Kiểm tra CRC
+                    if (!Tool.CRC_PD(buffer))
+                    {
+                        Tool.Log($"CRC check failed for data: {hexString}");
+                        return;
+                    }
+
+                    int address = buffer[0];
+
+                    // Lặp qua các activeRequests để tìm đúng request
+                    var matchedRequest = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{address}_"));
+
+                    if (activeRequests.Count == 0)
+                    {
+                        //Tool.Log("ActiveRequests hiện đang trống.");
+                    }
+
+
+                    if (!string.IsNullOrEmpty(matchedRequest.Key))
+                    {
+                        string requestName = matchedRequest.Value;
+                        string requestKey = matchedRequest.Key;
+
+                        // Tránh xử lý trùng trong cùng một lần nhận
+                        if (processedRequests.Contains(requestKey))
+                        {
+                            Tool.Log($"Data for {requestName} at address {address} already processed. Skipping...");
+                            return;
+                        }
+
+                        // Đánh dấu là đã xử lý
+                        processedRequests.Add(requestKey);
+
+                        // Hủy timeout nếu có
+                        if (responseTimeouts.ContainsKey(address.ToString()))
+                        {
+                            responseTimeouts[address.ToString()].Cancel();
+                            responseTimeouts.Remove(address.ToString());
+                        }
+
+                        activeRequests.Remove(requestKey);
+
+                        // Gọi hàm xử lý
+                        ParseAndStoreReceivedData(buffer, requestName, address);
+
+                        // XÓA KEY để lần sau vẫn xử lý được
+                        processedRequests.Remove(requestKey);
+                    }
+                    else
+                    {
+                        Tool.Log($"Received data from address {address} does not match any active request.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    System.Windows.MessageBox.Show($"Error in DataReceived: {ex.Message}");
+                });
+            }
+        }
+
+
+        #endregion
+        #region [ Function Translate Data ]
+        public async Task SendRequestsToAllAddressesAsync()
+        {
+            foreach (var item in GetDevices())
+            {
+                int capturedAddress = item.address;
+                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
+            }
+
+        }
+        private async Task LoopRequestsForMachineAsync(int address)
+        {
+            while (true)
+            {
+                //Tool.Log($"Máy {address}: Bắt đầu gửi dữ liệu");
+
+                foreach (var request in _appSetting.Requests)
+                {
+                    string requestName = $"{request.Key}_Address_{address}";
+                    await SendRequestAsync(requestName, request.Value, address);
+                    await Task.Delay(10000);
+                }
+
+                Tool.Log($"Máy {address}: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...");
+                await Task.Delay(TimeSpan.FromMinutes(_appSetting.TimeSendRequest));
+            }
+        }
+
+        private async Task SendRequestAsync(string requestName, string requestHex, int address)
+        {
+            try
+            {
+                await _serialLock.WaitAsync(); //Chỉ 1 máy được gửi tại 1 thời điểm
+
+                // B1: Thêm vào activeRequests
+                string requestKey = $"{address}_{requestName}";
+                if (!activeRequests.ContainsKey(requestKey))
+                {
+                    activeRequests[requestKey] = requestName;
+
+                    //Thiết lập timeout nếu cần
+                    var cts = new CancellationTokenSource();
+                    responseTimeouts[address.ToString()] = cts;
+                    _ = StartResponseTimeoutAsync(address.ToString(), cts.Token);
+                }
+
+                // B2: Xử lý dữ liệu hex
+                byte[] requestBytes = _service.ConvertHexStringToByteArray(requestHex);
+                string addressHex = _service.ConvertToHex(address).PadLeft(2, '0');
+                string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
+                string CRCString = CRC.CalculateCRC(requestString);
+                requestString += " " + CRCString;
+
+                // B3: Gửi
+                Write(requestString);
+                //Tool.Log($"Máy {address} gửi {requestName}: {requestString}");
+
+                await Task.Delay(1000); // Chờ thiết bị phản hồi
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi gửi request {requestName}: {ex.Message}");
+            }
+            finally
+            {
+                _serialLock.Release(); //Giải phóng cho máy khác gửi
+            }
+        }
+        private async Task StartResponseTimeoutAsync(string addressKey, CancellationToken cancellationToken)
+        {
+            try
+            {
+                int timeoutSeconds = _appSetting.TimeOutReceive; // đảm bảo bạn đã config nó trong appsettings.json
+
+                await Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationToken);
+
+                // Nếu không bị hủy, nghĩa là timeout xảy ra
+                if (activeRequests.Keys.Any(k => k.StartsWith($"{addressKey}_")))
+                {
+                    //Tool.Log($"Timeout: Không nhận được phản hồi từ máy có địa chỉ {addressKey} sau {timeoutSeconds} giây.");
+                    activeRequests = activeRequests
+                        .Where(kvp => !kvp.Key.StartsWith($"{addressKey}_"))
+                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Bị huỷ đúng cách do có phản hồi đến
+                Tool.Log($"Máy {addressKey} đã phản hồi đúng hạn.");
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi khi xử lý timeout cho địa chỉ {addressKey}: {ex.Message}");
+            }
+        }
+        private void ParseAndStoreReceivedData(byte[] data, string requestName, int address)
+        {
+            try
+            {
+                if (data.Length >= 9)
+                {
+                    int dataByteCount = data[2];
+                    if (dataByteCount != 4 || data.Length < 5 + dataByteCount)
+                    {
+                        Tool.Log($"Invalid data for {requestName} at address {address}: insufficient length.");
+                        return;
+                    }
+
+                    // Giải mã giá trị float
+                    byte[] floatBytes = new byte[4];
+                    Array.Copy(data, 3, floatBytes, 0, 4);
+                    Array.Reverse(floatBytes); // Đảo byte nếu cần
+
+                    float rawValue = BitConverter.ToSingle(floatBytes, 0);
+                    double actualValue;
+
+                    // Phân loại theo tên
+                    if (requestName.StartsWith("U"))
+                    {
+                        actualValue = rawValue * _appSetting.FactorU;
+                    }
+                    else if (requestName.StartsWith("Exp") || requestName.StartsWith("Imp"))
+                    {
+                        actualValue = rawValue * _appSetting.FactorImp;
+                    }
+                    else if (requestName.StartsWith("P"))
+                        actualValue = rawValue * _appSetting.FactorP;
+                    else if (requestName.StartsWith("I"))
+                        actualValue = rawValue * _appSetting.FactorI;
+                    else
+                    {
+                        Tool.Log($"Unknown request type for {requestName} at address {address}.");
+                        return;
+                    }
+
+                    actualValue = Math.Round(actualValue, 2);
+
+                    lock (lockObject)
+                    {
+                        if (!receivedDataByAddress.ContainsKey(address))
+                            receivedDataByAddress[address] = new Dictionary<string, double>();
+
+                        receivedDataByAddress[address][requestName] = actualValue;
+
+                        //Tool.Log($"Nhận {requestName} = {actualValue} tại địa chỉ {address}. Hiện có {receivedDataByAddress[address].Count}/{_appSetting.Requests.Count}");
+
+                        // Kiểm tra đủ số lượng request
+                        if (receivedDataByAddress[address].Count == _appSetting.Requests.Count)
+                        {
+                            //Tool.Log($"Đã đủ {_appSetting.Requests.Count} trường dữ liệu tại địa chỉ {address}, tiến hành lưu vào DB...");
+
+                            // Gọi hàm lưu trong background
+                            _ = Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    await SaveAllData(address);
+
+                                    lock (lockObject)
+                                    {
+                                        receivedDataByAddress[address].Clear();
+                                        processedRequests.RemoveWhere(k => k.StartsWith($"{address}_"));
+                                    }
+
+                                    Tool.Log($"Lưu thành công dữ liệu cho địa chỉ {address}");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
+                                }
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    Tool.Log($"Incomplete data for {requestName} at address {address}.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi khi phân tích dữ liệu {requestName} tại địa chỉ {address}: {ex.Message}");
+                Tool.Log($"Dữ liệu gốc: {BitConverter.ToString(data)}");
+            }
+        }
+        private async Task SaveAllData(int address)
+        {
+            try
+            {
+
+                //Tool.Log($"Đang chuẩn bị lấy dữ liệu đã nhận cho địa chỉ {address}...");
+
+                Dictionary<string, double> dataForAddress;
+
+                lock (lockObject)
+                {
+                    if (!receivedDataByAddress.TryGetValue(address, out dataForAddress))
+                    {
+                        Tool.Log($"Không tìm thấy dữ liệu cho địa chỉ {address}.");
+                        return;
+                    }
+
+                    if (dataForAddress.Count < 12)
+                    {
+                        //Tool.Log($"Dữ liệu không đủ trường cần thiết cho địa chỉ {address}. Đã nhận {dataForAddress.Count} trường.");
+                        return;
+                    }
+                }
+
+                //Tool.Log($"Đang tìm IdMachine tương ứng với địa chỉ {address}...");
+
+                var device = _context.devices.Where(x => x.typeid == 7 && x.ifshow == 1).FirstOrDefault(m => m.address == address);
+                if (device == null)
+                {
+                    Tool.Log($"Không tìm thấy IdMachine với địa chỉ {address}");
+                    return;
+                }
+
+                int Devid = device.devid;
+                //Tool.Log($"Tìm thấy IdMachine = {idMachine} cho địa chỉ {address}");
+
+                var now = DateTime.Now;
+
+                // 1. Chuẩn bị giá trị cần lưu
+                var valuesToSave = new Dictionary<string, double?>
+                {
+                    { "Ua", GetValueWithAddressSuffix(dataForAddress, "Ua", address) },
+                    { "Ub", GetValueWithAddressSuffix(dataForAddress, "Ub", address) },
+                    { "Uc", GetValueWithAddressSuffix(dataForAddress, "Uc", address) },
+                    { "Ia", GetValueWithAddressSuffix(dataForAddress, "Ia", address) },
+                    { "Ib", GetValueWithAddressSuffix(dataForAddress, "Ib", address) },
+                    { "Ic", GetValueWithAddressSuffix(dataForAddress, "Ic", address) },
+                    { "Pt", GetValueWithAddressSuffix(dataForAddress, "Pt", address) },
+                    { "Pa", GetValueWithAddressSuffix(dataForAddress, "Pa", address) },
+                    { "Pb", GetValueWithAddressSuffix(dataForAddress, "Pb", address) },
+                    { "Pc", GetValueWithAddressSuffix(dataForAddress, "Pc", address) },
+                    { "Exp", GetValueWithAddressSuffix(dataForAddress, "Exp", address) },
+                    { "Imp", GetValueWithAddressSuffix(dataForAddress, "Imp", address) }
+                };
+                // *************** BƯỚC CẬP NHẬT GIAO DIỆN ĐỒNG THỜI ***************
+                // Cần truyền dữ liệu đã lấy được sang ViewModel để cập nhật giao diện
+                // Giả sử ToolViewModel được inject hoặc có thể truy cập được:
+                // GỌI EVENT ĐỂ THÔNG BÁO CHO VIEWMODEL
+                DataUpdated?.Invoke(valuesToSave);
+                // ********************************************************************
+                // 2. Lấy danh sách control code theo devid
+                var controlCodes = await _context.controlcodes
+                    .Where(c => c.devid == Devid)
+                    .ToListAsync();
+
+                int savedCount = 0;
+
+                foreach (var item in valuesToSave)
+                {
+                    if (!item.Value.HasValue) continue;
+
+                    var code = controlCodes.FirstOrDefault(c => c.name == item.Key);
+                    if ((code.name == "Imp" && item.Value.Value < 0) || (code.name == "Exp" && item.Value.Value < 0))
+                    {
+                        Tool.Log($"⚠ Giá trị {item.Key} không hợp lệ (âm) cho địa chỉ {address}. Bỏ qua lưu trữ.");
+                        continue; // Bỏ qua nếu giá trị âm
+                    }
+
+                    if (code != null)
+                    {
+
+                        var sensorData = new SensorData
+                        {
+                            devid = Devid,
+                            codeid = code.codeid,
+                            value = item.Value.Value,
+                            day = now
+                        };
+                        Tool.Log($"→ Đang lưu: devid={sensorData.devid}, codeid={sensorData.codeid}, value={sensorData.value}, day={sensorData.day}");
+
+                        // Gọi và kiểm tra kết quả lưu
+                        bool isSaved = await _service.InsertToSensorDataAsync(sensorData);
+                        if (isSaved)
+                        {
+                            savedCount++;
+                        }
+                    }
+                }
+
+                // Logging kết quả
+                if (savedCount == 0)
+                {
+                    Tool.Log($"⚠ Không có bản ghi nào được lưu vào bảng SensorData cho địa chỉ {address}.");
+                }
+                else
+                {
+                    Tool.Log($"→ Đã lưu {savedCount} bản ghi vào bảng SensorData cho địa chỉ {address}.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
+            }
+        }
+        // Hàm tiện ích để lấy giá trị từ Dictionary dựa trên key có hậu tố `Address_X`
+        private double? GetValueWithAddressSuffix(Dictionary<string, double> data, string key, int address)
+        {
+            string fullKey = $"{key}_Address_{address}";
+            return data.ContainsKey(fullKey) ? data[fullKey] : null;
+        }
+
+        #endregion
+
+        #region [ Function Device ]
+        private List<Device> GetDevices()
+        {
+            return _context.devices.Where(d => d.ifshow == 1 && d.typeid == 7).ToList();
+        }
+        #endregion
     }
 }

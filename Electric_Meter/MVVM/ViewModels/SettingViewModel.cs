@@ -1,750 +1,565 @@
-﻿using Electric_Meter.Core;
-using Electric_Meter.Models;
-using System;
-using System.Collections.Generic;
+using System.Collections.Frozen;
 using System.Collections.ObjectModel;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
-using Electric_Meter.Services;
+using System.Windows.Controls;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input; // Quan trọng: Cung cấp [RelayCommand]
+
 using Electric_Meter.Configs;
+using Electric_Meter.Models;
+using Electric_Meter.Services;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Windows.Media;
+using Microsoft.Extensions.DependencyInjection;
+// Lưu ý: Đảm bảo rằng lớp RelayCommand cũ trong Electric_Meter.Core đã được loại bỏ 
+// hoặc bạn đã xóa using Electric_Meter.Core; để tránh xung đột.
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    public class SettingViewModel :BaseViewModel
+    public partial class SettingViewModel : ObservableObject
     {
-        private readonly Service _iService;
+        #region [ Fields - Private Dependencies ]
+        private readonly LanguageService _languageService;
+        private readonly Service _service;
         private readonly ToolViewModel _toolViewModel;
         private readonly AppSetting _appSetting;
-        private readonly PowerTempWatchContext _powerTempWatchContext;
-        public event Action OnMachineLoadDefault;
-        //Constructor
-        public SettingViewModel(Service service, ToolViewModel toolViewModel, AppSetting appSetting, PowerTempWatchContext powerTempWatchContext)
-        {
-            IsEnabledBtnConnect = true;
-            IsEnabledBtnAddMachine = true;
-            IsEnableBtnEditMachine = false;
-            _appSetting = appSetting;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly PowerTempWatchContext _context;
+        #endregion
 
+        #region [ Events ]
+        public event Action OnDeviceLoadDefault;
+        public event Action<Button, Button> NewButtonCreated;
+        #endregion
+
+        #region [ Constructor ]
+        public SettingViewModel(LanguageService languageService, Service service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope, PowerTempWatchContext context)
+        {
+            _languageService = languageService;
+            _languageService.LanguageChanged += UpdateTexts;
+
+            UpdateTexts();
+            _service = service;
             _toolViewModel = toolViewModel;
+            _appSetting = appSetting;
+            _context = context;
 
-            _toolViewModel.Port = _appSetting.Port;
-            _toolViewModel.Baudrate = _appSetting.Baudrate;
-            // list baudrate
+            // Khởi tạo trạng thái ban đầu
+            // Các thuộc tính [ObservableProperty] có giá trị mặc định là true/false
+            IsEnabledBtnConnect = true;
+            IsEnabledBtnAddDevice = true;
+            IsEnableBtnEditDevice = false;
+            IsEnabledBtnDeleteDevice = true; // Mặc định là true, sẽ được kiểm soát bởi CanDelete
 
-            LstBaudrate = new ObservableCollection<int>()
-            {
-                9600,14400,19200,2400,1200
-            };
+            // Load dữ liệu ban đầu
+            //LoadAssemblings();
+            LoadDeviceList();
+            GetDefaultSetting();
 
-            LstChooseAssembling = new ObservableCollection<string>()
-            {
-                "Nong","Lanh"
-            };
-            _powerTempWatchContext = powerTempWatchContext;
-
-
-            // Lấy danh sách lstAssembling từ cơ sở dữ liệu
-            List<string> lstAssembling = _powerTempWatchContext.dvFactoryAssemblings
-                .Where(x => x.Factory == _appSetting.CurrentArea)
-                .Select(x => x.Assembling)
-                .ToList();
-
-            // Khởi tạo danh sách lstAssemblings
-            LstAssemblings = new List<KeyValue>();
-
-            // Thêm từng mục vào danh sách lstAssemblings
-            foreach (var item in lstAssembling)
-            {
-                LstAssemblings.Add(new KeyValue
-                {
-                    key = item,
-                    value = "Thành Hình " + item
-                });
-            }
-
-            
-            _iService = service;
-
-            GetPorts();
-
-            ConnectCommand = new RelayCommand(ExecuteConnectCommand, CanConnect);
-            AddMachineCommand = new RelayCommand(ExecuteAddMachineCommand, CanAddMachine);
-            EditMachineCommand = new RelayCommand(ExecuteEditMachineCommand, CanEditMachine);
-            DeleteMachineCommand = new RelayCommand(ExecuteDeleteMachineCommand, CanDeleteMachine);
-            //_toolViewModel.Start();//tự động chạy app
-        }
-        #region Command
-        public ICommand ConnectCommand { get; set; }
-        public ICommand AddMachineCommand { get; set; }
-        public ICommand EditMachineCommand { get; set; }
-        public ICommand DeleteMachineCommand { get; set; }
-
-        #endregion
-        #region Entity
-
-
-        public event Action<Button,Button> NewButtonCreated;
-        
-
-        public ObservableCollection<int> LstBaudrate { get; set; }
-        public ObservableCollection<string> LstChooseAssembling { get; set; }
-        
-
-        private List<KeyValue> _lstAssebling;
-        public List<KeyValue> LstAssemblings
-        {
-            get { return _lstAssebling; }
-            set
-            {
-                _lstAssebling = value;
-                OnPropertyChanged(nameof(LstAssemblings));
-            }
-        }
-        private KeyValue _selectedAssembling;
-        public KeyValue SelectedAssembling
-        {
-            get { return _selectedAssembling; }
-            set
-            {
-                _selectedAssembling = value;
-                OnPropertyChanged(nameof(SelectedAssembling));
-            }
-        }
-
-        private DeviceConfig _deviceConfig;
-        public DeviceConfig DeviceConfig
-        {
-            get { return _deviceConfig; }
-            set
-            {
-                _deviceConfig = value;
-                OnPropertyChanged(nameof(DeviceConfig));
-            }
-        }
-
-        private Machine _selectedMachine;
-        public Machine SelectedMachine
-        {
-            get => _selectedMachine;
-            set
-            {
-                if (_selectedMachine != value)
-                {
-                    _selectedMachine = value;
-                    OnPropertyChanged(nameof(SelectedMachine));
-                }
-            }
-        }
-        // Thuộc tính lưu trữ Baudrate được chọn
-        private int _selectedBaudrate;
-        public int SelectedBaudrate
-        {
-            get => _selectedBaudrate;
-            set
-            {
-                if (_selectedBaudrate != value)
-                {
-                    _selectedBaudrate = value;
-                    OnPropertyChanged(nameof(SelectedBaudrate));
-                }
-            }
-        }
-
-        
-
-
-        //Thuoc tinh luu tru port
-        private string _selectPort;
-
-        public string SelectedPort
-        {
-            get => _selectPort;
-            set
-            {
-                if (_selectPort != value)
-                {
-                    _selectPort = value;
-                    OnPropertyChanged(nameof(SelectedPort));
-                }
-            }
-        }
-
-
-        //Thuoc tinh luu tru LstAssembling
-        private string _selectedChooseAssembling;
-
-        public string SelectedChooseAssembling
-        {
-            get => _selectedChooseAssembling;
-            set
-            {
-                if (_selectedChooseAssembling != value)
-                {
-
-                    _selectedChooseAssembling = value;
-                    OnPropertyChanged(nameof(SelectedChooseAssembling));
-                }
-            }
-        }
-
-
-        private string _nameMachine;
-        public string NameMachine
-        {
-            get => _nameMachine;
-            set
-            {
-                if (_nameMachine != value)
-                {
-                    // Cho phép tạm thời đặt giá trị rỗng
-                    _nameMachine = value;
-
-                    if (string.IsNullOrWhiteSpace(value))
-                    {
-                        ErrorMessage = string.Empty; // Không hiển thị lỗi khi người dùng xóa toàn bộ
-                    }
-                    else if (!IsValidName(value.TrimStart()))
-                    {
-                        ErrorMessage = "NameMachine không được chứa ký tự đặc biệt.";
-                    }
-                    else
-                    {
-                        _nameMachine = value.TrimStart(); // Xóa khoảng trắng ở đầu chuỗi
-                        ErrorMessage = string.Empty; // Xóa thông báo lỗi nếu hợp lệ
-                    }
-
-                    OnPropertyChanged(nameof(NameMachine));
-                }
-            }
-        }
-        // Hàm kiểm tra giá trị hợp lệ (không chứa ký tự đặc biệt)
-        private bool IsValidName(string name)
-        {
-            // Chỉ cho phép các ký tự chữ, số và khoảng trắng
-            return System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-zA-Z0-9 ]+$");
-        }
-
-
-        //Thuoc tinh luu tru Address
-        private string _addressMachine = string.Empty;
-        public string AddressMachine
-        {
-            get => _addressMachine;
-            set
-            {
-                if (_addressMachine != value)
-                {
-                    if (int.TryParse(value, out int parsedValue) && parsedValue >= 1 && parsedValue <= 50)
-                    {
-                        _addressMachine = value;
-                        ErrorMessage = string.Empty; // Xóa lỗi nếu giá trị hợp lệ
-                    }
-                    else if (string.IsNullOrWhiteSpace(value))
-                    {
-                        _addressMachine = value; // Cho phép chuỗi rỗng
-                        ErrorMessage = "Vui lòng nhập số từ 1 đến 50.";
-                    }
-                    else
-                    {
-                        ErrorMessage = "AddressMachine chỉ cho phép nhập số từ 1 đến 50.";
-                    }
-                    OnPropertyChanged(nameof(AddressMachine));
-                }
-            }
-        }
-
-
-        public int address;
-        public int Address
-        {
-            get => address;
-            set
-            {
-                this.address = value;
-                OnPropertyChanged(nameof(Address));
-            }
-        }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = null;
-                switch (columnName)
-                {
-                    case nameof(Port):
-                        if (string.IsNullOrEmpty(Port))
-                            error = "Port is required.";
-                        else if (Port == "COM1")
-                            error = "Port is default! Choose anthore port.";
-                        break;
-                    case nameof(Baudrate):
-                        if (string.IsNullOrEmpty(Baudrate.ToString()))
-                            error = "Baudrate is required.";
-                        else if (Baudrate != 115200)
-                            error = "Baudrate is not correct.";
-                        break;
-
-                }
-                return error;
-            }
-        }
-
-        public string Error => null;
-
-
-        //Thuoc tinh EnableBtn
-
-        private bool isEnabledBtnConnect;
-
-        public bool IsEnabledBtnConnect
-        {
-            get { return isEnabledBtnConnect; }
-            set
-            {
-                isEnabledBtnConnect = value;
-                OnPropertyChanged(nameof(IsEnabledBtnConnect));
-            }
-        }
-        private bool isEnabledBtnAddMachine;
-
-        public bool IsEnabledBtnAddMachine
-        {
-            get { return isEnabledBtnAddMachine; }
-            set
-            {
-                isEnabledBtnAddMachine = value;
-                OnPropertyChanged(nameof(IsEnabledBtnAddMachine));
-            }
-        }
-        private bool isEnabledBtnEditMachine;
-        public bool IsEnableBtnEditMachine
-        {
-            get { return isEnabledBtnEditMachine; }
-            set
-            {
-                isEnabledBtnEditMachine = value;
-                OnPropertyChanged(nameof(IsEnableBtnEditMachine));
-            }
-        }
-        private bool isEnabledBtnDeleteMachine;
-        public bool IsEnabledBtnDeleteMachine
-        {
-            get { return isEnabledBtnDeleteMachine; }
-            set
-            {
-                isEnabledBtnDeleteMachine = value;
-                OnPropertyChanged(nameof(IsEnabledBtnDeleteMachine));
-            }
-        }
-        #endregion
-        #region Khai báo và lấy ra danh sách các post
-
-        private List<string> _lstPost;
-        public List<string> ListPost
-        {
-            get => _lstPost;
-            set
-            {
-
-                this._lstPost = value;
-                OnPropertyChanged(nameof(_lstPost));
-            }
-        }
-
-        public string port;
-        public string Port
-        {
-            get => port;
-            set
-            {
-                this.port = value;
-                OnPropertyChanged(nameof(_lstPost));
-            }
-        }
-        public void GetPorts()
-        {
-            string[] ArryPort = SerialPort.GetPortNames();
-            ListPost = ArryPort.ToList<string>();
         }
         #endregion
 
-        #region Lấy ra danh sách các tốc độ truyền
-
-        private List<int> _lstBaute;
-        public List<int> lstBaute
-        {
-            get => _lstBaute;
-            set
-            {
-                this._lstBaute = value;
-                OnPropertyChanged(nameof(lstBaute));
-            }
-        }
-        public int baudrate;
-        public int Baudrate
-        {
-            get => baudrate;
-            set
-            {
-                this.baudrate = value;
-                OnPropertyChanged(nameof(Baudrate));
-            }
-        }
-        #endregion
-
-        #region GetPortName
-        public ObservableCollection<string> LstPort { get; set; } = new ObservableCollection<string>();
 
 
-        public void GetPortName()
-        {
-            string[] lstPort = SerialPort.GetPortNames();
-            foreach (var item in lstPort)
-            {
-                LstPort.Add(item);
-
-            }
-        }
-        #endregion
-        #region Language
-        private string _connectCommandText;
-        public string ConnectCommandText
-        {
-            get => _connectCommandText;
-            set
-            {
-                _connectCommandText = value;
-                OnPropertyChanged(nameof(ConnectCommandText));
-            }
-        }
-        private string _addMachineCommandText;
-        public string AddMachineCommandText
-        {
-            get => _addMachineCommandText;
-            set
-            {
-                _addMachineCommandText = value;
-                OnPropertyChanged(nameof(AddMachineCommandText));
-            }
-        }
-        private string _editMachineCommandText;
-        public string EditMachineCommandText
-        {
-            get => _editMachineCommandText;
-            set
-            {
-                _editMachineCommandText = value;
-                OnPropertyChanged(nameof(EditMachineCommandText));
-            }
-        }
-        private string _deleteMachineCommandText;
-        public string DeleteMachineCommandText
-        {
-            get => _deleteMachineCommandText;
-            set
-            {
-                _deleteMachineCommandText = value;
-                OnPropertyChanged(nameof(DeleteMachineCommandText));
-            }
-        }
-
-        private string _addressMachineCommandText;
-        public string AddressMachineCommandText
-        {
-            get => _addressMachineCommandText;
-            set
-            {
-                _addressMachineCommandText = value;
-                OnPropertyChanged(nameof(AddressMachineCommandText));
-            }
-        }
-
-        private string _baudrateMachineCommandText;
-        public string BaudrateMachineCommandText
-        {
-            get => _baudrateMachineCommandText;
-            set
-            {
-                _baudrateMachineCommandText = value;
-                OnPropertyChanged(nameof(BaudrateMachineCommandText));
-            }
-        }
-
-
-        private string _nameMachineCommandText;
-        public string NameMachineCommandText
-        {
-            get => _nameMachineCommandText;
-            set
-            {
-                _nameMachineCommandText = value;
-                OnPropertyChanged(nameof(NameMachineCommandText));
-            }
-        }
-        private string _portMachineCommandText;
-        public string PortMachineCommandText
-        {
-            get => _portMachineCommandText;
-            set
-            {
-                _portMachineCommandText = value;
-                OnPropertyChanged(nameof(PortMachineCommandText));
-            }
-        }
+        #region [ Properties - UI State ]
+        // [ObservableProperty] đã được giữ nguyên
+        [ObservableProperty] private bool isEnabledBtnConnect;
+        [ObservableProperty] private bool isEnabledBtnAddDevice;
+        [ObservableProperty] private bool isEnableBtnEditDevice;
+        [ObservableProperty] private bool isEnabledBtnDeleteDevice;
+        [ObservableProperty] private bool isEnabledBtnAddControlCode;
+        [ObservableProperty] private bool isEnabledBtnEditControlCode;
+        [ObservableProperty] private bool isEnabledBtnDeleteControlCode;
+        [ObservableProperty] private string errorMessage;
+        [ObservableProperty] private DeviceVM selectedDevice;//  phải có cái này mới có onselectedchange
+        [ObservableProperty] private ControlcodeVM selectedControlCode;
 
         #endregion
-        public DeviceConfig message = new DeviceConfig();
-        //Connect
-        public async void ExecuteConnectCommand(object parameter)
+
+        #region [ Properties - Device Configuration ]
+        [ObservableProperty] private string nameDevice = string.Empty;
+        [ObservableProperty] private int addressDevice;
+        [ObservableProperty] private KeyValue selectedAssembling;
+        [ObservableProperty] private string selectedChooseAssembling;
+        [ObservableProperty] private ObservableCollection<DeviceVM> deviceList = new();
+        [ObservableProperty] private ObservableCollection<ControlcodeVM> controlCodeList = new();
+        #endregion
+        #region [ Properties - Controlcode Configuration ]
+        [ObservableProperty] private int codeId;
+        [ObservableProperty] private int devId;
+        [ObservableProperty] private string code;
+        [ObservableProperty] private string active;
+        [ObservableProperty] private string codeType;
+        [ObservableProperty] private string name;
+        [ObservableProperty] private double factor;
+        [ObservableProperty] private string type;
+        [ObservableProperty] private decimal? high;
+        [ObservableProperty] private decimal? low;
+        [ObservableProperty] private int? ifShow;
+        [ObservableProperty] private int? ifCal;
+        [ObservableProperty] private int activeid;
+        public string ActiveText => activeid == 1 ? ActiveCommandText : InActiveCommandText;
+
+        #endregion
+        #region [ Properties - Communication Settings ]
+        [ObservableProperty] private string selectedPort;
+        [ObservableProperty] private int selectedBaudrate;
+        [ObservableProperty]
+        private ObservableCollection<string> lstPort = new();
+
+        [ObservableProperty] private ObservableCollection<int> lstBaudrate = new();
+        [ObservableProperty]
+        private List<KeyValue> lstAssembling = new();
+
+        #endregion
+        #region [ Methods - Get Default setting ]
+
+        private void GetDefaultSetting()
         {
-            //if (string.IsNullOrWhiteSpace(Port) || !DataModelConstant.BaudrateConst.Contains(Baudrate))
-            //{
-            //    MessageBox.Show("Please connect to the device before");
-            //    return;
-            //}
-            //if (Port == "COM1" || Baudrate != 2400)
-            //{
-            //    MessageBox.Show("Please choose correct connection");
-            //    return;
-            //}
 
-            try
-            {
-                //message.Port = this.Port;
-                //message.Baudrate = this.Baudrate;
+            SetupAssemblingList();
 
+            lstBaudrate = new() { 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 };
 
-                message.Port = _appSetting.Port;
-                message.Factory = _appSetting.CurrentArea;
-                
-                // set port for _toolViewModel
-
-
-                _toolViewModel.Start();
-                IsEnabledBtnConnect = false;
-                MessageBox.Show("Connection successful!");
-
-                
-
-            }
-            catch (Exception ex)
-            {
-                IsEnabledBtnConnect = true;
-                MessageBox.Show("Connection erro!" + ex.Message);
-            }
+            lstPort = new() { "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM10" };
         }
-        private bool CanConnect(object parameter)
+        private void SetupAssemblingList()
         {
-            return IsEnabledBtnConnect;
-        }
-        //Add Machine
-        public async void ExecuteAddMachineCommand(object parameter)
-        {
-
-            try
+            // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                
-                if (_powerTempWatchContext.machines.Any(x => x.Name == NameMachine))
+                // Cập nhật lại danh sách LstAssembling
+                LstAssembling = new()
                 {
-                    MessageBox.Show("Machine is allready!");
-                    return;
-                }
-                Machine machines = new Machine();
-                machines.Name = NameMachine;
-                machines.Port = SelectedPort;
-                machines.Baudrate = SelectedBaudrate;
-                machines.Address = int.Parse(AddressMachine);
-                machines.Line = SelectedAssembling.key;
-                machines.LineCode = SelectedChooseAssembling == "Nong" ? "H" : "C";
-
-                await _iService.InsertToMachine(machines);
-                IsEnabledBtnAddMachine = false;
-
-                // Tạo nút Machine
-                Button btn_Machine = new Button
-                {
-                    Content = NameMachine,
-                    Background = SelectedChooseAssembling == "Nong" ? Brushes.White : Brushes.Blue
+                    new KeyValue { key = "A", value = $"{AssemblingText} A" },
+                    new KeyValue { key = "B", value = $"{AssemblingText} B" },
+                    new KeyValue { key = "C", value = $"{AssemblingText} C" },
+                    new KeyValue { key = "D", value = $"{AssemblingText} D" }
                 };
 
-                // Tạo nút Assembling
-                Button btn_Assembling = new Button
+                // Đảm bảo giữ lại KeyValue đã chọn
+                if (SelectedAssembling != null)
                 {
-                    Content = SelectedAssembling.value
+                    var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
+
+                    if (newSelected != null)
+                    {
+                        // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
+                        SelectedAssembling = newSelected;
+                    }
+                }
+                // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
+                else
+                {
+                    SelectedAssembling = LstAssembling.FirstOrDefault();
+                }
+            });
+
+        }
+        #endregion
+        #region [ Methods - Language ]
+        public void UpdateTexts()
+        {
+            AddDeviceCommandText = _languageService.GetString("Add a new device");
+            EditDeviceCommandText = _languageService.GetString("Edit device");
+            DeleteDeviceCommandText = _languageService.GetString("Delete device");
+            AddControlCodeCommandText = _languageService.GetString("Add a new controlcode");
+            EditControlCodeCommandText = _languageService.GetString("Edit controlcode");
+            DeleteControlCodeCommandText = _languageService.GetString("Delete controlcode");
+            NameDeviceCommandText = _languageService.GetString("Name device");
+            AddressDeviceCommandText = _languageService.GetString("Address device");
+            BaudrateDeviceCommandText = _languageService.GetString("Baudrate");
+            PortDeviceCommandText = _languageService.GetString("Port");
+            AssemblingCommandText = _languageService.GetString("Assembling");
+            AssemblingText = _languageService.GetString("Assembling");
+            DetailControlCodeText = _languageService.GetString("Detail controlcode");
+            ListControlCodeText = _languageService.GetString("List controlcode");
+            DetailDeviceText = _languageService.GetString("Detail device");
+            ListDeviceText = _languageService.GetString("List device");
+            AddControlCodeCommandText = _languageService.GetString("Add a new controlcode");
+            EditControlCodeCommandText = _languageService.GetString("Edit controlcode");
+            DeleteControlCodeCommandText = _languageService.GetString("Delete controlcode");
+            CodeIdCommandText = _languageService.GetString("CodeId");
+            DevIdCommandText = _languageService.GetString("DevId");
+            CodeCommandText = _languageService.GetString("Code");
+            ActiveCommandText = _languageService.GetString("Active");
+            InActiveCommandText = _languageService.GetString("InActive");
+            CodeTypeIdCommandText = _languageService.GetString("CodeTypeId");
+            NameCommandText = _languageService.GetString("Name");
+            FactorCommandText = _languageService.GetString("Factor");
+            TypeIdCommandText = _languageService.GetString("TypeId");
+            HighCommandText = _languageService.GetString("High");
+            LowCommandText = _languageService.GetString("Low");
+            IfShowCommandText = _languageService.GetString("IfShow");
+            IfCalCommandText = _languageService.GetString("IfCal");
+            NameCodeTypeCommandText = _languageService.GetString("Name code type");
+            NameTypeCommandText = _languageService.GetString("Name type");
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                SetupAssemblingList();
+            });
+
+
+        }
+        #endregion
+
+        #region [ Language Texts ]
+        [ObservableProperty] private string addDeviceCommandText;
+        [ObservableProperty] private string editDeviceCommandText;
+        [ObservableProperty] private string deleteDeviceCommandText;
+        [ObservableProperty] private string addressDeviceCommandText;
+        [ObservableProperty] private string baudrateDeviceCommandText;
+        [ObservableProperty] private string nameDeviceCommandText;
+        [ObservableProperty] private string portDeviceCommandText;
+        [ObservableProperty] private string assemblingCommandText;
+        [ObservableProperty] private string assemblingText;
+
+        [ObservableProperty] private string detailControlCodeText;
+        [ObservableProperty] private string listControlCodeText;
+        [ObservableProperty] private string detailDeviceText;
+        [ObservableProperty] private string listDeviceText;
+        [ObservableProperty] private string addControlCodeCommandText;
+        [ObservableProperty] private string editControlCodeCommandText;
+        [ObservableProperty] private string deleteControlCodeCommandText;
+        [ObservableProperty] private string codeIdCommandText;
+        [ObservableProperty] private string devIdCommandText;
+        [ObservableProperty] private string codeCommandText;
+        [ObservableProperty] private string activeCommandText;
+        [ObservableProperty] private string inActiveCommandText;
+        [ObservableProperty] private string codeTypeIdCommandText;
+        [ObservableProperty] private string nameCommandText;
+        [ObservableProperty] private string factorCommandText;
+        [ObservableProperty] private string typeIdCommandText;
+        [ObservableProperty] private string highCommandText;
+        [ObservableProperty] private string lowCommandText;
+        [ObservableProperty] private string ifShowCommandText;
+        [ObservableProperty] private string ifCalCommandText;
+        [ObservableProperty] private string nameCodeTypeCommandText;
+        [ObservableProperty] private string nameTypeCommandText;
+        #endregion
+
+        #region [ Methods - Load & Initialization ]
+        // Giữ nguyên các hàm Load
+        private void LoadDeviceList()
+        {
+            try
+            {
+                var devices = _service.GetDevicesList();
+                DeviceList = new ObservableCollection<DeviceVM>(devices);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading devices: " + ex.Message);
+            }
+        }
+        private void LoadControlCodeList(int devid)
+        {
+            try
+            {
+                var controlcodes = _service.GetControlCodeListByDevid(devid);
+                ControlCodeList = new(controlcodes);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Error loading control code: " + ex.Message);
+            }
+        }
+
+
+
+        #endregion
+
+        #region [ Methods - Selected Change ]
+        partial void OnSelectedDeviceChanged(DeviceVM value)
+        {
+            if (value == null)
+            {
+                NameDevice = string.Empty;
+                AddressDevice = 0;
+                SelectedPort = null;
+                SelectedBaudrate = 0;
+                SelectedAssembling = null;
+                SelectedChooseAssembling = null;
+                IsEnableBtnEditDevice = false;
+                return;
+            }
+            LoadControlCodeList(value.devid);
+            // Gán dữ liệu từ dòng đang chọn sang các input
+            NameDevice = value.name;
+            AddressDevice = value.address;
+            SelectedPort = value.port;
+            SelectedBaudrate = value.baudrate;
+
+            // Nếu bạn có logic đặc biệt cho Thành hình & Type
+            SelectedAssembling = LstAssembling.FirstOrDefault(x => x.key == value.assembling);
+
+            // Cho phép nút Edit và Delete
+            IsEnableBtnEditDevice = true;
+            AddDeviceCommand.NotifyCanExecuteChanged();
+            EditDeviceCommand.NotifyCanExecuteChanged();
+            DeleteDeviceCommand.NotifyCanExecuteChanged();
+
+        }
+
+        partial void OnSelectedControlCodeChanged(ControlcodeVM value)
+        {
+            if (value == null)
+            {
+                CodeId = 0;
+                DevId = 0;
+                Code = string.Empty;
+                Active = string.Empty;
+                CodeType = string.Empty;
+                Name = string.Empty;
+                Factor = 0;
+                Type = string.Empty;
+                High = 0;
+                Low = 0;
+                IfShow = 0;
+                IfCal = 0;
+                return;
+            }
+            // Gán dữ liệu từ dòng đang chọn sang các input
+            CodeId = value.codeid;
+            DevId = value.devid;
+            Code = value.code;
+            //Active = value.activeid;
+            CodeType = value.codetype;
+            Name = value.name;
+            Factor = value.factor;
+            Type = value.type;
+            High = value.high;
+            Low = value.low;
+            IfShow = value.ifshow;
+            IfCal = value.ifcal;
+            AddControlCodeCommand.NotifyCanExecuteChanged();
+            EditControlCodeCommand.NotifyCanExecuteChanged();
+            DeleteControlCodeCommand.NotifyCanExecuteChanged();
+        }
+        #endregion
+
+
+
+        #region [ Command Logic - Add Device (Sử dụng [RelayCommand]) ]
+        [RelayCommand(CanExecute = nameof(CanExecuteAddDevice))]
+        private async Task AddDevice()
+        {
+            try
+            {
+                if (!ValidateDeviceInput()) return;
+
+                if (_context.devices.Where(x => x.typeid == 7)
+                    .Any(x => x.name == NameDevice || x.address == AddressDevice))
+                {
+                    MessageBox.Show("Device already exists!");
+                    return;
+                }
+
+                var newDevice = new Device
+                {
+                    name = NameDevice,
+                    port = SelectedPort,
+                    baudrate = SelectedBaudrate,
+                    address = AddressDevice,
+                    assembling = SelectedAssembling?.key,
+                    typeid = 7,
+                    activeid = 1,
+                    ifshow = 1
                 };
 
-                // Gửi Button qua sự kiện
-                NewButtonCreated?.Invoke(btn_Machine, btn_Assembling);
+                await _service.InsertToDevice(newDevice);
+                MessageBox.Show("Device added successfully!");
+                LoadDeviceList();
             }
             catch (Exception ex)
             {
-
-                IsEnabledBtnAddMachine = true;
-                MessageBox.Show("Add machine errors: " + ex.Message);
+                MessageBox.Show("Add Device error: " + ex.Message);
             }
-            
         }
-        private bool CanAddMachine(object parameter)
+
+        private bool CanExecuteAddDevice() => true; // ✅ luôn cho phép bấm
+        #endregion
+
+
+        #region [ Command Logic - Edit Device (Sử dụng [RelayCommand]) ]
+        [RelayCommand(CanExecute = nameof(CanExecuteEditDevice))]
+        private async Task EditDevice()
         {
             try
             {
-                return 
-               !string.IsNullOrEmpty(AddressMachine.ToString()) &&
-               !string.IsNullOrEmpty(NameMachine) &&
-               !string.IsNullOrEmpty(SelectedPort) &&
-               !string.IsNullOrEmpty(SelectedBaudrate.ToString()) &&
-               !string.IsNullOrEmpty(SelectedAssembling?.value) &&
-               !string.IsNullOrEmpty(SelectedChooseAssembling);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
-        }
-        //Edit
-        public async void ExecuteEditMachineCommand(object parameter)
-        {
-            try
-            {
-                if (!IsEnableBtnEditMachine)
+                if (SelectedDevice == null)
                 {
-                    MessageBox.Show("Button is disabled. Cannot edit machine.");
+                    MessageBox.Show("No Device selected.");
                     return;
                 }
 
-                if (SelectedMachine == null)
-                {
-                    MessageBox.Show("No machine selected.");
-                    return;
-                }
+                if (!ValidateDeviceInput()) return;
 
-                // Tìm máy trong cơ sở dữ liệu
-                var find = await _powerTempWatchContext.machines.FirstOrDefaultAsync(x => x.Id == SelectedMachine.Id);
-
+                var find = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
                 if (find == null)
                 {
-                    MessageBox.Show("Machine not found.");
+                    MessageBox.Show("Device not found.");
                     return;
                 }
 
-                // Cập nhật thuộc tính của máy
-                find.Address = int.Parse(AddressMachine);
-                find.Port = SelectedPort;
-                find.Baudrate = SelectedBaudrate;
-                find.Name = NameMachine;
-                find.Line = SelectedAssembling.key;
-                find.LineCode = SelectedChooseAssembling == "Nong" ? "H" : "C";
+                find.address = AddressDevice;
+                find.port = SelectedPort;
+                find.baudrate = SelectedBaudrate;
+                find.name = NameDevice;
+                find.assembling = SelectedAssembling?.key;
 
-                // Lưu thay đổi vào cơ sở dữ liệu
-                await _iService.EditToMachine(find);
-                OnMachineLoadDefault?.Invoke();
+                await _service.EditToDevice(find);
                 MessageBox.Show("Edit successfully!");
+                LoadDeviceList();
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi nếu có
-                MessageBox.Show($"An error occurred: {ex.Message}");
+                MessageBox.Show("Edit error: " + ex.Message);
             }
         }
 
-        private bool CanEditMachine(object parameter)
+        private bool CanExecuteEditDevice() => SelectedDevice != null; // ✅ chỉ bật khi chọn thiết bị
+        #endregion
+
+
+        #region [ Command Logic - Delete Device (Sử dụng [RelayCommand]) ]
+        [RelayCommand(CanExecute = nameof(CanExecuteDeleteDevice))]
+        private async Task DeleteDevice()
         {
             try
             {
-                return !string.IsNullOrEmpty(AddressMachine.ToString()) &&
-               !string.IsNullOrEmpty(NameMachine) &&
-               !string.IsNullOrEmpty(SelectedPort) &&
-               !string.IsNullOrEmpty(SelectedBaudrate.ToString()) &&
-               !string.IsNullOrEmpty(SelectedAssembling?.value) &&
-               !string.IsNullOrEmpty(SelectedChooseAssembling);
+                if (SelectedDevice == null)
+                {
+                    MessageBox.Show("No Device selected.");
+                    return;
+                }
+
+                var device = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
+                if (device == null)
+                {
+                    MessageBox.Show("Device not found.");
+                    return;
+                }
+
+                await _service.DeleteToDevice(device);
+                MessageBox.Show("Delete successfully!");
+                LoadDeviceList();
             }
             catch (Exception ex)
             {
+                MessageBox.Show("Delete error: " + ex.Message);
+            }
+        }
+
+        private bool CanExecuteDeleteDevice() => SelectedDevice != null; // ✅ chỉ bật khi chọn thiết bị
+        #endregion
+
+        #region [ Command Logic - Add Control Code ]
+        [RelayCommand(CanExecute = nameof(CanExecuteAddControlCode))]
+        private async Task AddControlCode()
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var newControlCode = new Controlcode
+                {
+                    code = Code,
+                    activeid = _context.activeTypes.Where(x => x.name == Active).Select(x => x.activeid).FirstOrDefault(),
+                    codetypeid = _context.codetypes.Where(x => x.name == CodeType).Select(x => x.codetypeid).FirstOrDefault(),
+                    name = Name,
+                    factor = Factor,
+                    typeid = _context.sensorTypes.Where(x =>x.name == Type).Select(x => x.typeid).FirstOrDefault(),
+                    high = High,
+                    low = Low,
+                    ifshow = IfShow,
+                    ifcal = IfCal
+                };
+                await _service.InsertToControlcode(newControlCode);
+                MessageBox.Show("Control Code added successfully!");
+                LoadControlCodeList(SelectedDevice.devid);
+            }
+            catch (Exception ex)
+            {
+
                 MessageBox.Show(ex.Message);
-                return false;
+
             }
         }
-        //Delete
-        public async void ExecuteDeleteMachineCommand(object parameter)
+        private bool CanExecuteAddControlCode() => true; // Chỉ bật khi có thiết bị được chọn
+        #endregion
+        #region [ Command Logic - Edit Control Code ]
+        [RelayCommand(CanExecute = nameof(CanExecuteEditControlCode))]
+        private async Task EditControlCode()
         {
             try
             {
-                if (!IsEnableBtnEditMachine)
-                {
-                    MessageBox.Show("Button is disabled. Cannot edit machine.");
-                    return;
-                }
-
-                if (SelectedMachine == null)
-                {
-                    MessageBox.Show("No machine selected.");
-                    return;
-                }
-
-                // Tìm máy trong cơ sở dữ liệu
-                var find = await _powerTempWatchContext.machines.FirstOrDefaultAsync(x => x.Id == SelectedMachine.Id);
-
+                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.codeid);
                 if (find == null)
                 {
-                    MessageBox.Show("Machine not found.");
+                    MessageBox.Show("Control Code not found.");
                     return;
                 }
-
-                
-
-                // Lưu thay đổi vào cơ sở dữ liệu
-                await _iService.DeleteToMachine(find);
-                // Giả sử đã xóa thành công
-                OnMachineLoadDefault?.Invoke();
-                MessageBox.Show("Delete successfully!");
+                find.code = Code;
+                //find.activeid = ActiveId;
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi nếu có
-                MessageBox.Show($"An error occurred: {ex.Message}");
+
+                MessageBox.Show(ex.Message);
             }
         }
-        private bool CanDeleteMachine(object parameter)
+        private bool CanExecuteEditControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
+        #endregion
+        #region [ Command Logic - Delete Control Code ]
+        [RelayCommand(CanExecute = nameof(CanExecuteDeleteControlCode))]
+        private async Task DeleteControlCode()
         {
-            try
+            // Thêm logic xóa Control Code ở đây
+        }
+        private bool CanExecuteDeleteControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
+        #endregion
+
+
+        #region [ Helper / Validation ]
+        // Giữ nguyên hàm ValidateDeviceInput
+        private bool ValidateDeviceInput()
+        {
+            if (string.IsNullOrWhiteSpace(NameDevice))
             {
-                return !string.IsNullOrEmpty(AddressMachine.ToString()) &&
-                int.Parse(AddressMachine) >= 1 &&
-                int.Parse(AddressMachine) <= 50 &&
-               !string.IsNullOrEmpty(NameMachine) &&
-               !string.IsNullOrEmpty(SelectedPort) &&
-               !string.IsNullOrEmpty(SelectedBaudrate.ToString()) &&
-               !string.IsNullOrEmpty(SelectedAssembling?.value) &&
-               !string.IsNullOrEmpty(SelectedChooseAssembling);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                ErrorMessage = "NameDevice is required.";
                 return false;
             }
-        }
-        private string _errorMessage;
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
+
+            if (!Regex.IsMatch(NameDevice, @"^[a-zA-Z0-9 ]+$"))
             {
-                if (_errorMessage != value)
-                {
-                    _errorMessage = value;
-                    OnPropertyChanged(nameof(ErrorMessage));
-                }
+                ErrorMessage = "NameDevice cannot contain special characters.";
+                return false;
             }
+
+            if (string.IsNullOrWhiteSpace(AddressDevice.ToString()) ||
+                !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1)
+            {
+                ErrorMessage = "AddressDevice must be more than 1";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(SelectedPort) ||
+                SelectedBaudrate == 0 ||
+                SelectedAssembling.key == null)
+            {
+                ErrorMessage = "Please fill all required fields.";
+                return false;
+            }
+
+            ErrorMessage = string.Empty;
+            return true;
         }
+        #endregion
     }
 }

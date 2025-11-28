@@ -22,6 +22,57 @@ namespace Electric_Meter.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Electric_Meter.Dto.DailyConsumptionDTO", b =>
+                {
+                    b.Property<double>("TotalDailyConsumption")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("dayData")
+                        .HasColumnType("datetime2");
+
+                    b.ToTable("DailyConsumptionDTO");
+                });
+
+            modelBuilder.Entity("Electric_Meter.Dto.LatestSensorByDeviceYear", b =>
+                {
+                    b.Property<double>("TotalValue")
+                        .HasColumnType("float");
+
+                    b.Property<string>("device_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("devid")
+                        .HasColumnType("int");
+
+                    b.ToTable("LatestSensorByDeviceYear");
+                });
+
+            modelBuilder.Entity("Electric_Meter.Dto.LatestSensorDataDTO", b =>
+                {
+                    b.ToTable((string)null);
+
+                    b.ToView(null, (string)null);
+                });
+
+            modelBuilder.Entity("Electric_Meter.Dto.TotalConsumptionPercentageDeviceDTO", b =>
+                {
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Percentage")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalConsumption")
+                        .HasColumnType("float");
+
+                    b.Property<int>("devid")
+                        .HasColumnType("int");
+
+                    b.ToTable("TotalConsumptionPercentageDeviceDTO");
+                });
+
             modelBuilder.Entity("Electric_Meter.Models.ActiveType", b =>
                 {
                     b.Property<int>("activeid")
@@ -88,116 +139,44 @@ namespace Electric_Meter.Migrations
                     b.ToTable("controlcode");
                 });
 
-            modelBuilder.Entity("Electric_Meter.Models.DvElectricDataTemp", b =>
+            modelBuilder.Entity("Electric_Meter.Models.Device", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("devid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("devid"));
 
-                    b.Property<double?>("Exp")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Ia")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Ib")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Ic")
-                        .HasColumnType("float");
-
-                    b.Property<int>("IdMachine")
+                    b.Property<int>("activeid")
                         .HasColumnType("int");
 
-                    b.Property<double?>("Imp")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Pa")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Pb")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Pc")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Pt")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("TotalElectric")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Ua")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Ub")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Uc")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("dv_ElectricDataTemp", (string)null);
-                });
-
-            modelBuilder.Entity("Electric_Meter.Models.DvFactoryAssembling", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("address")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Assembling")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Factory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("dv_FactoryAddress_Configs");
-                });
-
-            modelBuilder.Entity("Electric_Meter.Models.Machine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Address")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Baudrate")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Line")
+                    b.Property<string>("assembling")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LineCode")
+                    b.Property<int>("baudrate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ifshow")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("port")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Port")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("typeid")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("devid");
 
-                    b.ToTable("dv_Machine");
+                    b.ToTable("devices");
                 });
 
             modelBuilder.Entity("Electric_Meter.Models.SensorData", b =>
@@ -225,30 +204,21 @@ namespace Electric_Meter.Migrations
                     b.ToTable("SensorData");
                 });
 
-            modelBuilder.Entity("Electric_Meter.Models.devices", b =>
+            modelBuilder.Entity("Electric_Meter.Models.SensorType", b =>
                 {
-                    b.Property<int>("devid")
+                    b.Property<int>("typeid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("devid"));
-
-                    b.Property<int>("activeid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ifshow")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("typeid"));
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("typeid")
-                        .HasColumnType("int");
+                    b.HasKey("typeid");
 
-                    b.HasKey("devid");
-
-                    b.ToTable("devices");
+                    b.ToTable("SensorType");
                 });
 #pragma warning restore 612, 618
         }

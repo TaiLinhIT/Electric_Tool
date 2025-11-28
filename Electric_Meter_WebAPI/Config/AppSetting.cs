@@ -1,0 +1,21 @@
+namespace Electric_Meter_WebAPI.Config
+{
+    public class AppSetting
+    {
+        public string ConnectString { get; set; }
+        public int TimeReloadData { get; set; }
+        public int TimeSaveToDataBase { get; set; }
+        public int TimeSendRequest { get; set; }
+        public int TimeOutReceive { get; set; }
+        public Dictionary<string, string> Requests { get; set; } // Danh sách các yêu cầu
+        public string CurrentArea { get; set; }
+        public string Port { get; set; }
+        public int Baudrate { get; set; }
+        public int TotalMachine { get; set; }
+        public List<string> AutoActions { get; set; }
+        public float FactorImp { get; set; }
+        public float FactorU { get; set; }
+        public float FactorI { get; set; }
+        public float FactorP { get; set; }
+    }
+}

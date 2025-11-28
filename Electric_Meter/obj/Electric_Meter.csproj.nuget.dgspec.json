@@ -51,6 +51,30 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
+            "FontAwesome": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "FontAwesome.WPF": {
+              "target": "Package",
+              "version": "[4.7.0.9, )"
+            },
+            "Hardcodet.NotifyIcon.Wpf": {
+              "target": "Package",
+              "version": "[2.0.1, )"
+            },
+            "LiveCharts.Wpf": {
+              "target": "Package",
+              "version": "[0.9.7, )"
+            },
+            "MahApps.Metro.IconPacks": {
+              "target": "Package",
+              "version": "[6.2.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -71,6 +95,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Microsoft.Extensions.Caching.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -83,6 +111,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Microsoft.VisualStudio.Utilities": {
+              "target": "Package",
+              "version": "[17.14.40264, )"
+            },
             "Microsoft.Xaml.Behaviors.Wpf": {
               "target": "Package",
               "version": "[1.1.135, )"
@@ -94,6 +126,14 @@
             "System.IO.Ports": {
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "WPF-UI": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "WPF-UI.DependencyInjection": {
+              "target": "Package",
+              "version": "[4.0.3, )"
             }
           },
           "imports": [

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electric_Meter", "Electric_Meter\Electric_Meter.csproj", "{D1FF5359-431C-444F-A33C-5B87B46EA70F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electric_Meter_WebAPI", "Electric_Meter_WebAPI\Electric_Meter_WebAPI.csproj", "{B7AB28C2-6CC7-4229-8AF1-AA360290F402}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D1FF5359-431C-444F-A33C-5B87B46EA70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1FF5359-431C-444F-A33C-5B87B46EA70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1FF5359-431C-444F-A33C-5B87B46EA70F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7AB28C2-6CC7-4229-8AF1-AA360290F402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7AB28C2-6CC7-4229-8AF1-AA360290F402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7AB28C2-6CC7-4229-8AF1-AA360290F402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7AB28C2-6CC7-4229-8AF1-AA360290F402}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

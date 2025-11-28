@@ -1,25 +1,34 @@
 using System.Collections.ObjectModel;
-using System.IO.Ports;
 using System.Windows;
 using System.Windows.Threading;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using Electric_Meter.Configs;
-using Electric_Meter.Core;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 using Electric_Meter.Utilities;
-
-using Microsoft.EntityFrameworkCore;
+// Thêm partial vào lớp ToolViewModel
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    public class ToolViewModel : BaseViewModel
+    // Cần thêm từ khóa partial vào đây
+    public partial class ToolViewModel : ObservableObject
     {
+        #region [ Fields (Private data) - Observable Properties ]
+        private readonly LanguageService _languageService;
+        private ObservableCollection<ElectricDataDisplay> _electricDataTemp;
+        public ObservableCollection<ElectricDataDisplay> ElectricDataTemp
+        {
+            get => _electricDataTemp;
+            set => SetProperty(ref _electricDataTemp, value);
+        }
+        #endregion
         public string Port = string.Empty;
         public int Baudrate = 0;
         public string Factory = string.Empty;
         private DispatcherTimer _dispatcherTimer;
-        public int IdMachine;
+        public int IdDevice;
         private readonly Service _service;
         public MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
@@ -35,34 +44,29 @@ namespace Electric_Meter.MVVM.ViewModels
         public string FactoryCode { get; private set; }
         #region Properties
 
-        private double _ia, _ib, _ic, _ua, _ub, _uc, _pt, _pa, _pb, _pc, _exp, _imp, _total;
-
-        public double Ia { get => _ia; set { _ia = value; OnPropertyChanged(nameof(Ia)); } }
-        public double Ib { get => _ib; set { _ib = value; OnPropertyChanged(nameof(Ib)); } }
-        public double Ic { get => _ic; set { _ic = value; OnPropertyChanged(nameof(Ic)); } }
-        public double Ua { get => _ua; set { _ua = value; OnPropertyChanged(nameof(Ua)); } }
-        public double Ub { get => _ub; set { _ub = value; OnPropertyChanged(nameof(Ub)); } }
-        public double Uc { get => _uc; set { _uc = value; OnPropertyChanged(nameof(Uc)); } }
-        public double Pt { get => _pt; set { _pt = value; OnPropertyChanged(nameof(Pt)); } }
-        public double Pa { get => _pa; set { _pa = value; OnPropertyChanged(nameof(Pa)); } }
-        public double Pb { get => _pb; set { _pb = value; OnPropertyChanged(nameof(Pb)); } }
-        public double Pc { get => _pc; set { _pc = value; OnPropertyChanged(nameof(Pc)); } }
-        public double Exp { get => _exp; set { _exp = value; OnPropertyChanged(nameof(Exp)); } }
-        public double Imp { get => _imp; set { _imp = value; OnPropertyChanged(nameof(Imp)); } }
-        public double Total { get => _total + _exp; set { _total = value; OnPropertyChanged(nameof(Total)); } }
-
+        // Các thuộc tính [ObservableProperty] đã thêm
+        [ObservableProperty] private string ia = "0.00";
+        [ObservableProperty] private string ib = "0.00";
+        [ObservableProperty] private string ic = "0.00";
+        [ObservableProperty] private string ua = "0.00";
+        [ObservableProperty] private string ub = "0.00";
+        [ObservableProperty] private string uc = "0.00";
+        [ObservableProperty] private string pt = "0.00";
+        [ObservableProperty] private string pa = "0.00";
+        [ObservableProperty] private string pb = "0.00";
+        [ObservableProperty] private string pc = "0.00";
+        [ObservableProperty] private string exp = "0.00";
+        [ObservableProperty] private string imp = "0.00";
+        [ObservableProperty] private string total = "0.00";
+        [ObservableProperty] private bool isLoading = false;
+        [ObservableProperty] private List<KeyValue> lstAssembling;
+        [ObservableProperty] private KeyValue selectedAssembling;
+        [ObservableProperty] private ObservableCollection<Device> lstDevice;
+        [ObservableProperty] private Device selectedDevice;
+        [ObservableProperty] private string searchQuery; // Đã thấy trong XAML, nhưng chưa
         #endregion
 
-        public ObservableCollection<DvElectricDataTemp> _electricDataTemp;
-        public ObservableCollection<DvElectricDataTemp> ElectricDataTemp
-        {
-            get => _electricDataTemp;
-            set
-            {
-                _electricDataTemp = value;
-                OnPropertyChanged(nameof(ElectricDataTemp));
-            }
-        }
+
         private readonly DispatcherTimer _timerCurrent;
         private DateTime _currentTime;
         public DateTime CurrentTime
@@ -77,21 +81,18 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
         //Constructor
-        public ToolViewModel(Service service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext)
+        public ToolViewModel(Service service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext, LanguageService languageService)
         {
-
+            _languageService = languageService;
             _context = powerTempWatchContext;
             _service = service;
             _appSetting = appSetting;
             _mySerialPort = mySerialPortService;
+            _languageService.LanguageChanged += UpdateTexts;
 
-            ElectricDataTemp = new ObservableCollection<DvElectricDataTemp> { new DvElectricDataTemp() };
-
-            _dispatcherTimer = new DispatcherTimer();
-
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(Convert.ToInt32(_appSetting.TimeReloadData));
-
-            _dispatcherTimer.Tick += _dispatcherTimer_Tick;
+            UpdateTexts();
+            // Đăng ký lắng nghe sự kiện ngay khi ViewModel được tạo
+            _mySerialPort.DataUpdated += HandleDataUpdate;
 
             _currentTime = DateTime.Now;
             _timerCurrent = new DispatcherTimer
@@ -103,519 +104,28 @@ namespace Electric_Meter.MVVM.ViewModels
                 CurrentTime = DateTime.Now;
             };
             _timerCurrent.Start();
+            ElectricDataTemp = new ObservableCollection<ElectricDataDisplay>()
+            {
+                new ElectricDataDisplay { Name = "Ua", Value = 0, Unit = "V" }, // Đã thêm Ua
+                new ElectricDataDisplay { Name = "Ub", Value = 0, Unit = "V" },
+                new ElectricDataDisplay { Name = "Uc", Value = 0, Unit = "V" },
+                new ElectricDataDisplay { Name = "Ia", Value = 0, Unit = "A" },
+                new ElectricDataDisplay { Name = "Ib", Value = 0, Unit = "A" },
+                new ElectricDataDisplay { Name = "Ic", Value = 0, Unit = "A" },
+                new ElectricDataDisplay { Name = "Pt", Value = 0, Unit = "kW" },
+                new ElectricDataDisplay { Name = "Pa", Value = 0, Unit = "kW" },
+                new ElectricDataDisplay { Name = "Pb", Value = 0, Unit = "kW" },
+                new ElectricDataDisplay { Name = "Pc", Value = 0, Unit = "kW" },
+                new ElectricDataDisplay { Name = "Exp", Value = 0, Unit = "kWh" },
+                new ElectricDataDisplay { Name = "Imp", Value = 0, Unit = "kWh" }
+                // Bạn có thể cần thêm Total
+            };
+            GetDefaultSetting();
         }
 
-
-        private void _dispatcherTimer_Tick(object? sender, EventArgs e)
-        {
-            ReloadData(FactoryCode, AddressCurrent);
-        }
-
-        public void StartTimer()
-        {
-            ReloadData(FactoryCode, AddressCurrent);
-            _dispatcherTimer.Start();
-        }
         public void StopTimer()
         {
             _dispatcherTimer.Stop();
-        }
-
-
-        public async void Start()
-        {
-
-            _mySerialPort.Port = Port;
-            _mySerialPort.Baudrate = Baudrate;
-
-            _mySerialPort.Sdre += SerialPort_DataReceived;
-            _mySerialPort.Conn();
-            await SendRequestsToAllAddressesAsync(); // Gọi phương thức gửi yêu cầu cho tất cả địa chỉ
-
-        }
-        #region Gửi request
-        private async Task SendRequestAsync(string requestName, string requestHex, int address)
-        {
-            try
-            {
-                await _serialLock.WaitAsync(); //Chỉ 1 máy được gửi tại 1 thời điểm
-
-                // B1: Thêm vào activeRequests
-                string requestKey = $"{address}_{requestName}";
-                if (!activeRequests.ContainsKey(requestKey))
-                {
-                    activeRequests[requestKey] = requestName;
-
-                    //Thiết lập timeout nếu cần
-                    var cts = new CancellationTokenSource();
-                    responseTimeouts[address.ToString()] = cts;
-                    _ = StartResponseTimeoutAsync(address.ToString(), cts.Token);
-                }
-
-                // B2: Xử lý dữ liệu hex
-                byte[] requestBytes = _service.ConvertHexStringToByteArray(requestHex);
-                string addressHex = _service.ConvertToHex(address).PadLeft(2, '0');
-                string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
-                string CRCString = CRC.CalculateCRC(requestString);
-                requestString += " " + CRCString;
-
-                // B3: Gửi
-                _mySerialPort.Write(requestString);
-                //Tool.Log($"Máy {address} gửi {requestName}: {requestString}");
-
-                await Task.Delay(1000); // Chờ thiết bị phản hồi
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi gửi request {requestName}: {ex.Message}");
-            }
-            finally
-            {
-                _serialLock.Release(); //Giải phóng cho máy khác gửi
-            }
-        }
-        private async Task StartResponseTimeoutAsync(string addressKey, CancellationToken cancellationToken)
-        {
-            try
-            {
-                int timeoutSeconds = _appSetting.TimeSendRequest; // đảm bảo bạn đã config nó trong appsettings.json
-
-                await Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationToken);
-
-                // Nếu không bị hủy, nghĩa là timeout xảy ra
-                if (activeRequests.Keys.Any(k => k.StartsWith($"{addressKey}_")))
-                {
-                    //Tool.Log($"Timeout: Không nhận được phản hồi từ máy có địa chỉ {addressKey} sau {timeoutSeconds} giây.");
-                    activeRequests = activeRequests
-                        .Where(kvp => !kvp.Key.StartsWith($"{addressKey}_"))
-                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                // Bị huỷ đúng cách do có phản hồi đến
-                Tool.Log($"Máy {addressKey} đã phản hồi đúng hạn.");
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi khi xử lý timeout cho địa chỉ {addressKey}: {ex.Message}");
-            }
-        }
-        public async Task SendRequestsToAllAddressesAsync()
-        {
-            for (int address = 1; address <= _appSetting.TotalMachine; address++)
-            {
-                int capturedAddress = address; // tránh closure issue
-                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
-            }
-        }
-        private async Task LoopRequestsForMachineAsync(int address)
-        {
-            while (true)
-            {
-                //Tool.Log($"Máy {address}: Bắt đầu gửi dữ liệu");
-
-                foreach (var request in _appSetting.Requests)
-                {
-                    string requestName = $"{request.Key}_Address_{address}";
-                    await SendRequestAsync(requestName, request.Value, address);
-                    await Task.Delay(10000);
-                }
-
-                Tool.Log($"Máy {address}: Hoàn tất vòng gửi dữ liệu. Chờ 5 phút...");
-                await Task.Delay(TimeSpan.FromMinutes(_appSetting.TimeSendRequest)); // Hoặc dùng _appSetting.TimeReloadData
-            }
-        }
-        #endregion
-        //private Dictionary<string, string> activeRequests = new Dictionary<string, string>();// đối tượng dùng làm khóa
-        private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
-
-        // Biến lưu trạng thái các request đã nhận
-        private readonly Dictionary<string, double> receivedData = new Dictionary<string, double>();
-
-        private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
-        private HashSet<string> processedRequests = new HashSet<string>();
-        #region Nhận dữ liệu
-        private async void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            try
-            {
-                var serialPort = (SerialPort)sender;
-                int bytesToRead = serialPort.BytesToRead;
-
-                if (bytesToRead > 0)
-                {
-                    byte[] buffer = new byte[bytesToRead];
-                    serialPort.Read(buffer, 0, bytesToRead);
-
-                    string hexString = BitConverter.ToString(buffer).Replace("-", " ");
-
-                    // Kiểm tra CRC
-                    if (!Tool.CRC_PD(buffer))
-                    {
-                        Tool.Log($"CRC check failed for data: {hexString}");
-                        return;
-                    }
-
-                    int address = buffer[0];
-
-                    // Lặp qua các activeRequests để tìm đúng request
-                    var matchedRequest = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{address}_"));
-
-                    if (activeRequests.Count == 0)
-                    {
-                        //Tool.Log("ActiveRequests hiện đang trống.");
-                    }
-                    //else
-                    //{
-                    //    //Tool.Log("Danh sách activeRequests:");
-                    //    foreach (var kvp in activeRequests)
-                    //    {
-                    //        Tool.Log($"Key = {kvp.Key}, Value = {kvp.Value}");
-                    //    }
-                    //}
-
-                    //Tool.Log("Danh sách activeRequests hiện tại:");
-                    //foreach (var kvp in activeRequests)
-                    //{
-                    //    Tool.Log($"  Key = {kvp.Key}, Value = {kvp.Value}");
-                    //}
-
-                    //Tool.Log($"Matched request: Key = {matchedRequest.Key}, Value = {matchedRequest.Value}");
-
-                    if (!string.IsNullOrEmpty(matchedRequest.Key))
-                    {
-                        string requestName = matchedRequest.Value;
-                        string requestKey = matchedRequest.Key;
-
-                        // Tránh xử lý trùng trong cùng một lần nhận
-                        if (processedRequests.Contains(requestKey))
-                        {
-                            Tool.Log($"Data for {requestName} at address {address} already processed. Skipping...");
-                            return;
-                        }
-
-                        // Đánh dấu là đã xử lý
-                        processedRequests.Add(requestKey);
-
-                        // Hủy timeout nếu có
-                        if (responseTimeouts.ContainsKey(address.ToString()))
-                        {
-                            responseTimeouts[address.ToString()].Cancel();
-                            responseTimeouts.Remove(address.ToString());
-                        }
-
-                        activeRequests.Remove(requestKey);
-
-                        // Gọi hàm xử lý
-                        ParseAndStoreReceivedData(buffer, requestName, address);
-
-                        // XÓA KEY để lần sau vẫn xử lý được
-                        processedRequests.Remove(requestKey);
-                    }
-                    else
-                    {
-                        Tool.Log($"Received data from address {address} does not match any active request.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show($"Error in DataReceived: {ex.Message}");
-                });
-            }
-        }
-
-
-        #endregion
-        #region Dịch dữ liệu
-        private void ParseAndStoreReceivedData(byte[] data, string requestName, int address)
-        {
-            try
-            {
-                if (data.Length >= 9)
-                {
-                    int dataByteCount = data[2];
-                    if (dataByteCount != 4 || data.Length < 5 + dataByteCount)
-                    {
-                        Tool.Log($"Invalid data for {requestName} at address {address}: insufficient length.");
-                        return;
-                    }
-
-                    // Giải mã giá trị float
-                    byte[] floatBytes = new byte[4];
-                    Array.Copy(data, 3, floatBytes, 0, 4);
-                    Array.Reverse(floatBytes); // Đảo byte nếu cần
-
-                    float rawValue = BitConverter.ToSingle(floatBytes, 0);
-                    double actualValue;
-
-                    // Phân loại theo tên
-                    if (requestName.StartsWith("U") || requestName.StartsWith("Exp") || requestName.StartsWith("Imp") || requestName.StartsWith("P"))
-                        actualValue = rawValue * 20.0; //actualValue = rawValue / 10.0;
-                    else if (requestName.StartsWith("I"))
-                        actualValue = rawValue / 1000.0;
-                    else
-                    {
-                        Tool.Log($"Unknown request type for {requestName} at address {address}.");
-                        return;
-                    }
-
-                    actualValue = Math.Round(actualValue, 2);
-
-                    lock (lockObject)
-                    {
-                        if (!receivedDataByAddress.ContainsKey(address))
-                            receivedDataByAddress[address] = new Dictionary<string, double>();
-
-                        receivedDataByAddress[address][requestName] = actualValue;
-
-                        //Tool.Log($"Nhận {requestName} = {actualValue} tại địa chỉ {address}. Hiện có {receivedDataByAddress[address].Count}/{_appSetting.Requests.Count}");
-
-                        // Kiểm tra đủ số lượng request
-                        if (receivedDataByAddress[address].Count == _appSetting.Requests.Count)
-                        {
-                            //Tool.Log($"Đã đủ {_appSetting.Requests.Count} trường dữ liệu tại địa chỉ {address}, tiến hành lưu vào DB...");
-
-                            // Gọi hàm lưu trong background
-                            _ = Task.Run(async () =>
-                            {
-                                try
-                                {
-                                    await SaveAllData(address);
-
-                                    lock (lockObject)
-                                    {
-                                        receivedDataByAddress[address].Clear();
-                                        processedRequests.RemoveWhere(k => k.StartsWith($"{address}_"));
-                                    }
-
-                                    Tool.Log($"Lưu thành công dữ liệu cho địa chỉ {address}");
-                                }
-                                catch (Exception ex)
-                                {
-                                    Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
-                                }
-                            });
-                        }
-                    }
-                }
-                else
-                {
-                    Tool.Log($"Incomplete data for {requestName} at address {address}.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi khi phân tích dữ liệu {requestName} tại địa chỉ {address}: {ex.Message}");
-                Tool.Log($"Dữ liệu gốc: {BitConverter.ToString(data)}");
-            }
-        }
-
-        #endregion
-
-
-
-
-
-        private CancellationTokenSource _cancellationTokenSource;
-
-        public async Task StartSavingDataWithTimer(int address)
-        {
-            int saveInterval = _appSetting.TimeSaveToDataBase * 1000;
-
-            lock (lockObject)
-            {
-                if (_timers.ContainsKey(address))
-                {
-                    Tool.Log($"Timer cho địa chỉ {address} đã tồn tại, không tạo lại.");
-                    return;
-                }
-
-                //Tool.Log($"Khởi tạo timer lưu dữ liệu cho địa chỉ {address} mỗi {saveInterval / 1000} giây.");
-
-                var timer = new Timer(async _ =>
-                {
-                    try
-                    {
-                        Tool.Log($"Bắt đầu lưu dữ liệu cho địa chỉ {address}...");
-                        await SaveAllData(address);
-                    }
-                    catch (Exception ex)
-                    {
-                        Tool.Log($"Lỗi trong timer của địa chỉ {address}: {ex.Message}");
-                    }
-                }, null, 0, saveInterval);
-
-                _timers[address] = timer;
-            }
-        }
-
-
-
-
-
-        public void StopSavingData()
-        {
-            foreach (var timer in _timers.Values)
-            {
-                timer?.Dispose();
-            }
-            _timers.Clear();
-        }
-        private async Task SaveAllData(int address)
-        {
-            try
-            {
-                //Tool.Log($"Đang chuẩn bị lấy dữ liệu đã nhận cho địa chỉ {address}...");
-
-                Dictionary<string, double> dataForAddress;
-
-                lock (lockObject)
-                {
-                    if (!receivedDataByAddress.TryGetValue(address, out dataForAddress))
-                    {
-                        Tool.Log($"Không tìm thấy dữ liệu cho địa chỉ {address}.");
-                        return;
-                    }
-
-                    if (dataForAddress.Count < 12)
-                    {
-                        //Tool.Log($"Dữ liệu không đủ trường cần thiết cho địa chỉ {address}. Đã nhận {dataForAddress.Count} trường.");
-                        return;
-                    }
-                }
-
-                //Tool.Log($"Đang tìm IdMachine tương ứng với địa chỉ {address}...");
-
-                var device = _appSetting.devices.FirstOrDefault(m => m.address == address);
-                if (device == null)
-                {
-                    Tool.Log($"Không tìm thấy IdMachine với địa chỉ {address}");
-                    return;
-                }
-
-                int idMachine = device.devid;
-                //Tool.Log($"Tìm thấy IdMachine = {idMachine} cho địa chỉ {address}");
-
-                var now = DateTime.Now;
-
-                // 1. Chuẩn bị giá trị cần lưu
-                var valuesToSave = new Dictionary<string, double?>
-                {
-                    { "Ub", GetValueWithAddressSuffix(dataForAddress, "Ub", address) },
-                    { "Uc", GetValueWithAddressSuffix(dataForAddress, "Uc", address) },
-                    { "Ia", GetValueWithAddressSuffix(dataForAddress, "Ia", address) },
-                    { "Ib", GetValueWithAddressSuffix(dataForAddress, "Ib", address) },
-                    { "Ic", GetValueWithAddressSuffix(dataForAddress, "Ic", address) },
-                    { "Pt", GetValueWithAddressSuffix(dataForAddress, "Pt", address) },
-                    { "Pa", GetValueWithAddressSuffix(dataForAddress, "Pa", address) },
-                    { "Pb", GetValueWithAddressSuffix(dataForAddress, "Pb", address) },
-                    { "Pc", GetValueWithAddressSuffix(dataForAddress, "Pc", address) },
-                    { "Exp", GetValueWithAddressSuffix(dataForAddress, "Exp", address) },
-                    { "Imp", GetValueWithAddressSuffix(dataForAddress, "Imp", address) }
-                };
-
-                // 2. Lấy danh sách control code theo devid
-                var controlCodes = await _context.controlcodes
-                    .Where(c => c.devid == idMachine)
-                    .ToListAsync();
-
-                int savedCount = 0;
-
-                foreach (var item in valuesToSave)
-                {
-                    if (!item.Value.HasValue) continue;
-
-                    var code = controlCodes.FirstOrDefault(c => c.name == item.Key);
-                    if ((code.name == "Imp" && item.Value.Value < 0) || (code.name == "Exp" && item.Value.Value < 0))
-                    {
-                        Tool.Log($"⚠ Giá trị {item.Key} không hợp lệ (âm) cho địa chỉ {address}. Bỏ qua lưu trữ.");
-                        continue; // Bỏ qua nếu giá trị âm
-                    }
-
-                    if (code != null)
-                    {
-
-                        var sensorData = new SensorData
-                        {
-                            devid = idMachine,
-                            codeid = code.codeid,
-                            value = item.Value.Value,
-                            day = now
-                        };
-                        //Tool.Log($"→ Đang lưu: devid={sensorData.devid}, codeid={sensorData.codeid}, value={sensorData.value}, day={sensorData.day}");
-
-                        // Gọi và kiểm tra kết quả lưu
-                        bool isSaved = await _service.InsertToSensorDataAsync(sensorData);
-                        if (isSaved)
-                        {
-                            savedCount++;
-                        }
-                    }
-                }
-
-                // Logging kết quả
-                if (savedCount == 0)
-                {
-                    Tool.Log($"⚠ Không có bản ghi nào được lưu vào bảng SensorData cho địa chỉ {address}.");
-                }
-                else
-                {
-                    Tool.Log($"→ Đã lưu {savedCount} bản ghi vào bảng SensorData cho địa chỉ {address}.");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {address}: {ex.Message}");
-            }
-        }
-
-
-
-        // Hàm tiện ích để lấy giá trị từ Dictionary dựa trên key có hậu tố `Address_X`
-        private double? GetValueWithAddressSuffix(Dictionary<string, double> data, string key, int address)
-        {
-            string fullKey = $"{key}_Address_{address}";
-            return data.ContainsKey(fullKey) ? data[fullKey] : null;
-        }
-
-
-
-        private static readonly object lockObject = new object();
-
-        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();
-
-
-
-
-
-
-
-
-
-
-        private async void ReloadData(string factory, int address)
-        {
-            if (!string.IsNullOrEmpty(Port))
-            {
-                List<DvElectricDataTemp> data = await _service.GetListDataAsync(address);
-
-                if (data != null)
-                {
-                    var find = data;
-
-                    // Clear the existing items and add new ones
-                    ElectricDataTemp.Clear();
-                    foreach (var item in find)
-                    {
-                        ElectricDataTemp.Add(item);
-                    }
-                }
-            }
         }
         public void Close()
         {
@@ -629,5 +139,261 @@ namespace Electric_Meter.MVVM.ViewModels
 
             }
         }
+        #region [ Method - Update Display ]
+
+
+        public void UpdateToolViewData(Dictionary<string, double?> values)
+        {
+            // Cập nhật các ObservableProperty mới
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Helper để cập nhật thuộc tính string
+                void UpdateStringProperty(string key, Action<string> setter)
+                {
+                    if (values.TryGetValue(key, out double? value) && value.HasValue)
+                    {
+                        // Định dạng giá trị double sang string với 2 chữ số thập phân
+                        setter(value.Value.ToString("N2"));
+                    }
+                }
+
+                UpdateStringProperty("Ia", v => Ia = v);
+                UpdateStringProperty("Ib", v => Ib = v);
+                UpdateStringProperty("Ic", v => Ic = v);
+                UpdateStringProperty("Ua", v => Ua = v);
+                UpdateStringProperty("Ub", v => Ub = v);
+                UpdateStringProperty("Uc", v => Uc = v);
+                UpdateStringProperty("Pt", v => Pt = v);
+                UpdateStringProperty("Pa", v => Pa = v);
+                UpdateStringProperty("Pb", v => Pb = v);
+                UpdateStringProperty("Pc", v => Pc = v);
+                UpdateStringProperty("Exp", v => Exp = v);
+                UpdateStringProperty("Imp", v => Imp = v);
+
+                // Nếu Total được tính là tổng của Exp và một giá trị khác (Total cũ trong code gốc),
+                // bạn cần tìm cách tính toán lại ở đây (ví dụ: Exp + Imp, hoặc Exp + giá trị ban đầu của Total)
+                // Hiện tại tôi sẽ tính Total = Exp + Imp (Ví dụ)
+                if (values.TryGetValue("Exp", out double? expValue) && expValue.HasValue &&
+                    values.TryGetValue("Imp", out double? impValue) && impValue.HasValue)
+                {
+                    // Đảm bảo không bị null khi tính toán
+                    Total = (expValue.GetValueOrDefault() + impValue.GetValueOrDefault()).ToString("N2");
+                }
+                else if (values.TryGetValue("Total", out double? totalValue) && totalValue.HasValue)
+                {
+                    // Dùng giá trị Total nếu được truyền trực tiếp từ meter (dù không thấy trong SaveAllData)
+                    Total = totalValue.Value.ToString("N2");
+                }
+
+
+                // Giữ lại logic cũ nếu bạn vẫn cần cập nhật ObservableCollection ElectricDataTemp
+                foreach (var item in values)
+                {
+                    if (item.Value.HasValue)
+                    {
+                        var dataItem = ElectricDataTemp.FirstOrDefault(d => d.Name == item.Key);
+                        if (dataItem != null)
+                        {
+                            dataItem.Value = item.Value.Value;
+                        }
+                    }
+                }
+            });
+        }
+
+        private void HandleDataUpdate(Dictionary<string, double?> data)
+        {
+
+            // Đảm bảo cập nhật UI trên luồng chính (Dispatcher)
+            Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                // Gọi hàm cập nhật dữ liệu của ViewModel
+                UpdateToolViewData(data);
+            });
+        }
+        #endregion
+        #region [ Methods - Language ]
+        public void UpdateTexts()
+        {
+            // Điện áp
+            PhaseAVoltageText = _languageService.GetString("PHASE A VOLTAGE");
+            PhaseBVoltageText = _languageService.GetString("PHASE B VOLTAGE");
+            PhaseCVoltageText = _languageService.GetString("PHASE C VOLTAGE");
+
+            // Dòng điện
+            PhaseACurrentText = _languageService.GetString("PHASE A CURRENT");
+            PhaseBCurrentText = _languageService.GetString("PHASE B CURRENT");
+            PhaseCCurrentText = _languageService.GetString("PHASE C CURRENT");
+
+            // Công suất
+            TotalPowerText = _languageService.GetString("TOTAL POWER");
+            PhaseAPowerText = _languageService.GetString("Phase A Power");
+            PhaseBPowerText = _languageService.GetString("Phase B Power");
+            PhaseCPowerText = _languageService.GetString("Phase C Power");
+
+            // Năng lượng
+            ExportEnergyText = _languageService.GetString("EXPORT ENERGY");
+            ImportEnergyText = _languageService.GetString("IMPORT ENERGY");
+            TotalEnergyText = _languageService.GetString("TOTAL ENERGY");
+
+            // Thành hình
+            AssemblingText = _languageService.GetString("Assembling");
+            // Khác
+            SearchKeywordText = _languageService.GetString("Search keyword");
+            SelectDevicePlaceholderText = _languageService.GetString("Select device...");
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                SetupAssemblingList();
+            });
+
+
+        }
+        #endregion
+
+        #region [ Language Texts ]
+        [ObservableProperty] private string phaseAVoltageText;
+        [ObservableProperty] private string phaseBVoltageText;
+        [ObservableProperty] private string phaseCVoltageText;
+        [ObservableProperty] private string phaseACurrentText;
+        [ObservableProperty] private string phaseBCurrentText;
+        [ObservableProperty] private string phaseCCurrentText;
+        [ObservableProperty] private string totalPowerText;
+        [ObservableProperty] private string phaseAPowerText;
+        [ObservableProperty] private string phaseBPowerText;
+        [ObservableProperty] private string phaseCPowerText;
+        [ObservableProperty] private string exportEnergyText;
+        [ObservableProperty] private string importEnergyText;
+        [ObservableProperty] private string totalEnergyText;
+        [ObservableProperty] private string searchKeywordText;
+        [ObservableProperty] private string selectDevicePlaceholderText;
+        [ObservableProperty] private string assemblingText;
+        #endregion
+        #region [ Method ]
+        private void GetDefaultSetting()
+        {
+
+            SetupAssemblingList();
+            LstDevice = new ObservableCollection<Device>();
+            SelectedAssembling = LstAssembling.FirstOrDefault();
+            SearchQuery = string.Empty;
+        }
+        private void SetupAssemblingList()
+        {
+            // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Cập nhật lại danh sách LstAssembling
+                LstAssembling = new()
+                {
+                    new KeyValue { key = "A", value = $"{AssemblingText} A" },
+                    new KeyValue { key = "B", value = $"{AssemblingText} B" },
+                    new KeyValue { key = "C", value = $"{AssemblingText} C" },
+                    new KeyValue { key = "D", value = $"{AssemblingText} D" }
+                };
+
+                // Đảm bảo giữ lại KeyValue đã chọn
+                if (SelectedAssembling != null)
+                {
+                    var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
+
+                    if (newSelected != null)
+                    {
+                        // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
+                        SelectedAssembling = newSelected;
+                    }
+                }
+                // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
+                else
+                {
+                    SelectedAssembling = LstAssembling.FirstOrDefault();
+                }
+            });
+        }
+        partial void OnSelectedAssemblingChanged(KeyValue value)
+        {
+            if (value != null)
+            {
+                // Lấy danh sách device theo assembling
+                LstDevice = new ObservableCollection<Device>(_service.GetDevicesByAssembling(value.key));
+
+                // Chọn device đầu tiên
+                SelectedDevice = LstDevice.FirstOrDefault();
+            }
+        }
+        partial void OnSelectedDeviceChanged(Device value)
+        {
+            if (value != null)
+            {
+                // Lấy dữ liệu mới từ database theo device mới
+                _ = LoadLatestDataAsync(value.devid);
+            }
+        }
+        // Hàm async load dữ liệu mới
+        private async Task LoadLatestDataAsync(int devid)
+        {
+            // Bắt đầu LOADING trên UI Thread
+            Application.Current.Dispatcher.Invoke(() => { IsLoading = true; });
+
+            Dictionary<string, double?> latestDict = null;
+
+            try
+            {
+                // 1. Tải dữ liệu DB: Dùng ConfigureAwait(false) để cho phép phần tiếp theo của hàm 
+                // chạy trên luồng nền (Thread Pool) và không cần quay lại UI Thread.
+                var latestSensorData = await _service.GetLatestSensorByDeviceAsync(devid).ConfigureAwait(false);
+
+                if (latestSensorData == null || latestSensorData.Count == 0)
+                {
+                    // Nếu không có dữ liệu, khởi tạo Dictionary với giá trị mặc định 0.0
+                    latestDict = new Dictionary<string, double?>
+                    {
+                        { "Ia", 0.0 }, { "Ib", 0.0 }, { "Ic", 0.0 },
+                        { "Ua", 0.0 }, { "Ub", 0.0 }, { "Uc", 0.0 },
+                        { "Pt", 0.0 }, { "Pa", 0.0 }, { "Pb", 0.0 }, { "Pc", 0.0 },
+                        { "Exp", 0.0 }, { "Imp", 0.0 },
+                        { "Total", 0.0 }
+                    };
+                }
+                else
+                {
+                    latestDict = latestSensorData
+                       .Join(_context.controlcodes,
+                             s => s.codeid,
+                             c => c.codeid,
+                             (s, c) => new { c.name, s.value })
+                       // Sử dụng ToList() HOẶC ToDictionary() trên luồng nền là OK.
+                       .ToDictionary(x => x.name, x => (double?)x.value);
+                }
+
+                // 3. Cập nhật UI: Bắt buộc phải quay lại UI Thread để tương tác với Properties/Control.
+                if (latestDict != null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        // Gọi hàm cập nhật UI chính
+                        UpdateToolViewData(latestDict);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi. Bạn có thể muốn cập nhật UI để hiển thị lỗi:
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // Ví dụ: MessageBox.Show($"Lỗi khi tải dữ liệu: {ex.Message}");
+                    Tool.Log($"Lỗi khi tải dữ liệu cho devid {devid}: {ex.Message}");
+                });
+            }
+            finally
+            {
+                // 4. TẮT Loading: Bắt buộc phải quay lại UI Thread để thay đổi IsLoading.
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    IsLoading = false;
+                });
+            }
+        }
+        #endregion
+
     }
 }

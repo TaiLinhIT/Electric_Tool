@@ -1,11 +1,16 @@
+using System.Net.Http;
 using System.Windows;
 
+using Electric_Meter.Dto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
 
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
+using Newtonsoft.Json;
 
 namespace Electric_Meter.Services
 {
@@ -16,15 +21,18 @@ namespace Electric_Meter.Services
         private readonly IServiceScopeFactory _scopeFactory;
         public Service(PowerTempWatchContext powerTempWatchContext, IServiceScopeFactory serviceScope)
         {
-            _context = powerTempWatchContext;
+            //_context = powerTempWatchContext;
             _scopeFactory = serviceScope;
         }
 
-        public async Task<int> DeleteToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> DeleteToDevice(Device device)
         {
             try
             {
-                _context.machines.Remove(machine);
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                device.activeid = 0;
+                _context.devices.Update(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -36,11 +44,13 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<int> EditToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> EditToDevice(Device device)
         {
             try
             {
-                _context.machines.Update(machine);
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                _context.devices.Update(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -51,69 +61,16 @@ namespace Electric_Meter.Services
             }
 
 
-        }
-
-        public async Task<List<DvElectricDataTemp>> GetListDataAsync(int address)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                try
-                {
-                    // Ordering by CreatedAt (assuming the column name is CreatedAt)
-                    var data = await dbContext.DvElectricDataTemps.Where(x => x.IdMachine == address)
-                                             .OrderByDescending(d => d.UploadDate) // Order by date descending
-                                             .Take(1) // Get the most recent 2 records
-                                             .ToListAsync();
-
-                    return data;
-                }
-                catch (Exception ex)
-                {
-
-                    Tool.Log(ex.Message);
-                    return new List<DvElectricDataTemp>();
-                }
-
-            }
         }
 
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-
-        public async Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                await _semaphore.WaitAsync();
-                try
-                {
-
-                    await dbContext.DvElectricDataTemps.AddAsync(dvElectricDataTemp);
-                    await dbContext.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Lỗi khi thêm dữ liệu vào cơ sở dữ liệu: {ex.Message}");
-                }
-                finally
-                {
-                    _semaphore.Release();
-                }
-
-            }
-        }
-
-
-
-
-
-
-        public async Task<int> InsertToMachine(Electric_Meter.Models.Machine machine)
+        public async Task<int> InsertToDevice(Device device)
         {
             try
             {
-                await _context.machines.AddAsync(machine);
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                await _context.devices.AddAsync(device);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -154,6 +111,7 @@ namespace Electric_Meter.Services
 
                 try
                 {
+                    Tool.Log($"→ Bắt đầu thêm SensorData cho codeid {data.codeid}");
                     await dbContext.sensorDatas.AddAsync(data);
                     var result = await dbContext.SaveChangesAsync();
 
@@ -176,7 +134,209 @@ namespace Electric_Meter.Services
             }
         }
 
+        public List<DeviceVM> GetDevicesList()
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var lstDevice = from x in _context.devices
+                                join y in _context.activeTypes on x.activeid equals y.activeid
+                                join z in _context.sensorTypes on x.typeid equals z.typeid
+                                select new DeviceVM
+                                {
+                                    devid = x.devid,
+                                    address = x.address,
+                                    name = x.name,
+                                    port = x.port,
+                                    assembling = x.assembling,
+                                    baudrate = x.baudrate,
+                                    active = y.name,
+                                    type = z.name,
+                                    ifshow = x.ifshow
+                                };
+                return lstDevice.ToList();
 
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return new List<DeviceVM>();
+            }
+        }
+        public List<ControlcodeVM> GetControlCodeListByDevid(int devid)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            var lstControlCode = from x in _context.controlcodes
+                                 join y in _context.devices on x.devid equals y.devid
+                                 join z in _context.codetypes on x.codetypeid equals z.codetypeid
+                                 join g in _context.activeTypes on x.activeid equals g.activeid
+                                 join h in _context.sensorTypes on x.typeid equals h.typeid
+                                 where x.devid == devid && x.activeid == 1
+                                 select new ControlcodeVM
+                                 {
+                                     codeid = x.codeid,
+                                     devid = x.devid,
+                                     deviceName = y.name,
+                                     code = x.code,
+                                     active = g.name,
+                                     codetype = z.name,
+                                     name = x.name,
+                                     factor = x.factor,
+                                     type = h.name,
+                                     high = x.high,
+                                     low = x.low,
+                                     ifshow = x.ifshow,
+                                     ifcal = x.ifcal
+                                 };
+            return lstControlCode.ToList();
+        }
+
+        public List<Device> GetDevicesByAssembling(string key)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
+        }
+
+        public async Task<List<Device>> GetActiveDevicesAsync()
+        {
+            try
+            {
+                return await _context.devices
+                    .FromSqlRaw("EXEC GetActiveDevices")
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Lỗi khi gọi GetActiveDevices: " + ex.Message);
+                return new List<Device>();
+            }
+        }
+
+        public async Task<List<Device>> GetDeviceByIdAsync(int devid)
+        {
+            try
+            {
+                var param = new SqlParameter("@devid", devid);
+                return await _context.devices
+                    .FromSqlRaw("EXEC GetDeviceById @devid", param)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Lỗi khi gọi GetDeviceById: " + ex.Message);
+                return new List<Device>();
+            }
+        }
+        public async Task<List<LatestSensorByDeviceYear>> GetLatestSensorByDeviceYear(int year)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+
+            // 1. Định nghĩa tham số SQL
+            var yearParam = new SqlParameter("@year", year);
+
+            // 2. Sử dụng FromSqlRaw
+            return await _context.Set<LatestSensorByDeviceYear>()
+                .FromSqlRaw("EXEC GetLatestSensorByDeviceYear @year", yearParam)
+                .ToListAsync();
+        }
+
+
+        public async Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+
+            return await _context.sensorDatas
+            .FromSqlInterpolated($"EXEC GetLatestSensorByDevice @devid={devid}")
+            .ToListAsync();
+        }
+
+        public async Task<List<DailyConsumptionDTO>> GetDailyConsumptionDTOs(int devid)
+        {
+
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            var devidCurrent = new SqlParameter("@devid", devid);
+            return await _context.Set<DailyConsumptionDTO>()
+                .FromSqlRaw($"EXEC GetDailyConsumption @devid", devidCurrent)
+                .ToListAsync();
+
+
+        }
+
+        public async Task<List<TotalConsumptionPercentageDeviceDTO>> GetRatioMonthlyDevice(int month, int year)
+        {
+
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            return await _context.Set<TotalConsumptionPercentageDeviceDTO>()
+                .FromSqlInterpolated($"EXEC GetRatioMonthlyDevice @month={month}, @year={year}")
+                .ToListAsync();
+
+        }
+
+        public async Task<int> InsertToControlcode(Controlcode code)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                await _context.controlcodes.AddAsync(code);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return 0;
+            }
+
+        }
+
+        public async Task<int> EditToControlcode(Controlcode code)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                _context.controlcodes.Update(code);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return 0;
+            }
+        }
+
+        public async Task<int> DeleteToControlcode(Controlcode code)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                code.activeid = 0;
+                _context.controlcodes.Update(code);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return 0;
+            }
+        }
+
+       
     }
 
 

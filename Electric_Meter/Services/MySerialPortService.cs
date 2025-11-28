@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Net.Http;
+using System.Text;
 using System.Windows;
 
 using Electric_Meter.Configs;
@@ -8,6 +10,8 @@ using Electric_Meter.Utilities;
 
 using Microsoft.EntityFrameworkCore;
 
+using Newtonsoft.Json;
+
 namespace Electric_Meter.Services
 {
     public class MySerialPortService
@@ -15,6 +19,7 @@ namespace Electric_Meter.Services
         // Định nghĩa Delegate cho Event
         public event Action<Dictionary<string, double?>> DataUpdated;
         #region [ Fields (Private data) - Observable Properties ]
+        private readonly HttpClient _httpClient;
         private readonly Service _service;
         private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
         private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
@@ -31,16 +36,54 @@ namespace Electric_Meter.Services
         private AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
         #endregion
-        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting, SerialPort serialPort)
+        public MySerialPortService(Service service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting, SerialPort serialPort, HttpClient httpClient)
         {
 
             _serialPort = serialPort;
             _context = powerTempWatchContext;
             _appSetting = appSetting;
             _service = service;
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri("http://localhost:7099");
         }
-        public void Conn()
+        public async Task SendDataToServer(string devid)
         {
+
+            try
+            {
+                var dto = new
+                {
+                    devid = "1",
+                    value = 121,
+                    createdAt = DateTime.Now
+                };
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/Sensor/sensor", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+
+            }
+            catch (HttpRequestException httpEx)
+            {
+                // Bắt lỗi kết nối mạng (Server không chạy, sai địa chỉ, v.v.)
+                Console.WriteLine($"❌ Gửi dữ liệu thất bại (HttpRequestException): Vui lòng kiểm tra Server API (https://localhost:7099) đã chạy chưa. Lỗi: {httpEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"❌ Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+            }
+
+        }
+
+        public async Task Conn()
+        {
+
             //_serialPort = new SerialPort();
             _serialPort.DataReceived += Sdre;
             _serialPort.ErrorReceived += _serialPort_ErrorReceived;
@@ -54,6 +97,7 @@ namespace Electric_Meter.Services
             _serialPort.ReadTimeout = 500; //设置超时读取时间
             _serialPort.WriteTimeout = 100;
             _serialPort.RtsEnable = true;
+            await SendDataToServer("5");
             try
             {
                 _serialPort.Open();
@@ -379,10 +423,12 @@ namespace Electric_Meter.Services
                     if (requestName.StartsWith("U"))
                     {
                         actualValue = rawValue * _appSetting.FactorU;
-                    }else if (requestName.StartsWith("Exp") || requestName.StartsWith("Imp"))
+                    }
+                    else if (requestName.StartsWith("Exp") || requestName.StartsWith("Imp"))
                     {
                         actualValue = rawValue * _appSetting.FactorImp;
-                    }else if (requestName.StartsWith("P"))
+                    }
+                    else if (requestName.StartsWith("P"))
                         actualValue = rawValue * _appSetting.FactorP;
                     else if (requestName.StartsWith("I"))
                         actualValue = rawValue * _appSetting.FactorI;
@@ -446,6 +492,7 @@ namespace Electric_Meter.Services
         {
             try
             {
+
                 //Tool.Log($"Đang chuẩn bị lấy dữ liệu đã nhận cho địa chỉ {address}...");
 
                 Dictionary<string, double> dataForAddress;

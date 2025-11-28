@@ -1,5 +1,4 @@
 
-
 using Electric_Meter_WebAPI.Dto;
 using Electric_Meter_WebAPI.Models;
 
@@ -13,7 +12,6 @@ namespace Electric_Meter_WebAPI.Interfaces
         Task<int> DeleteToDevice(Device machine);
         //Task InsertToElectricDataTempAsync(DvElectricDataTemp dvElectricDataTemp);
         Task<bool> InsertToSensorDataAsync(SensorData data);
-        List<Device> GetDevicesList();
         List<Device> GetDevicesByAssembling(string key);
         Task<List<Device>> GetActiveDevicesAsync();
         Task<List<Device>> GetDeviceByIdAsync(int devid);

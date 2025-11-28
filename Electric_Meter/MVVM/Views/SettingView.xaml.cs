@@ -58,7 +58,11 @@ namespace Electric_Meter.MVVM.Views
                 e.PropertyName == nameof(_vm.HighCommandText) ||
                 e.PropertyName == nameof(_vm.LowCommandText) ||
                 e.PropertyName == nameof(_vm.IfShowCommandText) ||
-                e.PropertyName == nameof(_vm.IfCalCommandText))
+                e.PropertyName == nameof(_vm.IfCalCommandText) ||
+                e.PropertyName == nameof(_vm.ActiveCommandText) ||
+                e.PropertyName == nameof(_vm.NameCodeTypeCommandText) ||
+                e.PropertyName == nameof(_vm.NameTypeCommandText)
+                )
 
             {
                 UpdateGridHeaders();
@@ -77,20 +81,21 @@ namespace Electric_Meter.MVVM.Views
                 DeviceGrid.Columns[5].Header = _vm.ActiveCommandText;
                 DeviceGrid.Columns[6].Header = _vm.TypeIdCommandText;
             }
-            if (ControlcodeGrid.Columns.Count >= 12)
+            if (ControlcodeGrid.Columns.Count >= 13)
             {
                 ControlcodeGrid.Columns[0].Header = _vm.CodeIdCommandText;
                 ControlcodeGrid.Columns[1].Header = _vm.DevIdCommandText;
-                ControlcodeGrid.Columns[2].Header = _vm.CodeCommandText;
-                ControlcodeGrid.Columns[3].Header = _vm.ActiveCommandText;
-                ControlcodeGrid.Columns[4].Header = _vm.CodeTypeIdCommandText;
-                ControlcodeGrid.Columns[5].Header = _vm.NameCommandText;
-                ControlcodeGrid.Columns[6].Header = _vm.FactorCommandText;
-                ControlcodeGrid.Columns[7].Header = _vm.TypeIdCommandText;
-                ControlcodeGrid.Columns[8].Header = _vm.HighCommandText;
-                ControlcodeGrid.Columns[9].Header = _vm.LowCommandText;
-                ControlcodeGrid.Columns[10].Header = _vm.IfShowCommandText;
-                ControlcodeGrid.Columns[11].Header = _vm.IfCalCommandText;
+                ControlcodeGrid.Columns[2].Header = _vm.NameDeviceCommandText;
+                ControlcodeGrid.Columns[3].Header = _vm.CodeCommandText;
+                ControlcodeGrid.Columns[4].Header = _vm.ActiveCommandText;
+                ControlcodeGrid.Columns[5].Header = _vm.NameCodeTypeCommandText;
+                ControlcodeGrid.Columns[6].Header = _vm.NameCommandText;
+                ControlcodeGrid.Columns[7].Header = _vm.FactorCommandText;
+                ControlcodeGrid.Columns[8].Header = _vm.NameTypeCommandText;
+                ControlcodeGrid.Columns[9].Header = _vm.HighCommandText;
+                ControlcodeGrid.Columns[10].Header = _vm.LowCommandText;
+                ControlcodeGrid.Columns[11].Header = _vm.IfShowCommandText;
+                ControlcodeGrid.Columns[12].Header = _vm.IfCalCommandText;
 
             }
         }

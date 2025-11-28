@@ -347,7 +347,6 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.csproj.AssemblyReference.cache
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MainWindow.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\DashboardView.baml
-D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SettingView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MainWindow.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\DashboardView.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SettingView.g.cs
@@ -357,6 +356,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_M
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter_MarkupCompile.cache
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter_MarkupCompile.lref
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\App.baml
+D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SettingView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\ToolView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.g.resources
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.GeneratedMSBuildEditorConfig.editorconfig
@@ -370,4 +370,3 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\refint\Ele
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.pdb
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.genruntimeconfig.cache
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\ref\Electric_Meter.dll
-D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs

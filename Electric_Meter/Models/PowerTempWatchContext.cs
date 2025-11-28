@@ -13,7 +13,7 @@ public partial class PowerTempWatchContext : DbContext
     {
     }
 
-
+    public DbSet<Codetype> codetypes { get; set; }
     public DbSet<ActiveType> activeTypes { get; set; }
     public DbSet<Controlcode> controlcodes { get; set; }
     public DbSet<Device> devices { get; set; }

@@ -12,8 +12,8 @@ namespace Electric_Meter.Interfaces
         Task<int> EditToControlcode(Controlcode code);
         Task<int> DeleteToControlcode(Controlcode code);
         Task<bool> InsertToSensorDataAsync(SensorData data);
-        List<Device> GetDevicesList();
-        List<Controlcode> GetControlCodeListByDevid(int devid);
+        List<DeviceVM> GetDevicesList();
+        List<ControlcodeVM> GetControlCodeListByDevid(int devid);
         List<Device> GetDevicesByAssembling(string key);
         Task<List<Device>> GetActiveDevicesAsync();
         Task<List<Device>> GetDeviceByIdAsync(int devid);

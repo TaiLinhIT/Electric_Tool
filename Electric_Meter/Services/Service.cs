@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System.Windows;
 
 using Electric_Meter.Dto;
@@ -8,6 +9,8 @@ using Electric_Meter.Utilities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
+using Newtonsoft.Json;
 
 namespace Electric_Meter.Services
 {
@@ -133,16 +136,62 @@ namespace Electric_Meter.Services
 
         public List<DeviceVM> GetDevicesList()
         {
-            using var scope = _scopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            var lstDevice = 
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var lstDevice = from x in _context.devices
+                                join y in _context.activeTypes on x.activeid equals y.activeid
+                                join z in _context.sensorTypes on x.typeid equals z.typeid
+                                select new DeviceVM
+                                {
+                                    devid = x.devid,
+                                    address = x.address,
+                                    name = x.name,
+                                    port = x.port,
+                                    assembling = x.assembling,
+                                    baudrate = x.baudrate,
+                                    active = y.name,
+                                    type = z.name,
+                                    ifshow = x.ifshow
+                                };
+                return lstDevice.ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+                return new List<DeviceVM>();
+            }
         }
-        public List<Controlcode> GetControlCodeListByDevid(int devid)
+        public List<ControlcodeVM> GetControlCodeListByDevid(int devid)
         {
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            var lstControlCode = _context.controlcodes.Where(x => x.devid == devid).ToList();
-            return lstControlCode;
+            var lstControlCode = from x in _context.controlcodes
+                                 join y in _context.devices on x.devid equals y.devid
+                                 join z in _context.codetypes on x.codetypeid equals z.codetypeid
+                                 join g in _context.activeTypes on x.activeid equals g.activeid
+                                 join h in _context.sensorTypes on x.typeid equals h.typeid
+                                 where x.devid == devid && x.activeid == 1
+                                 select new ControlcodeVM
+                                 {
+                                     codeid = x.codeid,
+                                     devid = x.devid,
+                                     deviceName = y.name,
+                                     code = x.code,
+                                     active = g.name,
+                                     codetype = z.name,
+                                     name = x.name,
+                                     factor = x.factor,
+                                     type = h.name,
+                                     high = x.high,
+                                     low = x.low,
+                                     ifshow = x.ifshow,
+                                     ifcal = x.ifcal
+                                 };
+            return lstControlCode.ToList();
         }
 
         public List<Device> GetDevicesByAssembling(string key)
@@ -256,7 +305,7 @@ namespace Electric_Meter.Services
             {
                 using var scope = _scopeFactory.CreateScope();
                 var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                 _context.controlcodes.Update(code);
+                _context.controlcodes.Update(code);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -286,6 +335,8 @@ namespace Electric_Meter.Services
                 return 0;
             }
         }
+
+       
     }
 
 

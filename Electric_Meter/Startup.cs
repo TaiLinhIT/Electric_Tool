@@ -1,5 +1,6 @@
 using System.IO;
 using System.IO.Ports;
+using System.Net.Http;
 
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
@@ -69,6 +70,7 @@ namespace Electric_Meter
             services.AddSingleton<SettingViewModel>();
             services.AddSingleton<ToolViewModel>();
             services.AddSingleton<DashboardViewModel>();
+            services.AddSingleton<HttpClient>();
 
             // Services
             services.AddSingleton<Service>();

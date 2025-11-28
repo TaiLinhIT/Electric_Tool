@@ -33,8 +33,8 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private int selectedYearPieChart;
         [ObservableProperty] private List<int> lstYearColumnChart;
         [ObservableProperty] private int selectedYearColumnChart;
-        [ObservableProperty] private ObservableCollection<Device> lstDeviceChartLine;
-        [ObservableProperty] private Device selectedDeviceChartLine;
+        [ObservableProperty] private ObservableCollection<DeviceVM> lstDeviceChartLine;
+        [ObservableProperty] private DeviceVM selectedDeviceChartLine;
         [ObservableProperty] private SeriesCollection chartBarSeriesCollection;
         [ObservableProperty] private string[] lstChartBarLabels;
         [ObservableProperty] private SeriesCollection chartLineSeriesCollection;
@@ -104,7 +104,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 InitializeChartPieAsyncWrapper(SelectedMonthPieChart, newValue);
             }
         }
-        partial void OnSelectedDeviceChartLineChanged(Device oldValue, Device newValue)
+        partial void OnSelectedDeviceChartLineChanged(DeviceVM oldValue, DeviceVM newValue)
         {
             if (newValue != null)
             {
@@ -390,7 +390,7 @@ namespace Electric_Meter.MVVM.ViewModels
         }
         public void LoadDeviceChartLine()
         {
-            LstDeviceChartLine = new ObservableCollection<Device>(_services.GetDevicesList());
+            LstDeviceChartLine = new ObservableCollection<DeviceVM>(_services.GetDevicesList());
             SelectedDeviceChartLine = LstDeviceChartLine.FirstOrDefault();
         }
         #endregion

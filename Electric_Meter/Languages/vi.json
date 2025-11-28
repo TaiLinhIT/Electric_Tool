@@ -1,4 +1,7 @@
 {
+    "Name device": "Tên thiết bị",
+    "Name code type": "Tên loại mã",
+    "Name type": "Tên loại",
     "CodeId": "Mã định danh mã",
     "DevId": "Mã định danh thiết bị",
     "Code": "Mã",

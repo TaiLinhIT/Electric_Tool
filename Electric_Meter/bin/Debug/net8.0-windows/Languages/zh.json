@@ -1,4 +1,7 @@
 {
+    "Name device": "设备名称",
+    "Name code type": "代码类型名称",
+    "Name type": "类型名称",
     "CodeId": "代码编号",
     "DevId": "设备编号",
     "Code": "代码",

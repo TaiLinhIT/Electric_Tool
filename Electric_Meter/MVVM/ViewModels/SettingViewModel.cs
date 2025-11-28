@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -11,6 +12,7 @@ using Electric_Meter.Models;
 using Electric_Meter.Services;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 // Lưu ý: Đảm bảo rằng lớp RelayCommand cũ trong Electric_Meter.Core đã được loại bỏ 
 // hoặc bạn đã xóa using Electric_Meter.Core; để tránh xung đột.
 
@@ -23,6 +25,7 @@ namespace Electric_Meter.MVVM.ViewModels
         private readonly Service _service;
         private readonly ToolViewModel _toolViewModel;
         private readonly AppSetting _appSetting;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly PowerTempWatchContext _context;
         #endregion
 
@@ -32,7 +35,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Constructor ]
-        public SettingViewModel(LanguageService languageService, Service service, ToolViewModel toolViewModel, AppSetting appSetting, PowerTempWatchContext context)
+        public SettingViewModel(LanguageService languageService, Service service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope, PowerTempWatchContext context)
         {
             _languageService = languageService;
             _languageService.LanguageChanged += UpdateTexts;
@@ -70,8 +73,8 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private bool isEnabledBtnEditControlCode;
         [ObservableProperty] private bool isEnabledBtnDeleteControlCode;
         [ObservableProperty] private string errorMessage;
-        [ObservableProperty] private Device selectedDevice;//  phải có cái này mới có onselectedchange
-        [ObservableProperty] private Controlcode selectedControlCode;
+        [ObservableProperty] private DeviceVM selectedDevice;//  phải có cái này mới có onselectedchange
+        [ObservableProperty] private ControlcodeVM selectedControlCode;
 
         #endregion
 
@@ -80,24 +83,24 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private int addressDevice;
         [ObservableProperty] private KeyValue selectedAssembling;
         [ObservableProperty] private string selectedChooseAssembling;
-        [ObservableProperty] private ObservableCollection<Device> deviceList = new();
-        [ObservableProperty] private ObservableCollection<Controlcode> controlCodeList = new();
+        [ObservableProperty] private ObservableCollection<DeviceVM> deviceList = new();
+        [ObservableProperty] private ObservableCollection<ControlcodeVM> controlCodeList = new();
         #endregion
         #region [ Properties - Controlcode Configuration ]
         [ObservableProperty] private int codeId;
         [ObservableProperty] private int devId;
         [ObservableProperty] private string code;
         [ObservableProperty] private string active;
-        [ObservableProperty] private string codeTypeId;
+        [ObservableProperty] private string codeType;
         [ObservableProperty] private string name;
         [ObservableProperty] private double factor;
-        [ObservableProperty] private int? typeId;
+        [ObservableProperty] private string type;
         [ObservableProperty] private decimal? high;
         [ObservableProperty] private decimal? low;
         [ObservableProperty] private int? ifShow;
         [ObservableProperty] private int? ifCal;
         [ObservableProperty] private int activeid;
-         public string ActiveText => activeid == 1 ? ActiveCommandText : InActiveCommandText;
+        public string ActiveText => activeid == 1 ? ActiveCommandText : InActiveCommandText;
 
         #endregion
         #region [ Properties - Communication Settings ]
@@ -153,7 +156,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     SelectedAssembling = LstAssembling.FirstOrDefault();
                 }
             });
-            
+
         }
         #endregion
         #region [ Methods - Language ]
@@ -191,6 +194,9 @@ namespace Electric_Meter.MVVM.ViewModels
             LowCommandText = _languageService.GetString("Low");
             IfShowCommandText = _languageService.GetString("IfShow");
             IfCalCommandText = _languageService.GetString("IfCal");
+            NameCodeTypeCommandText = _languageService.GetString("Name code type");
+            NameTypeCommandText = _languageService.GetString("Name type");
+
             Application.Current.Dispatcher.Invoke(() =>
             {
                 SetupAssemblingList();
@@ -231,6 +237,8 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string lowCommandText;
         [ObservableProperty] private string ifShowCommandText;
         [ObservableProperty] private string ifCalCommandText;
+        [ObservableProperty] private string nameCodeTypeCommandText;
+        [ObservableProperty] private string nameTypeCommandText;
         #endregion
 
         #region [ Methods - Load & Initialization ]
@@ -240,7 +248,7 @@ namespace Electric_Meter.MVVM.ViewModels
             try
             {
                 var devices = _service.GetDevicesList();
-                DeviceList = new ObservableCollection<Device>(devices);
+                DeviceList = new ObservableCollection<DeviceVM>(devices);
 
             }
             catch (Exception ex)
@@ -267,7 +275,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Methods - Selected Change ]
-        partial void OnSelectedDeviceChanged(Device value)
+        partial void OnSelectedDeviceChanged(DeviceVM value)
         {
             if (value == null)
             {
@@ -298,7 +306,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
         }
 
-        partial void OnSelectedControlCodeChanged(Controlcode value)
+        partial void OnSelectedControlCodeChanged(ControlcodeVM value)
         {
             if (value == null)
             {
@@ -306,10 +314,10 @@ namespace Electric_Meter.MVVM.ViewModels
                 DevId = 0;
                 Code = string.Empty;
                 Active = string.Empty;
-                CodeTypeId = string.Empty;
+                CodeType = string.Empty;
                 Name = string.Empty;
                 Factor = 0;
-                TypeId = 0;
+                Type = string.Empty;
                 High = 0;
                 Low = 0;
                 IfShow = 0;
@@ -321,10 +329,10 @@ namespace Electric_Meter.MVVM.ViewModels
             DevId = value.devid;
             Code = value.code;
             //Active = value.activeid;
-            CodeTypeId = value.codetypeid;
+            CodeType = value.codetype;
             Name = value.name;
             Factor = value.factor;
-            TypeId = value.typeid;
+            Type = value.type;
             High = value.high;
             Low = value.low;
             IfShow = value.ifshow;
@@ -457,14 +465,16 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
                 var newControlCode = new Controlcode
                 {
                     code = Code,
-                    //activeid = Active,
-                    codetypeid = CodeTypeId,
+                    activeid = _context.activeTypes.Where(x => x.name == Active).Select(x => x.activeid).FirstOrDefault(),
+                    codetypeid = _context.codetypes.Where(x => x.name == CodeType).Select(x => x.codetypeid).FirstOrDefault(),
                     name = Name,
                     factor = Factor,
-                    typeid = TypeId,
+                    typeid = _context.sensorTypes.Where(x =>x.name == Type).Select(x => x.typeid).FirstOrDefault(),
                     high = High,
                     low = Low,
                     ifshow = IfShow,

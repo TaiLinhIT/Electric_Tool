@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Electric_Meter.Models
 {
-    class DeviceVM
+    public class DeviceVM
     {
         public int devid { get; set; }
         public int address { get; set; }
@@ -15,7 +15,7 @@ namespace Electric_Meter.Models
         public string assembling { get; set; }
         public int baudrate { get; set; }
         public string active { get; set; }
-        public int typeid { get; set; }
+        public string type { get; set; }
         public int ifshow { get; set; }
     }
 }

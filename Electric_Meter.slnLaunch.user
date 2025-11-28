@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Electric_Meter\\Electric_Meter.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Electric_Meter_WebAPI\\Electric_Meter_WebAPI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

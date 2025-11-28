@@ -8,9 +8,7 @@
 			 mc:Ignorable="d"
 			 d:DesignWidth="900" Height="900"
 			 Background="#FFF">
-    <UserControl.Resources>
-        <conv:ActiveIdMultiLanguageConverter x:Key="ActiveIdMultiLanguageConverter"/>
-    </UserControl.Resources>
+    
 
 
 
@@ -123,17 +121,10 @@
                             <DataGridTextColumn Header="{Binding BaudrateDeviceCommandText}" Binding="{Binding baudrate}" Width="*"/>
                             <DataGridTextColumn Header="{Binding PortDeviceCommandText}" Binding="{Binding port}" Width="*"/>
                             <DataGridTextColumn Header="{Binding AssemblingCommandText}" Binding="{Binding assembling}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding ActiveCommandText}">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource ActiveIdMultiLanguageConverter}">
-                                        <Binding Path="activeid"/>
-                                        <Binding Path="DataContext.ActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                                        <Binding Path="DataContext.InActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="{Binding ActiveCommandText}" Binding="{Binding active}" Width="*"/>
+                            
 
-                            <DataGridTextColumn Header="{Binding TypeCommandText}" Binding="{Binding typeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding TypeCommandText}" Binding="{Binding type}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -303,20 +294,13 @@
     <DataGrid.Columns>
                             <DataGridTextColumn Header="{Binding CodeIdCommandText}" Binding="{Binding codeid}" Width="*"/>
                             <DataGridTextColumn Header="{Binding DevIdCommandText}" Binding="{Binding devid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding deviceName}" Width="*"/>
                             <DataGridTextColumn Header="{Binding CodeCommandText}" Binding="{Binding code}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding ActiveCommandText}">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource ActiveIdMultiLanguageConverter}">
-                                        <Binding Path="activeid"/>
-                                        <Binding Path="DataContext.ActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                                        <Binding Path="DataContext.InActiveCommandText" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="{Binding CodeTypeIdCommandText}" Binding="{Binding codetypeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding ActiveCommandText}" Binding="{Binding active}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameCodeTypeCommandText}" Binding="{Binding codetype}" Width="*"/>
                             <DataGridTextColumn Header="{Binding NameCommandText}" Binding="{Binding name}" Width="*"/>
                             <DataGridTextColumn Header="{Binding FactorCommandText}" Binding="{Binding factor}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding TypeIdCommandText}" Binding="{Binding typeid}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameTypeCommandText}" Binding="{Binding type}" Width="*"/>
                             <DataGridTextColumn Header="{Binding HighCommandText}" Binding="{Binding high}" Width="*"/>
                             <DataGridTextColumn Header="{Binding LowCommandText}" Binding="{Binding low}" Width="*"/>
                             <DataGridTextColumn Header="{Binding IfShowCommandText}" Binding="{Binding ifshow}" Width="*"/>

@@ -1,4 +1,5 @@
 using Electric_Meter_WebAPI.Dto;
+using Electric_Meter_WebAPI.Dto.DeviceDto;
 using Electric_Meter_WebAPI.Interfaces;
 using Electric_Meter_WebAPI.Models;
 
@@ -14,8 +15,9 @@ namespace Electric_Meter_WebAPI.Services
         private readonly IServiceScopeFactory _scopeFactory;
         public Service(PowerTempWatchContext powerTempWatchContext, IServiceScopeFactory serviceScope)
         {
-            //_context = powerTempWatchContext;
+
             _scopeFactory = serviceScope;
+
         }
 
         public async Task<int> DeleteToDevice(Device device)
@@ -55,19 +57,27 @@ namespace Electric_Meter_WebAPI.Services
         }
 
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-        public async Task<int> InsertToDevice(Device device)
+        public async Task<int> InsertToDevice(CreateDeviceDto dto)
         {
             try
             {
                 var scope = _scopeFactory.CreateScope();
                 var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                await _context.devices.AddAsync(device);
+                var data = new Device
+                {
+                    devid = dto.devid,
+                    name = dto.name,
+                    activeid = 1,
+                    typeid = dto.typeid,
+                    ifshow = 1
+                };
+                await _context.devices.AddAsync(data);
                 await _context.SaveChangesAsync();
                 return 1;
             }
             catch (Exception ex)
             {
-               
+
                 return 0;
             }
         }
@@ -102,19 +112,19 @@ namespace Electric_Meter_WebAPI.Services
 
                 try
                 {
-                    
+
                     await dbContext.sensorDatas.AddAsync(data);
                     var result = await dbContext.SaveChangesAsync();
 
-           
+
                     return result > 0;
                 }
                 catch (Exception ex)
                 {
-                    
+
                     if (ex.InnerException != null)
                     {
-                        
+
                     }
                     return false;
                 }
@@ -130,7 +140,8 @@ namespace Electric_Meter_WebAPI.Services
         {
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
+            //return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
+            return _context.devices.Where(x => x.activeid == 1 && x.typeid == 7).ToList();
         }
 
         public async Task<List<Device>> GetActiveDevicesAsync()
@@ -264,6 +275,32 @@ namespace Electric_Meter_WebAPI.Services
             }
         }
 
+        public Task<int> InsertToDevice(Device machine)
+        {
+            throw new NotImplementedException();
+        }
 
+        public async Task<List<DeviceDto>> GetListDevice()
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                return await _context.devices.Select(d => new DeviceDto
+                {
+                    devid = d.devid,
+                    name = d.name,
+                    active = d.activeid.ToString(),
+                    type = d.typeid.ToString(),
+                    ifshow = d.ifshow
+                }).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return new List<DeviceDto>();
+            }
+        }
     }
 }

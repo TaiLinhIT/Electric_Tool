@@ -26,7 +26,7 @@ namespace Electric_Meter_WebAPI.Controllers
             public DateTime CreatedAt { get; set; }
         }
 
-        [HttpPost("sensor")]
+        [HttpPost]
         public async Task<IActionResult> Send([FromBody] DataDto dto)
         {
             try

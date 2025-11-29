@@ -1,7 +1,9 @@
 using System.Net.Http;
+using System.Text;
 using System.Windows;
 
 using Electric_Meter.Dto;
+using Electric_Meter.Dto.DeviceDto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
@@ -19,9 +21,12 @@ namespace Electric_Meter.Services
 
         private readonly PowerTempWatchContext _context;
         private readonly IServiceScopeFactory _scopeFactory;
-        public Service(PowerTempWatchContext powerTempWatchContext, IServiceScopeFactory serviceScope)
+        private readonly HttpClient _httpClient;
+        public Service(IServiceScopeFactory serviceScope, HttpClient httpClient)
         {
-            //_context = powerTempWatchContext;
+            _httpClient = httpClient;
+            // Cập nhật từ HTTP sang HTTPS
+            _httpClient.BaseAddress = new Uri("https://localhost:7099");
             _scopeFactory = serviceScope;
         }
 
@@ -84,11 +89,11 @@ namespace Electric_Meter.Services
         {
             return number.ToString("X");
         }
-        // Hàm chuyển chuỗi hex thành mảng byte
-        public byte[] ConvertHexStringToByteArray(string hexString)
+        // Hàm chuyển chuỗi hex thành mảng byte
+        public byte[] ConvertHexStringToByteArray(string hexString)
         {
             hexString = hexString.Replace(" ", "").ToUpper(); // Chuẩn hóa chuỗi
-            if (hexString.Length % 2 != 0 || !System.Text.RegularExpressions.Regex.IsMatch(hexString, "^[0-9A-F]+$"))
+            if (hexString.Length % 2 != 0 || !System.Text.RegularExpressions.Regex.IsMatch(hexString, "^[0-9A-F]+$"))
             {
                 throw new FormatException("Invalid hex string.");
             }
@@ -206,8 +211,8 @@ namespace Electric_Meter.Services
             try
             {
                 return await _context.devices
-                    .FromSqlRaw("EXEC GetActiveDevices")
-                    .ToListAsync();
+                  .FromSqlRaw("EXEC GetActiveDevices")
+                  .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -222,8 +227,8 @@ namespace Electric_Meter.Services
             {
                 var param = new SqlParameter("@devid", devid);
                 return await _context.devices
-                    .FromSqlRaw("EXEC GetDeviceById @devid", param)
-                    .ToListAsync();
+                  .FromSqlRaw("EXEC GetDeviceById @devid", param)
+                  .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -236,13 +241,13 @@ namespace Electric_Meter.Services
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
 
-            // 1. Định nghĩa tham số SQL
-            var yearParam = new SqlParameter("@year", year);
+            // 1. Định nghĩa tham số SQL
+            var yearParam = new SqlParameter("@year", year);
 
-            // 2. Sử dụng FromSqlRaw
-            return await _context.Set<LatestSensorByDeviceYear>()
-                .FromSqlRaw("EXEC GetLatestSensorByDeviceYear @year", yearParam)
-                .ToListAsync();
+            // 2. Sử dụng FromSqlRaw
+            return await _context.Set<LatestSensorByDeviceYear>()
+        .FromSqlRaw("EXEC GetLatestSensorByDeviceYear @year", yearParam)
+        .ToListAsync();
         }
 
 
@@ -263,8 +268,8 @@ namespace Electric_Meter.Services
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
             var devidCurrent = new SqlParameter("@devid", devid);
             return await _context.Set<DailyConsumptionDTO>()
-                .FromSqlRaw($"EXEC GetDailyConsumption @devid", devidCurrent)
-                .ToListAsync();
+              .FromSqlRaw($"EXEC GetDailyConsumption @devid", devidCurrent)
+              .ToListAsync();
 
 
         }
@@ -275,8 +280,8 @@ namespace Electric_Meter.Services
             using var scope = _scopeFactory.CreateScope();
             var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
             return await _context.Set<TotalConsumptionPercentageDeviceDTO>()
-                .FromSqlInterpolated($"EXEC GetRatioMonthlyDevice @month={month}, @year={year}")
-                .ToListAsync();
+              .FromSqlInterpolated($"EXEC GetRatioMonthlyDevice @month={month}, @year={year}")
+              .ToListAsync();
 
         }
 
@@ -336,7 +341,82 @@ namespace Electric_Meter.Services
             }
         }
 
-       
+        public async Task<bool> CreateDevice(CreateDeviceDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/Device/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                // Bắt lỗi kết nối mạng. Sửa thông báo để hướng dẫn người dùng kiểm tra HTTPS.
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<List<DeviceDto>> GetListDevice()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/Device/");
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Không thể kết nối đến API Device.");
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var devices = JsonConvert.DeserializeObject<List<DeviceDto>>(content);
+                return devices ?? new List<DeviceDto>();
+            }
+            catch (HttpRequestException httpEx)
+            {
+
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return new List<DeviceDto>();
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return new List<DeviceDto>();
+            }
+        }
     }
 
 

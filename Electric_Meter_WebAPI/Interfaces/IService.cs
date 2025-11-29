@@ -1,11 +1,13 @@
 
 using Electric_Meter_WebAPI.Dto;
+using Electric_Meter_WebAPI.Dto.DeviceDto;
 using Electric_Meter_WebAPI.Models;
 
 namespace Electric_Meter_WebAPI.Interfaces
 {
     public interface IService
     {
+        Task<List<DeviceDto>> GetListDevice();
         Task<int> InsertToDevice(Device machine);
         //Task<List<DvElectricDataTemp>> GetListDataAsync(int address);
         Task<int> EditToDevice(Device machine);

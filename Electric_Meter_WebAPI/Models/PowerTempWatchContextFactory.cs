@@ -11,7 +11,7 @@ namespace Electric_Meter_WebAPI.Models
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
             var connectionString = configuration.GetSection("AppSettings:ConnectString").Value;

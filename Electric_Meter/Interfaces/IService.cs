@@ -1,10 +1,13 @@
 using Electric_Meter.Dto;
+using Electric_Meter.Dto.DeviceDto;
 using Electric_Meter.Models;
 
 namespace Electric_Meter.Interfaces
 {
     public interface IService
     {
+        Task<List<DeviceDto>> GetListDevice();
+        Task<bool> CreateDevice(CreateDeviceDto dto);
         Task<int> InsertToDevice(Device machine);
         Task<int> EditToDevice(Device machine);
         Task<int> DeleteToDevice(Device machine);

@@ -1,6 +1,6 @@
-using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input; // Quan trọng: Cung cấp [RelayCommand]
 
 using Electric_Meter.Configs;
+using Electric_Meter.Dto.DeviceDto;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 
@@ -243,12 +244,15 @@ namespace Electric_Meter.MVVM.ViewModels
 
         #region [ Methods - Load & Initialization ]
         // Giữ nguyên các hàm Load
-        private void LoadDeviceList()
+        private async Task LoadDeviceList()
         {
             try
             {
-                var devices = _service.GetDevicesList();
-                DeviceList = new ObservableCollection<DeviceVM>(devices);
+                var devices = await _service.GetListDevice();
+                //DeviceList = new ObservableCollection<DeviceVM>(new()
+                //{
+                    
+                //});
 
             }
             catch (Exception ex)
@@ -351,29 +355,31 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                if (!ValidateDeviceInput()) return;
+                //if (!ValidateDeviceInput()) return;
 
-                if (_context.devices.Where(x => x.typeid == 7)
-                    .Any(x => x.name == NameDevice || x.address == AddressDevice))
-                {
-                    MessageBox.Show("Device already exists!");
-                    return;
-                }
+                //if (_context.devices.Where(x => x.typeid == 7)
+                //    .Any(x => x.name == NameDevice || x.address == AddressDevice))
+                //{
+                //    MessageBox.Show("Device already exists!");
+                //    return;
+                //}
 
-                var newDevice = new Device
+                var newDevice = new CreateDeviceDto
                 {
+                    devid = AddressDevice, // Giá trị tạm thời, sẽ được DB tự động gán
                     name = NameDevice,
-                    port = SelectedPort,
-                    baudrate = SelectedBaudrate,
-                    address = AddressDevice,
-                    assembling = SelectedAssembling?.key,
                     typeid = 7,
-                    activeid = 1,
-                    ifshow = 1
+
+                    //port = SelectedPort,
+                    //baudrate = SelectedBaudrate,
+                    //address = AddressDevice,
+                    //assembling = SelectedAssembling?.key,
+                    //typeid = 7,
+                    //activeid = 1,
+                    //ifshow = 1
                 };
 
-                await _service.InsertToDevice(newDevice);
-                MessageBox.Show("Device added successfully!");
+                await _service.CreateDevice(newDevice);
                 LoadDeviceList();
             }
             catch (Exception ex)
@@ -474,7 +480,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     codetypeid = _context.codetypes.Where(x => x.name == CodeType).Select(x => x.codetypeid).FirstOrDefault(),
                     name = Name,
                     factor = Factor,
-                    typeid = _context.sensorTypes.Where(x =>x.name == Type).Select(x => x.typeid).FirstOrDefault(),
+                    typeid = _context.sensorTypes.Where(x => x.name == Type).Select(x => x.typeid).FirstOrDefault(),
                     high = High,
                     low = Low,
                     ifshow = IfShow,

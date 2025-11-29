@@ -9,12 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Electric_Meter;
 using Electric_Meter.Converters;
-using Electric_Meter.MVVM.ViewModels;
-using Electric_Meter.MVVM.Views;
-using Electric_Meter.Models;
-using LiveCharts.Wpf;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -24,6 +19,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.Integration;
 using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -36,6 +32,10 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
+using Wpf.Ui;
+using Wpf.Ui.Controls;
+using Wpf.Ui.Converters;
+using Wpf.Ui.Markup;
 
 
 namespace Electric_Meter.MVVM.Views {
@@ -74,7 +74,7 @@ namespace Electric_Meter.MVVM.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Electric_Meter;V1.0.0.0;component/mvvm/views/settingview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Electric_Meter;component/mvvm/views/settingview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\MVVM\Views\SettingView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

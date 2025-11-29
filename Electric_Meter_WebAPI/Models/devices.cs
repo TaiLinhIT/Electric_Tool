@@ -7,12 +7,9 @@ namespace Electric_Meter_WebAPI.Models
     public class Device
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int devid { get; set; }
-        public int address { get; set; }
         public string name { get; set; }
-        public string port { get; set; }
-        public string assembling { get; set; }
-        public int baudrate { get; set; }
         public int activeid { get; set; }
         public int typeid { get; set; }
         public int ifshow { get; set; }

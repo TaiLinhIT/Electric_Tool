@@ -1,4 +1,6 @@
 {
+    "Sensor type" : "Loại cảm biến",
+    "Device id": "Mã định danh thiết bị",
     "Name device": "Tên thiết bị",
     "Name code type": "Tên loại mã",
     "Name type": "Tên loại",

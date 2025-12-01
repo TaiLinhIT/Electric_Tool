@@ -313,11 +313,11 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             if (value != null)
             {
-                // Lấy danh sách device theo assembling
-                LstDevice = new ObservableCollection<Device>(_service.GetDevicesByAssembling(value.key));
+                //// Lấy danh sách device theo assembling
+                //LstDevice = new ObservableCollection<Device>(_service.GetDevicesByAssembling(value.key));
 
-                // Chọn device đầu tiên
-                SelectedDevice = LstDevice.FirstOrDefault();
+                //// Chọn device đầu tiên
+                //SelectedDevice = LstDevice.FirstOrDefault();
             }
         }
         partial void OnSelectedDeviceChanged(Device value)

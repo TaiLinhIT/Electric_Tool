@@ -73,13 +73,11 @@ namespace Electric_Meter.MVVM.Views
         {
             if (DeviceGrid.Columns.Count >= 5)
             {
-                DeviceGrid.Columns[0].Header = _vm.AddressDeviceCommandText;
+                DeviceGrid.Columns[0].Header = _vm.DevidCommandText;
                 DeviceGrid.Columns[1].Header = _vm.NameDeviceCommandText;
-                DeviceGrid.Columns[2].Header = _vm.BaudrateDeviceCommandText;
-                DeviceGrid.Columns[3].Header = _vm.PortDeviceCommandText;
-                DeviceGrid.Columns[4].Header = _vm.AssemblingCommandText;
-                DeviceGrid.Columns[5].Header = _vm.ActiveCommandText;
-                DeviceGrid.Columns[6].Header = _vm.TypeIdCommandText;
+                DeviceGrid.Columns[2].Header = _vm.ActiveCommandText;
+                DeviceGrid.Columns[3].Header = _vm.TypeIdCommandText;
+                DeviceGrid.Columns[4].Header = _vm.IfShowCommandText;
             }
             if (ControlcodeGrid.Columns.Count >= 13)
             {

@@ -67,9 +67,9 @@ namespace Electric_Meter_WebAPI.Services
                 {
                     devid = dto.devid,
                     name = dto.name,
-                    activeid = 1,
+                    activeid = dto.activeid,
                     typeid = dto.typeid,
-                    ifshow = 1
+                    ifshow = dto.ifshow
                 };
                 await _context.devices.AddAsync(data);
                 await _context.SaveChangesAsync();
@@ -286,20 +286,47 @@ namespace Electric_Meter_WebAPI.Services
             {
                 using var scope = _scopeFactory.CreateScope();
                 var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                return await _context.devices.Select(d => new DeviceDto
-                {
-                    devid = d.devid,
-                    name = d.name,
-                    active = d.activeid.ToString(),
-                    type = d.typeid.ToString(),
-                    ifshow = d.ifshow
-                }).ToListAsync();
+                var results = from x in _context.devices
+                              join y in _context.activeTypes on x.activeid equals y.activeid
+                              join z in _context.sensorTypes on x.typeid equals z.typeid
+                              select new DeviceDto
+                              {
+                                  devid = x.devid,
+                                  name = x.name,
+                                  active = y.name,
+                                  type = z.name,
+                                  ifshow = x.ifshow
+                              };
+                return await results.ToListAsync();
             }
             catch (Exception ex)
             {
 
                 Console.WriteLine(ex.Message);
                 return new List<DeviceDto>();
+            }
+        }
+
+        public async Task<int> EditDevice(EditDeviceDto dto)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var findDevice = _context.devices.FirstOrDefault(x => x.devid == dto.devid);
+                findDevice.name = dto.name;
+                findDevice.typeid = dto.typeid;
+                findDevice.activeid = dto.activeid;
+                findDevice.ifshow = dto.ifshow;
+
+                 _context.devices.Update(findDevice);
+                await _context.SaveChangesAsync();
+                return 1;
+            }
+            catch (Exception ex)
+            {
+
+                return 0;
             }
         }
     }

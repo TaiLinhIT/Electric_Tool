@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -74,17 +73,17 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private bool isEnabledBtnEditControlCode;
         [ObservableProperty] private bool isEnabledBtnDeleteControlCode;
         [ObservableProperty] private string errorMessage;
-        [ObservableProperty] private DeviceVM selectedDevice;//  phải có cái này mới có onselectedchange
+        [ObservableProperty] private DeviceDto selectedDevice;//  phải có cái này mới có onselectedchange
         [ObservableProperty] private ControlcodeVM selectedControlCode;
 
         #endregion
 
         #region [ Properties - Device Configuration ]
         [ObservableProperty] private string nameDevice = string.Empty;
-        [ObservableProperty] private int addressDevice;
-        [ObservableProperty] private KeyValue selectedAssembling;
-        [ObservableProperty] private string selectedChooseAssembling;
-        [ObservableProperty] private ObservableCollection<DeviceVM> deviceList = new();
+        [ObservableProperty] private int devid;
+        [ObservableProperty] private string selectedActive;
+        [ObservableProperty] private string selectedSensorType;
+        [ObservableProperty] private ObservableCollection<DeviceDto> deviceList = new();
         [ObservableProperty] private ObservableCollection<ControlcodeVM> controlCodeList = new();
         #endregion
         #region [ Properties - Controlcode Configuration ]
@@ -105,12 +104,10 @@ namespace Electric_Meter.MVVM.ViewModels
 
         #endregion
         #region [ Properties - Communication Settings ]
-        [ObservableProperty] private string selectedPort;
-        [ObservableProperty] private int selectedBaudrate;
-        [ObservableProperty]
-        private ObservableCollection<string> lstPort = new();
+        [ObservableProperty] private ObservableCollection<string> lstPort = new();
 
-        [ObservableProperty] private ObservableCollection<int> lstBaudrate = new();
+        [ObservableProperty] private ObservableCollection<string> lstActive = new();
+        [ObservableProperty] private ObservableCollection<string> lstSensorType = new();
         [ObservableProperty]
         private List<KeyValue> lstAssembling = new();
 
@@ -120,49 +117,49 @@ namespace Electric_Meter.MVVM.ViewModels
         private void GetDefaultSetting()
         {
 
-            SetupAssemblingList();
+            //SetupAssemblingList();
 
-            lstBaudrate = new() { 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 };
-
-            lstPort = new() { "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM10" };
+            LstActive = new ObservableCollection<string>(_service.GetActiveTypes().Select(x => x.name));
+            LstSensorType = new ObservableCollection<string>(_service.GetSensorTypes().Select(x =>x.name));
         }
-        private void SetupAssemblingList()
-        {
-            // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                // Cập nhật lại danh sách LstAssembling
-                LstAssembling = new()
-                {
-                    new KeyValue { key = "A", value = $"{AssemblingText} A" },
-                    new KeyValue { key = "B", value = $"{AssemblingText} B" },
-                    new KeyValue { key = "C", value = $"{AssemblingText} C" },
-                    new KeyValue { key = "D", value = $"{AssemblingText} D" }
-                };
+        //private void SetupAssemblingList()
+        //{
+        //    // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
+        //    Application.Current.Dispatcher.Invoke(() =>
+        //    {
+        //        // Cập nhật lại danh sách LstAssembling
+        //        LstAssembling = new()
+        //        {
+        //            new KeyValue { key = "A", value = $"{AssemblingText} A" },
+        //            new KeyValue { key = "B", value = $"{AssemblingText} B" },
+        //            new KeyValue { key = "C", value = $"{AssemblingText} C" },
+        //            new KeyValue { key = "D", value = $"{AssemblingText} D" }
+        //        };
 
-                // Đảm bảo giữ lại KeyValue đã chọn
-                if (SelectedAssembling != null)
-                {
-                    var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
+        //        // Đảm bảo giữ lại KeyValue đã chọn
+        //        if (SelectedAssembling != null)
+        //        {
+        //            var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
 
-                    if (newSelected != null)
-                    {
-                        // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
-                        SelectedAssembling = newSelected;
-                    }
-                }
-                // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
-                else
-                {
-                    SelectedAssembling = LstAssembling.FirstOrDefault();
-                }
-            });
+        //            if (newSelected != null)
+        //            {
+        //                // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
+        //                SelectedAssembling = newSelected;
+        //            }
+        //        }
+        //        // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
+        //        else
+        //        {
+        //            SelectedAssembling = LstAssembling.FirstOrDefault();
+        //        }
+        //    });
 
-        }
+        //}
         #endregion
         #region [ Methods - Language ]
         public void UpdateTexts()
         {
+            SenSorTypeCommandText = _languageService.GetString("Sensor type");
             AddDeviceCommandText = _languageService.GetString("Add a new device");
             EditDeviceCommandText = _languageService.GetString("Edit device");
             DeleteDeviceCommandText = _languageService.GetString("Delete device");
@@ -171,7 +168,7 @@ namespace Electric_Meter.MVVM.ViewModels
             DeleteControlCodeCommandText = _languageService.GetString("Delete controlcode");
             NameDeviceCommandText = _languageService.GetString("Name device");
             AddressDeviceCommandText = _languageService.GetString("Address device");
-            BaudrateDeviceCommandText = _languageService.GetString("Baudrate");
+            DevidCommandText = _languageService.GetString("Device id");
             PortDeviceCommandText = _languageService.GetString("Port");
             AssemblingCommandText = _languageService.GetString("Assembling");
             AssemblingText = _languageService.GetString("Assembling");
@@ -198,20 +195,22 @@ namespace Electric_Meter.MVVM.ViewModels
             NameCodeTypeCommandText = _languageService.GetString("Name code type");
             NameTypeCommandText = _languageService.GetString("Name type");
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                SetupAssemblingList();
-            });
+            //Application.Current.Dispatcher.Invoke(() =>
+            //{
+            //    SetupAssemblingList();
+            //});
 
 
         }
         #endregion
 
         #region [ Language Texts ]
+        [ObservableProperty] private string senSorTypeCommandText;
         [ObservableProperty] private string addDeviceCommandText;
         [ObservableProperty] private string editDeviceCommandText;
         [ObservableProperty] private string deleteDeviceCommandText;
         [ObservableProperty] private string addressDeviceCommandText;
+        [ObservableProperty] private string devidCommandText;
         [ObservableProperty] private string baudrateDeviceCommandText;
         [ObservableProperty] private string nameDeviceCommandText;
         [ObservableProperty] private string portDeviceCommandText;
@@ -249,10 +248,7 @@ namespace Electric_Meter.MVVM.ViewModels
             try
             {
                 var devices = await _service.GetListDevice();
-                //DeviceList = new ObservableCollection<DeviceVM>(new()
-                //{
-                    
-                //});
+                DeviceList = new(devices);
 
             }
             catch (Exception ex)
@@ -279,28 +275,23 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Methods - Selected Change ]
-        partial void OnSelectedDeviceChanged(DeviceVM value)
+        partial void OnSelectedDeviceChanged(DeviceDto value)
         {
             if (value == null)
             {
                 NameDevice = string.Empty;
-                AddressDevice = 0;
-                SelectedPort = null;
-                SelectedBaudrate = 0;
-                SelectedAssembling = null;
-                SelectedChooseAssembling = null;
+                SelectedActive = string.Empty;
+                SelectedSensorType = string.Empty;
                 IsEnableBtnEditDevice = false;
                 return;
             }
             LoadControlCodeList(value.devid);
             // Gán dữ liệu từ dòng đang chọn sang các input
+            Devid = value.devid;
             NameDevice = value.name;
-            AddressDevice = value.address;
-            SelectedPort = value.port;
-            SelectedBaudrate = value.baudrate;
+            SelectedActive = value.active;
+            SelectedSensorType = value.type;
 
-            // Nếu bạn có logic đặc biệt cho Thành hình & Type
-            SelectedAssembling = LstAssembling.FirstOrDefault(x => x.key == value.assembling);
 
             // Cho phép nút Edit và Delete
             IsEnableBtnEditDevice = true;
@@ -355,28 +346,15 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                //if (!ValidateDeviceInput()) return;
-
-                //if (_context.devices.Where(x => x.typeid == 7)
-                //    .Any(x => x.name == NameDevice || x.address == AddressDevice))
-                //{
-                //    MessageBox.Show("Device already exists!");
-                //    return;
-                //}
+                
 
                 var newDevice = new CreateDeviceDto
                 {
-                    devid = AddressDevice, // Giá trị tạm thời, sẽ được DB tự động gán
+                    devid = Devid,
                     name = NameDevice,
-                    typeid = 7,
-
-                    //port = SelectedPort,
-                    //baudrate = SelectedBaudrate,
-                    //address = AddressDevice,
-                    //assembling = SelectedAssembling?.key,
-                    //typeid = 7,
-                    //activeid = 1,
-                    //ifshow = 1
+                    typeid = _service.GetSensorTypes().FirstOrDefault(x => x.name == SelectedSensorType) ?.typeid ?? 0,
+                    activeid = _service.GetActiveTypes().FirstOrDefault(x => x.name == SelectedActive)?.activeid ?? 0,
+                    ifshow = 1 // Mặc định hiển thị
                 };
 
                 await _service.CreateDevice(newDevice);
@@ -412,14 +390,11 @@ namespace Electric_Meter.MVVM.ViewModels
                     MessageBox.Show("Device not found.");
                     return;
                 }
-
-                find.address = AddressDevice;
-                find.port = SelectedPort;
-                find.baudrate = SelectedBaudrate;
                 find.name = NameDevice;
-                find.assembling = SelectedAssembling?.key;
-
-                await _service.EditToDevice(find);
+                find.typeid = _service.GetSensorTypes().FirstOrDefault(x => x.name == SelectedSensorType)?.typeid ?? find.typeid;
+                find.activeid = _service.GetActiveTypes().FirstOrDefault(x => x.name == SelectedActive)?.activeid ?? find.activeid;
+                find.ifshow = 1; // Giữ nguyên hiển thị
+                await _service.UpdateDevice(find);
                 MessageBox.Show("Edit successfully!");
                 LoadDeviceList();
             }
@@ -548,20 +523,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(AddressDevice.ToString()) ||
-                !int.TryParse(AddressDevice.ToString(), out int addr) || addr < 1)
-            {
-                ErrorMessage = "AddressDevice must be more than 1";
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(SelectedPort) ||
-                SelectedBaudrate == 0 ||
-                SelectedAssembling.key == null)
-            {
-                ErrorMessage = "Please fill all required fields.";
-                return false;
-            }
+           
 
             ErrorMessage = string.Empty;
             return true;

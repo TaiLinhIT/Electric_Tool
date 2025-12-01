@@ -304,7 +304,7 @@ namespace Electric_Meter.Services
         {
             foreach (var item in GetDevices())
             {
-                int capturedAddress = item.address;
+                int capturedAddress = item.devid;
                 _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
             }
 
@@ -510,7 +510,7 @@ namespace Electric_Meter.Services
 
                 //Tool.Log($"Đang tìm IdMachine tương ứng với địa chỉ {address}...");
 
-                var device = _context.devices.Where(x => x.typeid == 7 && x.ifshow == 1).FirstOrDefault(m => m.address == address);
+                var device = _context.devices.Where(x => x.typeid == 7 && x.ifshow == 1).FirstOrDefault(m => m.devid == address);
                 if (device == null)
                 {
                     Tool.Log($"Không tìm thấy IdMachine với địa chỉ {address}");

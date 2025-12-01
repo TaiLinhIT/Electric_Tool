@@ -1,6 +1,6 @@
-namespace Electric_Meter.Dto.DeviceDto
+namespace Electric_Meter_WebAPI.Dto.DeviceDto
 {
-    public class CreateDeviceDto
+    public class EditDeviceDto
     {
         public int devid { get; set; }
         public string name { get; set; }

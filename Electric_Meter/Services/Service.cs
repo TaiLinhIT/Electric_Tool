@@ -151,11 +151,11 @@ namespace Electric_Meter.Services
                                 select new DeviceVM
                                 {
                                     devid = x.devid,
-                                    address = x.address,
+                                    //address = x.address,
                                     name = x.name,
-                                    port = x.port,
-                                    assembling = x.assembling,
-                                    baudrate = x.baudrate,
+                                    //port = x.port,
+                                    //assembling = x.assembling,
+                                    //baudrate = x.baudrate,
                                     active = y.name,
                                     type = z.name,
                                     ifshow = x.ifshow
@@ -199,12 +199,12 @@ namespace Electric_Meter.Services
             return lstControlCode.ToList();
         }
 
-        public List<Device> GetDevicesByAssembling(string key)
-        {
-            using var scope = _scopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
-        }
+        //public List<Device> GetDevicesByAssembling(string key)
+        //{
+        //    using var scope = _scopeFactory.CreateScope();
+        //    var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+        //    return _context.devices.Where(x => x.assembling.Contains(key) && x.activeid == 1 && x.typeid == 7).ToList();
+        //}
 
         public async Task<List<Device>> GetActiveDevicesAsync()
         {
@@ -415,6 +415,58 @@ namespace Electric_Meter.Services
                 // Bắt các lỗi khác
                 Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
                 return new List<DeviceDto>();
+            }
+        }
+
+        public List<ActiveType> GetActiveTypes()
+        {
+            var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            return _context.activeTypes.ToList();
+        }
+
+        public List<SensorType> GetSensorTypes()
+        {
+            var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+            return _context.sensorTypes.ToList();
+        }
+
+        public async Task<bool> UpdateDevice(EditDeviceDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync("api/Device/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Sửa dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"Sửa dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
             }
         }
     }

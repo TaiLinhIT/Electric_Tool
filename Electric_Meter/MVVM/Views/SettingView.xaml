@@ -52,8 +52,8 @@
                                     <RowDefinition Height="35"/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding AddressDeviceCommandText}" Style="{StaticResource  Content Textblock}"/>
-                                    <TextBox Width="150" Text="{Binding AddressDevice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Width="120" Text="{Binding DevidCommandText}" Style="{StaticResource  Content Textblock}"/>
+                                    <TextBox Width="150" Text="{Binding Devid,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource Content TextBox}"
                                 />
                                  </StackPanel>
@@ -70,18 +70,18 @@
                                     <RowDefinition Height="35"/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding BaudrateDeviceCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBlock Width="120" Text="{Binding ActiveCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
                                     <ComboBox Width="150"
-	                                    ItemsSource="{Binding LstBaudrate}"
-	                                    SelectedItem="{Binding SelectedBaudrate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+	                                    ItemsSource="{Binding LstActive}"
+	                                    SelectedItem="{Binding SelectedActive,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Style="{StaticResource Content Combobox}"
 	                                    />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Text="{Binding PortDeviceCommandText}" Width="120" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBlock Text="{Binding SenSorTypeCommandText}" Width="120" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
                                     <ComboBox Width="150"
-                                        ItemsSource="{Binding LstPort}"
-                                        SelectedItem="{Binding SelectedPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding LstSensorType}"
+                                        SelectedItem="{Binding SelectedSensorType,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource Content Combobox}"
                                         />
                                 </StackPanel>
@@ -91,17 +91,7 @@
                                     <RowDefinition Height="35"/>
                                     <RowDefinition Height="35"/>
                                 </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Text="{Binding AssemblingCommandText}" Width="120" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
-                                    <ComboBox Width="150"
-							                ItemsSource="{Binding LstAssembling}"
-							                DisplayMemberPath="value"
-							                SelectedValuePath="key"
-							                SelectedItem="{Binding SelectedAssembling,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             Style="{StaticResource Content Combobox}"
-							                />
-
-                                </StackPanel>
+                                
                             </Grid>
                             
                         </Grid>
@@ -116,15 +106,11 @@
 					                        >
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="{Binding AddressDeviceCommandText}" Binding="{Binding address}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding DevidCommandText}" Binding="{Binding devid}" Width="*"/>
                             <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding name}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding BaudrateDeviceCommandText}" Binding="{Binding baudrate}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding PortDeviceCommandText}" Binding="{Binding port}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding AssemblingCommandText}" Binding="{Binding assembling}" Width="*"/>
                             <DataGridTextColumn Header="{Binding ActiveCommandText}" Binding="{Binding active}" Width="*"/>
-                            
-
                             <DataGridTextColumn Header="{Binding TypeCommandText}" Binding="{Binding type}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding IfShowCommandText}" Binding="{Binding ifshow}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

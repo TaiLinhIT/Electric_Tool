@@ -29,6 +29,21 @@ namespace Electric_Meter_WebAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateDevice([FromBody] EditDeviceDto dto)
+        {
+            try
+            {
+                await _service.EditDevice(dto);
+                return Ok(new { message = "Data received successfully" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Exception: {ex.Message}");
+                // Rất quan trọng: Server cần trả về lỗi 500 nếu catch được lỗi.
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> GetListDevice()
         {

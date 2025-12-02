@@ -1,22 +1,25 @@
 using Electric_Meter.Dto;
+using Electric_Meter.Dto.ActiveTypeDto;
 using Electric_Meter.Dto.DeviceDto;
+using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Models;
 
 namespace Electric_Meter.Interfaces
 {
     public interface IService
     {
-        List<ActiveType> GetActiveTypes();
-        List<SensorType> GetSensorTypes();
-        Task<List<DeviceDto>> GetListDevice();
-        Task<bool> CreateDevice(CreateDeviceDto dto);
-        Task<bool> UpdateDevice(EditDeviceDto dto);
-        Task<int> InsertToDevice(Device machine);
-        Task<int> EditToDevice(Device machine);
-        Task<int> DeleteToDevice(Device machine);
-        Task<int> InsertToControlcode(Controlcode code);
-        Task<int> EditToControlcode(Controlcode code);
-        Task<int> DeleteToControlcode(Controlcode code);
+        Task< List<ActiveTypeDto>> GetActiveTypesAsync();
+        Task<List<SensorTypeDto>> GetSensorTypesAsync();
+        Task<List<DeviceDto>> GetListDeviceAsync();
+        Task<DeviceDto> GetDeviceByDevidAsync(int devid);
+        Task<bool> CreateDeviceAsync(CreateDeviceDto dto);
+        Task<bool> UpdateDeviceAsync(EditDeviceDto dto);
+        Task<int> InsertToDeviceAsync(Device machine);
+        Task<int> EditToDeviceAsync(Device machine);
+        Task<int> DeleteToDeviceAsync(Device machine);
+        Task<int> InsertToControlcodeAsync(Controlcode code);
+        Task<int> EditToControlcodeAsync(Controlcode code);
+        Task<int> DeleteToControlcodeAsync(Controlcode code);
         Task<bool> InsertToSensorDataAsync(SensorData data);
         List<DeviceVM> GetDevicesList();
         List<ControlcodeVM> GetControlCodeListByDevid(int devid);

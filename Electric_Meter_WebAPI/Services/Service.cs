@@ -1,10 +1,13 @@
 using Electric_Meter_WebAPI.Dto;
+using Electric_Meter_WebAPI.Dto.ActiveTypeDto;
 using Electric_Meter_WebAPI.Dto.DeviceDto;
+using Electric_Meter_WebAPI.Dto.SensorTypeDto;
 using Electric_Meter_WebAPI.Interfaces;
 using Electric_Meter_WebAPI.Models;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Writers;
 
 namespace Electric_Meter_WebAPI.Services
 {
@@ -319,7 +322,7 @@ namespace Electric_Meter_WebAPI.Services
                 findDevice.activeid = dto.activeid;
                 findDevice.ifshow = dto.ifshow;
 
-                 _context.devices.Update(findDevice);
+                _context.devices.Update(findDevice);
                 await _context.SaveChangesAsync();
                 return 1;
             }
@@ -327,6 +330,77 @@ namespace Electric_Meter_WebAPI.Services
             {
 
                 return 0;
+            }
+        }
+
+        public async Task<DeviceDto> GetDeviceByDevid(int devid)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var results = await (from x in _context.devices
+                                     where x.devid == devid
+                                     join y in _context.activeTypes on x.activeid equals y.activeid
+                                     join z in _context.sensorTypes on x.typeid equals z.typeid
+                                     select new DeviceDto
+                                     {
+                                         devid = x.devid,
+                                         name = x.name,
+                                         active = y.name,
+                                         type = z.name,
+                                         ifshow = x.ifshow
+                                     }
+                              ).FirstOrDefaultAsync();
+                return results ?? new DeviceDto();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return new DeviceDto();
+            }
+        }
+
+        public async Task<List<ActiveTypeDto>> GetActiveTypesAsync()
+        {
+            try
+            {
+                using var Scope = _scopeFactory.CreateScope();
+                var _context = Scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var results = await(_context.activeTypes.ToListAsync());
+                var dto = results.Select(x => new ActiveTypeDto
+                {
+                    activeid = x.activeid,
+                    name = x.name,
+                }).ToList();
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<ActiveTypeDto>();
+            }
+        }
+
+        public async Task<List<SensorTypeDto>> GetSensorTypesAsync()
+        {
+            try
+            {
+                using var Scope = _scopeFactory.CreateScope();
+                var _context = Scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var results = await(_context.sensorTypes.ToListAsync());
+                var dto = results.Select(x => new SensorTypeDto
+                {
+                    typeid = x.typeid,
+                    name = x.name,
+                }).ToList();
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<SensorTypeDto>();
             }
         }
     }

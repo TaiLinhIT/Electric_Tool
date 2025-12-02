@@ -1,12 +1,17 @@
 
 using Electric_Meter_WebAPI.Dto;
+using Electric_Meter_WebAPI.Dto.ActiveTypeDto;
 using Electric_Meter_WebAPI.Dto.DeviceDto;
+using Electric_Meter_WebAPI.Dto.SensorTypeDto;
 using Electric_Meter_WebAPI.Models;
 
 namespace Electric_Meter_WebAPI.Interfaces
 {
     public interface IService
     {
+        Task<List<ActiveTypeDto>> GetActiveTypesAsync();
+        Task<List<SensorTypeDto>> GetSensorTypesAsync();
+        Task<DeviceDto> GetDeviceByDevid(int devid);
         Task<List<DeviceDto>> GetListDevice();
         Task<int> InsertToDevice(CreateDeviceDto dto);
         Task<int> EditDevice(EditDeviceDto dto);

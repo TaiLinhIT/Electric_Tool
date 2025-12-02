@@ -3,7 +3,9 @@ using System.Text;
 using System.Windows;
 
 using Electric_Meter.Dto;
+using Electric_Meter.Dto.ActiveTypeDto;
 using Electric_Meter.Dto.DeviceDto;
+using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
@@ -30,7 +32,7 @@ namespace Electric_Meter.Services
             _scopeFactory = serviceScope;
         }
 
-        public async Task<int> DeleteToDevice(Device device)
+        public async Task<int> DeleteToDeviceAsync(Device device)
         {
             try
             {
@@ -49,7 +51,7 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<int> EditToDevice(Device device)
+        public async Task<int> EditToDeviceAsync(Device device)
         {
             try
             {
@@ -69,7 +71,7 @@ namespace Electric_Meter.Services
         }
 
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-        public async Task<int> InsertToDevice(Device device)
+        public async Task<int> InsertToDeviceAsync(Device device)
         {
             try
             {
@@ -285,7 +287,7 @@ namespace Electric_Meter.Services
 
         }
 
-        public async Task<int> InsertToControlcode(Controlcode code)
+        public async Task<int> InsertToControlcodeAsync(Controlcode code)
         {
             try
             {
@@ -304,7 +306,7 @@ namespace Electric_Meter.Services
 
         }
 
-        public async Task<int> EditToControlcode(Controlcode code)
+        public async Task<int> EditToControlcodeAsync(Controlcode code)
         {
             try
             {
@@ -322,7 +324,7 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<int> DeleteToControlcode(Controlcode code)
+        public async Task<int> DeleteToControlcodeAsync(Controlcode code)
         {
             try
             {
@@ -341,7 +343,7 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<bool> CreateDevice(CreateDeviceDto dto)
+        public async Task<bool> CreateDeviceAsync(CreateDeviceDto dto)
         {
             try
             {
@@ -380,7 +382,7 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<List<DeviceDto>> GetListDevice()
+        public async Task<List<DeviceDto>> GetListDeviceAsync()
         {
             try
             {
@@ -418,21 +420,89 @@ namespace Electric_Meter.Services
             }
         }
 
-        public List<ActiveType> GetActiveTypes()
+        public async Task<List<ActiveTypeDto>> GetActiveTypesAsync()
         {
-            var scope = _scopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            return _context.activeTypes.ToList();
+            try
+            {
+                var response = await _httpClient.GetAsync("api/ActiveType/");
+
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Không thể kết nối đến API Device.");
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var activetypes = JsonConvert.DeserializeObject<List<ActiveTypeDto>>(content);
+                return activetypes ?? new List<ActiveTypeDto>();
+            }
+
+            catch (HttpRequestException httpEx)
+            {
+
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return new List<ActiveTypeDto>();
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return new List<ActiveTypeDto>();
+            }
         }
 
-        public List<SensorType> GetSensorTypes()
+        public async Task<List<SensorTypeDto>> GetSensorTypesAsync()
         {
-            var scope = _scopeFactory.CreateScope();
-            var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-            return _context.sensorTypes.ToList();
+            try
+            {
+                var response = await _httpClient.GetAsync("api/SensorType/");
+
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Không thể kết nối đến API Device.");
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var sensortypes = JsonConvert.DeserializeObject<List<SensorTypeDto>>(content);
+                return sensortypes ?? new List<SensorTypeDto>();
+            }
+
+            catch (HttpRequestException httpEx)
+            {
+
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return new List<SensorTypeDto>();
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return new List<SensorTypeDto>();
+            }
         }
 
-        public async Task<bool> UpdateDevice(EditDeviceDto dto)
+        public async Task<bool> UpdateDeviceAsync(EditDeviceDto dto)
         {
             try
             {
@@ -467,6 +537,45 @@ namespace Electric_Meter.Services
                 // Bắt các lỗi khác
                 Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
                 return false;
+            }
+        }
+
+        public async Task<DeviceDto> GetDeviceByDevidAsync(int devid)
+        {
+
+            try
+            {
+                var response = await _httpClient.GetAsync("api/Device/{devid}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Không thể kết nối đến API Device.");
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var devices = JsonConvert.DeserializeObject<DeviceDto>(content);
+                return devices ?? new DeviceDto();
+            }
+            catch (HttpRequestException httpEx)
+            {
+
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return new DeviceDto();
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return new DeviceDto();
             }
         }
     }

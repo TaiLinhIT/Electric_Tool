@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -55,8 +56,8 @@ namespace Electric_Meter.MVVM.ViewModels
 
             // Load dữ liệu ban đầu
             //LoadAssemblings();
-            LoadDeviceList();
-            GetDefaultSetting();
+            LoadDeviceListAsync();
+            GetDefaultSettingAsync();
 
         }
         #endregion
@@ -114,13 +115,17 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
         #region [ Methods - Get Default setting ]
 
-        private void GetDefaultSetting()
+        private async Task GetDefaultSettingAsync()
         {
 
             //SetupAssemblingList();
 
-            LstActive = new ObservableCollection<string>(_service.GetActiveTypes().Select(x => x.name));
-            LstSensorType = new ObservableCollection<string>(_service.GetSensorTypes().Select(x =>x.name));
+            LstActive = new ObservableCollection<string>(
+                (await _service.GetActiveTypesAsync()).Select(x => x.name)
+                );
+            LstSensorType = new ObservableCollection<string>(
+                (await _service.GetSensorTypesAsync()).Select(x => x.name)
+                );
         }
         //private void SetupAssemblingList()
         //{
@@ -243,11 +248,11 @@ namespace Electric_Meter.MVVM.ViewModels
 
         #region [ Methods - Load & Initialization ]
         // Giữ nguyên các hàm Load
-        private async Task LoadDeviceList()
+        private async Task LoadDeviceListAsync()
         {
             try
             {
-                var devices = await _service.GetListDevice();
+                var devices = await _service.GetListDeviceAsync();
                 DeviceList = new(devices);
 
             }
@@ -352,13 +357,13 @@ namespace Electric_Meter.MVVM.ViewModels
                 {
                     devid = Devid,
                     name = NameDevice,
-                    typeid = _service.GetSensorTypes().FirstOrDefault(x => x.name == SelectedSensorType) ?.typeid ?? 0,
-                    activeid = _service.GetActiveTypes().FirstOrDefault(x => x.name == SelectedActive)?.activeid ?? 0,
+                    //typeid = _service.GetSensorTypesAsync().fi(x => x.name == SelectedSensorType) ?.typeid ?? 0,
+                    //activeid = _service.GetActiveTypesAsync().FirstOrDefault(x => x.name == SelectedActive)?.activeid ?? 0,
                     ifshow = 1 // Mặc định hiển thị
                 };
 
-                await _service.CreateDevice(newDevice);
-                LoadDeviceList();
+                await _service.CreateDeviceAsync(newDevice);
+                LoadDeviceListAsync();
             }
             catch (Exception ex)
             {
@@ -384,19 +389,17 @@ namespace Electric_Meter.MVVM.ViewModels
 
                 if (!ValidateDeviceInput()) return;
 
-                var find = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
-                if (find == null)
+                var device = new EditDeviceDto()
                 {
-                    MessageBox.Show("Device not found.");
-                    return;
-                }
-                find.name = NameDevice;
-                find.typeid = _service.GetSensorTypes().FirstOrDefault(x => x.name == SelectedSensorType)?.typeid ?? find.typeid;
-                find.activeid = _service.GetActiveTypes().FirstOrDefault(x => x.name == SelectedActive)?.activeid ?? find.activeid;
-                find.ifshow = 1; // Giữ nguyên hiển thị
-                await _service.UpdateDevice(find);
+                    devid = SelectedDevice.devid,
+                    name = NameDevice,
+                    type = selectedSensorType,
+                    active = selectedActive,
+                    ifshow = 1 // Giữ nguyên hiển thị
+                };
+                await _service.UpdateDeviceAsync(device);
                 MessageBox.Show("Edit successfully!");
-                LoadDeviceList();
+                LoadDeviceListAsync();
             }
             catch (Exception ex)
             {
@@ -404,7 +407,7 @@ namespace Electric_Meter.MVVM.ViewModels
             }
         }
 
-        private bool CanExecuteEditDevice() => SelectedDevice != null; // ✅ chỉ bật khi chọn thiết bị
+        private bool CanExecuteEditDevice() => SelectedDevice != null; //Chỉ bật khi chọn thiết bị
         #endregion
 
 
@@ -427,9 +430,9 @@ namespace Electric_Meter.MVVM.ViewModels
                     return;
                 }
 
-                await _service.DeleteToDevice(device);
+                await _service.DeleteToDeviceAsync(device);
                 MessageBox.Show("Delete successfully!");
-                LoadDeviceList();
+                LoadDeviceListAsync();
             }
             catch (Exception ex)
             {
@@ -461,7 +464,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     ifshow = IfShow,
                     ifcal = IfCal
                 };
-                await _service.InsertToControlcode(newControlCode);
+                await _service.InsertToControlcodeAsync(newControlCode);
                 MessageBox.Show("Control Code added successfully!");
                 LoadControlCodeList(SelectedDevice.devid);
             }

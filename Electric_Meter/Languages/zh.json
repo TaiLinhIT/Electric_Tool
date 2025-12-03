@@ -9,7 +9,7 @@
     "Code": "代码",
     "Active": "激活",
     "InActive": "未激活",
-    "CodeTypeId": "代码类型编号",
+    "CodeType": "代码类型编号",
     "Name": "名称",
     "Factor": "系数",
     "TypeId": "类型编号",

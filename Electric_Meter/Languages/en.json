@@ -9,7 +9,7 @@
     "Code": "Code",
     "Active": "Active",
     "InActive": "InActive",
-    "CodeTypeId": "CodeTypeId",
+    "CodeType": "CodeTypeId",
     "Name": "Name",
     "Factor": "Factor",
     "TypeId": "TypeId",

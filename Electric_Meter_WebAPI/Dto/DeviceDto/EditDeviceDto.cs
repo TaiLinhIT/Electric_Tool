@@ -4,8 +4,8 @@ namespace Electric_Meter_WebAPI.Dto.DeviceDto
     {
         public int devid { get; set; }
         public string name { get; set; }
-        public int typeid { get; set; }
-        public int activeid { get; set; }
+        public string type { get; set; }
+        public string active { get; set; }
         public int ifshow { get; set; }
     }
 }

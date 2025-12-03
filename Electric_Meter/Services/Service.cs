@@ -4,6 +4,8 @@ using System.Windows;
 
 using Electric_Meter.Dto;
 using Electric_Meter.Dto.ActiveTypeDto;
+using Electric_Meter.Dto.CodeTypeDto;
+using Electric_Meter.Dto.ControlcodeDto;
 using Electric_Meter.Dto.DeviceDto;
 using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Interfaces;
@@ -32,61 +34,9 @@ namespace Electric_Meter.Services
             _scopeFactory = serviceScope;
         }
 
-        public async Task<int> DeleteToDeviceAsync(Device device)
-        {
-            try
-            {
-                var scope = _scopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                device.activeid = 0;
-                _context.devices.Update(device);
-                await _context.SaveChangesAsync();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-                return 0;
-            }
-        }
-
-        public async Task<int> EditToDeviceAsync(Device device)
-        {
-            try
-            {
-                var scope = _scopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                _context.devices.Update(device);
-                await _context.SaveChangesAsync();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return 0;
-            }
-
-
-        }
 
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-        public async Task<int> InsertToDeviceAsync(Device device)
-        {
-            try
-            {
-                var scope = _scopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                await _context.devices.AddAsync(device);
-                await _context.SaveChangesAsync();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return 0;
-            }
-        }
+       
         public string ConvertToHex(int number)
         {
             return number.ToString("X");
@@ -306,95 +256,22 @@ namespace Electric_Meter.Services
 
         }
 
-        public async Task<int> EditToControlcodeAsync(Controlcode code)
+        public async Task<List<CodeTypeDto>> GetCodeTypeAsync()
         {
             try
             {
-                using var scope = _scopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                _context.controlcodes.Update(code);
-                await _context.SaveChangesAsync();
-                return 1;
-            }
-            catch (Exception ex)
-            {
+                var response = await _httpClient.GetAsync("api/CodeType/");
 
-                MessageBox.Show(ex.Message);
-                return 0;
-            }
-        }
 
-        public async Task<int> DeleteToControlcodeAsync(Controlcode code)
-        {
-            try
-            {
-                using var scope = _scopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                code.activeid = 0;
-                _context.controlcodes.Update(code);
-                await _context.SaveChangesAsync();
-                return 1;
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-                return 0;
-            }
-        }
-
-        public async Task<bool> CreateDeviceAsync(CreateDeviceDto dto)
-        {
-            try
-            {
-                var json = JsonConvert.SerializeObject(dto);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("api/Device/", content);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var respContent = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
-                }
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException httpEx)
-            {
-                // Bắt lỗi kết nối mạng. Sửa thông báo để hướng dẫn người dùng kiểm tra HTTPS.
-                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
-
-                if (httpEx.InnerException != null)
-                {
-                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
-                }
-
-                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
-                {
-                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                // Bắt các lỗi khác
-                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
-                return false;
-            }
-        }
-
-        public async Task<List<DeviceDto>> GetListDeviceAsync()
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync("api/Device/");
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception("Không thể kết nối đến API Device.");
                 }
                 var content = await response.Content.ReadAsStringAsync();
-                var devices = JsonConvert.DeserializeObject<List<DeviceDto>>(content);
-                return devices ?? new List<DeviceDto>();
+                var activetypes = JsonConvert.DeserializeObject<List<CodeTypeDto>>(content);
+                return activetypes ?? new List<CodeTypeDto>();
             }
+
             catch (HttpRequestException httpEx)
             {
 
@@ -410,16 +287,15 @@ namespace Electric_Meter.Services
                 {
                     Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
                 }
-                return new List<DeviceDto>();
+                return new List<CodeTypeDto>();
             }
             catch (Exception ex)
             {
                 // Bắt các lỗi khác
                 Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
-                return new List<DeviceDto>();
+                return new List<CodeTypeDto>();
             }
         }
-
         public async Task<List<ActiveTypeDto>> GetActiveTypesAsync()
         {
             try
@@ -501,6 +377,83 @@ namespace Electric_Meter.Services
                 return new List<SensorTypeDto>();
             }
         }
+        public async Task<List<DeviceDto>> GetListDeviceAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/Device/");
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Không thể kết nối đến API Device.");
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var devices = JsonConvert.DeserializeObject<List<DeviceDto>>(content);
+                return devices ?? new List<DeviceDto>();
+            }
+            catch (HttpRequestException httpEx)
+            {
+
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return new List<DeviceDto>();
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return new List<DeviceDto>();
+            }
+        }
+        public async Task<bool> CreateDeviceAsync(CreateDeviceDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/Device/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                // Bắt lỗi kết nối mạng. Sửa thông báo để hướng dẫn người dùng kiểm tra HTTPS.
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+
 
         public async Task<bool> UpdateDeviceAsync(EditDeviceDto dto)
         {
@@ -519,7 +472,7 @@ namespace Electric_Meter.Services
             }
             catch (HttpRequestException httpEx)
             {
-                Console.WriteLine($"Sửa dữ liệu thất bại. Lỗi: {httpEx.Message}");
+                Console.WriteLine($"Sửa dữ liệu thất bại. Lỗi: {httpEx.Message}");
 
                 if (httpEx.InnerException != null)
                 {
@@ -539,7 +492,42 @@ namespace Electric_Meter.Services
                 return false;
             }
         }
+        public async Task<bool> DeleteDeviceAsync(int devid)
+        {
+            try
+            {
 
+                var response = await _httpClient.DeleteAsync($"api/Device/{devid}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Xóa dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"Xóa dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
         public async Task<DeviceDto> GetDeviceByDevidAsync(int devid)
         {
 
@@ -578,6 +566,160 @@ namespace Electric_Meter.Services
                 return new DeviceDto();
             }
         }
+
+        public async Task<bool> CreateControlcodeAsync(CreateControlcodeDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/Controlcode/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                // Bắt lỗi kết nối mạng. Sửa thông báo để hướng dẫn người dùng kiểm tra HTTPS.
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateControlcodeAsync(EditControlcodeDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync("api/Controlcode/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Sửa dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"Sửa dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteControlcodeAsync(int codeid)
+        {
+            try
+            {
+
+                var response = await _httpClient.DeleteAsync($"api/Controlcode/{codeid}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Xóa dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"Xóa dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<List<ControlcodeDto>> GetListControlcodeAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/Controlcode/");
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Không thể kết nối đến API Device.");
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var controlcodes = JsonConvert.DeserializeObject<List<ControlcodeDto>>(content);
+                return controlcodes ?? new List<ControlcodeDto>();
+            }
+            catch (HttpRequestException httpEx)
+            {
+
+                Console.WriteLine($"Gửi dữ liệu thất bại. Lỗi: {httpEx.Message}");
+
+                if (httpEx.InnerException != null)
+                {
+                    Console.WriteLine($"Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+                }
+
+
+                if (httpEx.InnerException is System.Security.Authentication.AuthenticationException)
+                {
+                    Console.WriteLine("Lỗi SSL: Cần cấu hình HttpClient để bỏ qua lỗi chứng chỉ tự ký (self-signed) cho localhost.");
+                }
+                return new List<ControlcodeDto>();
+            }
+            catch (Exception ex)
+            {
+                // Bắt các lỗi khác
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return new List<ControlcodeDto>();
+            }
+        }
+
+        
     }
 
 

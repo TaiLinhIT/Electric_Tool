@@ -187,8 +187,12 @@
 
                                 <!-- DevId -->
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Width="120" Text="{Binding DevIdCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding DevId}"/>
+                                    <TextBlock Width="120" Text="Devie Name" VerticalAlignment="Center"/>
+                                    <ComboBox Width="150"
+                                        ItemsSource="{Binding LstDeviceControlcode}"
+                                        SelectedItem="{Binding SelectedDeviceName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource Content Combobox}"
+                                        />
                                 </StackPanel>
 
                                 <!-- Code -->
@@ -200,7 +204,11 @@
                                 <!-- ActiveId -->
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                                     <TextBlock Width="120" Text="{Binding ActiveIdCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding ActiveId}"/>
+                                    <ComboBox Width="150"
+                                        ItemsSource="{Binding LstActiveControlcode}"
+                                        SelectedItem="{Binding SelectedActiveControlcodeName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource Content Combobox}"
+                                        />
                                 </StackPanel>
                             </Grid>
 
@@ -215,12 +223,16 @@
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                                     <TextBlock Width="120" Text="{Binding CodeTypeIdCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding CodeTypeId}"/>
+                                    <ComboBox Width="150"
+                                        ItemsSource="{Binding LstCodeType}"
+                                        SelectedItem="{Binding SelectedCodeType,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource Content Combobox}"
+                                        />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                                     <TextBlock Width="120" Text="{Binding NameCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding Name}"/>
+                                    <TextBox Width="150" Text="{Binding NameControlcode}"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
@@ -230,7 +242,11 @@
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                                     <TextBlock Width="120" Text="{Binding TypeIdCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding TypeId}"/>
+                                    <ComboBox Width="150"
+                                        ItemsSource="{Binding LstSensorTypeControlCode}"
+                                        SelectedItem="{Binding SelectedSensorTypeControlCode,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource Content Combobox}"
+                                        />
                                 </StackPanel>
                             </Grid>
 
@@ -252,16 +268,7 @@
                                     <TextBlock Width="120" Text="{Binding LowCommandText}" VerticalAlignment="Center"/>
                                     <TextBox Width="150" Text="{Binding Low}"/>
                                 </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Grid.Row="2">
-                                    <TextBlock Width="120" Text="{Binding IfShowCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding IfShow}"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Grid.Row="3">
-                                    <TextBlock Width="120" Text="{Binding IfCalCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding IfCal}"/>
-                                </StackPanel>
+                                
                             </Grid>
 
                         </Grid>
@@ -278,20 +285,17 @@
 					    >
                         
     <DataGrid.Columns>
-                            <DataGridTextColumn Header="{Binding CodeIdCommandText}" Binding="{Binding codeid}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding DevIdCommandText}" Binding="{Binding devid}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding deviceName}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding CodeCommandText}" Binding="{Binding code}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding ActiveCommandText}" Binding="{Binding active}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding NameCodeTypeCommandText}" Binding="{Binding codetype}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding NameCommandText}" Binding="{Binding name}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding FactorCommandText}" Binding="{Binding factor}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding NameTypeCommandText}" Binding="{Binding type}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding HighCommandText}" Binding="{Binding high}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding LowCommandText}" Binding="{Binding low}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding IfShowCommandText}" Binding="{Binding ifshow}" Width="*"/>
-                            <DataGridTextColumn Header="{Binding IfCalCommandText}" Binding="{Binding ifcal}" Width="*"/>
-    </DataGrid.Columns>
+                            <DataGridTextColumn Header="{Binding CodeIdCommandText}" Binding="{Binding CodeId}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameDeviceCommandText}" Binding="{Binding DeviceName}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding CodeCommandText}" Binding="{Binding Code}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding ActiveCommandText}" Binding="{Binding Active}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding SenSorTypeCommandText}" Binding="{Binding SensorType}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameCodeTypeCommandText}" Binding="{Binding CodeType}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding NameCommandText}" Binding="{Binding NameControlcode}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding FactorCommandText}" Binding="{Binding Factor}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding HighCommandText}" Binding="{Binding High}" Width="*"/>
+                            <DataGridTextColumn Header="{Binding LowCommandText}" Binding="{Binding Low}" Width="*"/>
+                        </DataGrid.Columns>
 
                     </DataGrid>
                 </Grid>

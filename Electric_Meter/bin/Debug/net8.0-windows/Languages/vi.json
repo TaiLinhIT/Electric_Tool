@@ -9,7 +9,7 @@
     "Code": "Mã",
     "Active": "Hoạt động",
     "InActive": "Không hoạt động",
-    "CodeTypeId": "Mã định danh loại mã",
+    "CodeType": "Mã định danh loại mã",
     "Name": "Tên",
     "Factor": "Hệ số",
     "TypeId": "Mã định danh loại",

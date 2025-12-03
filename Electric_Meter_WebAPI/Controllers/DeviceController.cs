@@ -34,13 +34,27 @@ namespace Electric_Meter_WebAPI.Controllers
         {
             try
             {
-                await _service.EditDevice(dto);
+                await _service.EditDeviceAsync(dto);
                 return Ok(new { message = "Data received successfully" });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"❌ Exception: {ex.Message}");
                 // Rất quan trọng: Server cần trả về lỗi 500 nếu catch được lỗi.
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpDelete("{devid}")]
+        public async Task<IActionResult> DeleteDevice(int devid)
+        {
+            try
+            {
+                await _service.DeleteDeviceAsync(devid);
+                return Ok(new { message = $"{devid}" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
             }
         }

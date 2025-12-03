@@ -7,7 +7,7 @@ namespace Electric_Meter_WebAPI.Models
     public class Controlcode
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int codeid { get; set; }
         public int devid { get; set; }
         public string code { get; set; }

@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input; // Quan trọng: Cung cấp [RelayCommand]
 
 using Electric_Meter.Configs;
+using Electric_Meter.Dto.ControlcodeDto;
 using Electric_Meter.Dto.DeviceDto;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
@@ -57,6 +57,7 @@ namespace Electric_Meter.MVVM.ViewModels
             // Load dữ liệu ban đầu
             //LoadAssemblings();
             LoadDeviceListAsync();
+            _ = LoadControlCodeList();
             GetDefaultSettingAsync();
 
         }
@@ -75,7 +76,7 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private bool isEnabledBtnDeleteControlCode;
         [ObservableProperty] private string errorMessage;
         [ObservableProperty] private DeviceDto selectedDevice;//  phải có cái này mới có onselectedchange
-        [ObservableProperty] private ControlcodeVM selectedControlCode;
+        [ObservableProperty] private ControlcodeDto selectedControlCode;
 
         #endregion
 
@@ -85,34 +86,42 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string selectedActive;
         [ObservableProperty] private string selectedSensorType;
         [ObservableProperty] private ObservableCollection<DeviceDto> deviceList = new();
-        [ObservableProperty] private ObservableCollection<ControlcodeVM> controlCodeList = new();
+        [ObservableProperty] private ObservableCollection<ControlcodeDto> controlCodeList = new();
         #endregion
         #region [ Properties - Controlcode Configuration ]
         [ObservableProperty] private int codeId;
-        [ObservableProperty] private int devId;
+        [ObservableProperty] private ObservableCollection<string> lstActiveControlcode = new();
+        [ObservableProperty] private ObservableCollection<string> lstDeviceControlcode = new();
+        [ObservableProperty] private string selectedDeviceName;
+        [ObservableProperty] private string selectedActiveControlcodeName;
         [ObservableProperty] private string code;
-        [ObservableProperty] private string active;
+        [ObservableProperty] private string activeControlcode;
         [ObservableProperty] private string codeType;
-        [ObservableProperty] private string name;
+        [ObservableProperty] private string nameControlcode;
         [ObservableProperty] private double factor;
-        [ObservableProperty] private string type;
+        [ObservableProperty] private string sensorType;
         [ObservableProperty] private decimal? high;
         [ObservableProperty] private decimal? low;
-        [ObservableProperty] private int? ifShow;
-        [ObservableProperty] private int? ifCal;
         [ObservableProperty] private int activeid;
         public string ActiveText => activeid == 1 ? ActiveCommandText : InActiveCommandText;
 
+        #endregion
+        #region [ Properties - Code type configuration ]
+        [ObservableProperty] private ObservableCollection<string> lstCodeType = new();
+        [ObservableProperty] private string selectedCodeType;
         #endregion
         #region [ Properties - Communication Settings ]
         [ObservableProperty] private ObservableCollection<string> lstPort = new();
 
         [ObservableProperty] private ObservableCollection<string> lstActive = new();
         [ObservableProperty] private ObservableCollection<string> lstSensorType = new();
-        [ObservableProperty]
-        private List<KeyValue> lstAssembling = new();
+        [ObservableProperty] private ObservableCollection<string> lstSensorTypeControlCode = new();
+        [ObservableProperty] private string selectedSensorTypeControlCode;
+
+        [ObservableProperty] private List<KeyValue> lstAssembling = new();
 
         #endregion
+
         #region [ Methods - Get Default setting ]
 
         private async Task GetDefaultSettingAsync()
@@ -120,12 +129,21 @@ namespace Electric_Meter.MVVM.ViewModels
 
             //SetupAssemblingList();
 
-            LstActive = new ObservableCollection<string>(
+            LstActive = new(
                 (await _service.GetActiveTypesAsync()).Select(x => x.name)
                 );
-            LstSensorType = new ObservableCollection<string>(
+            LstSensorType = new(
                 (await _service.GetSensorTypesAsync()).Select(x => x.name)
                 );
+            LstSensorTypeControlCode = new(
+                (await _service.GetSensorTypesAsync()).Select(x => x.name)
+                );
+            LstActiveControlcode = new(
+                (await _service.GetActiveTypesAsync()).Select(x => x.name)
+                );
+            LstDeviceControlcode = new((await _service.GetListDeviceAsync()).Select(x => x.name));
+            LstCodeType = new((await _service.GetCodeTypeAsync()).Select(x => x.NameCodeType));
+
         }
         //private void SetupAssemblingList()
         //{
@@ -189,10 +207,10 @@ namespace Electric_Meter.MVVM.ViewModels
             CodeCommandText = _languageService.GetString("Code");
             ActiveCommandText = _languageService.GetString("Active");
             InActiveCommandText = _languageService.GetString("InActive");
-            CodeTypeIdCommandText = _languageService.GetString("CodeTypeId");
+            CodeTypeCommandText = _languageService.GetString("CodeType");
             NameCommandText = _languageService.GetString("Name");
             FactorCommandText = _languageService.GetString("Factor");
-            TypeIdCommandText = _languageService.GetString("TypeId");
+            //SensorTypeCommandText = _languageService.GetString("Sensor type");
             HighCommandText = _languageService.GetString("High");
             LowCommandText = _languageService.GetString("Low");
             IfShowCommandText = _languageService.GetString("IfShow");
@@ -234,10 +252,10 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string codeCommandText;
         [ObservableProperty] private string activeCommandText;
         [ObservableProperty] private string inActiveCommandText;
-        [ObservableProperty] private string codeTypeIdCommandText;
+        [ObservableProperty] private string codeTypeCommandText;
         [ObservableProperty] private string nameCommandText;
         [ObservableProperty] private string factorCommandText;
-        [ObservableProperty] private string typeIdCommandText;
+        [ObservableProperty] private string sensorTypeCommandText;
         [ObservableProperty] private string highCommandText;
         [ObservableProperty] private string lowCommandText;
         [ObservableProperty] private string ifShowCommandText;
@@ -261,12 +279,31 @@ namespace Electric_Meter.MVVM.ViewModels
                 MessageBox.Show("Error loading devices: " + ex.Message);
             }
         }
-        private void LoadControlCodeList(int devid)
+        private async Task LoadControlCodeListByDevid(int devid)
         {
             try
             {
-                var controlcodes = _service.GetControlCodeListByDevid(devid);
-                ControlCodeList = new(controlcodes);
+
+                var lstcontrolcode = await _service.GetListControlcodeAsync();
+                ControlCodeList = new(lstcontrolcode);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Error loading control code: " + ex.Message);
+            }
+        }
+        private async Task LoadControlCodeList()
+        {
+            try
+            {
+
+                var lstcontrolcode = await _service.GetListControlcodeAsync();
+                ControlCodeList = new(lstcontrolcode);
+
+
             }
             catch (Exception ex)
             {
@@ -290,7 +327,6 @@ namespace Electric_Meter.MVVM.ViewModels
                 IsEnableBtnEditDevice = false;
                 return;
             }
-            LoadControlCodeList(value.devid);
             // Gán dữ liệu từ dòng đang chọn sang các input
             Devid = value.devid;
             NameDevice = value.name;
@@ -305,38 +341,38 @@ namespace Electric_Meter.MVVM.ViewModels
             DeleteDeviceCommand.NotifyCanExecuteChanged();
 
         }
+        partial void OnDevidChanged(int devid)
+        {
+            _ = LoadControlCodeListByDevid(devid);
+        }
 
-        partial void OnSelectedControlCodeChanged(ControlcodeVM value)
+
+        partial void OnSelectedControlCodeChanged(ControlcodeDto value)
         {
             if (value == null)
             {
                 CodeId = 0;
-                DevId = 0;
                 Code = string.Empty;
-                Active = string.Empty;
+                ActiveControlcode = string.Empty;
                 CodeType = string.Empty;
-                Name = string.Empty;
+                NameControlcode = string.Empty;
                 Factor = 0;
-                Type = string.Empty;
+                SensorType = string.Empty;
                 High = 0;
                 Low = 0;
-                IfShow = 0;
-                IfCal = 0;
                 return;
             }
             // Gán dữ liệu từ dòng đang chọn sang các input
-            CodeId = value.codeid;
-            DevId = value.devid;
-            Code = value.code;
-            //Active = value.activeid;
-            CodeType = value.codetype;
-            Name = value.name;
-            Factor = value.factor;
-            Type = value.type;
-            High = value.high;
-            Low = value.low;
-            IfShow = value.ifshow;
-            IfCal = value.ifcal;
+            CodeId = value.CodeId;
+            Code = value.Code;
+            SelectedActiveControlcodeName = value.Active;
+            SelectedCodeType = value.CodeType;
+            SelectedDeviceName = value.DeviceName;
+            NameControlcode = value.NameControlcode;
+            Factor = value.Factor;
+            SelectedSensorTypeControlCode = value.SensorType;
+            High = value.High;
+            Low = value.Low;
             AddControlCodeCommand.NotifyCanExecuteChanged();
             EditControlCodeCommand.NotifyCanExecuteChanged();
             DeleteControlCodeCommand.NotifyCanExecuteChanged();
@@ -351,14 +387,14 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                
+
 
                 var newDevice = new CreateDeviceDto
                 {
                     devid = Devid,
                     name = NameDevice,
-                    //typeid = _service.GetSensorTypesAsync().fi(x => x.name == SelectedSensorType) ?.typeid ?? 0,
-                    //activeid = _service.GetActiveTypesAsync().FirstOrDefault(x => x.name == SelectedActive)?.activeid ?? 0,
+                    type = SelectedSensorType,
+                    active = SelectedActive,
                     ifshow = 1 // Mặc định hiển thị
                 };
 
@@ -398,8 +434,8 @@ namespace Electric_Meter.MVVM.ViewModels
                     ifshow = 1 // Giữ nguyên hiển thị
                 };
                 await _service.UpdateDeviceAsync(device);
-                MessageBox.Show("Edit successfully!");
                 LoadDeviceListAsync();
+                MessageBox.Show("Edit successfully!");
             }
             catch (Exception ex)
             {
@@ -423,14 +459,14 @@ namespace Electric_Meter.MVVM.ViewModels
                     return;
                 }
 
-                var device = await _context.devices.FirstOrDefaultAsync(x => x.devid == SelectedDevice.devid);
-                if (device == null)
+                int devid = Devid;
+                if (devid == null)
                 {
                     MessageBox.Show("Device not found.");
                     return;
                 }
 
-                await _service.DeleteToDeviceAsync(device);
+                await _service.DeleteDeviceAsync(devid);
                 MessageBox.Show("Delete successfully!");
                 LoadDeviceListAsync();
             }
@@ -449,24 +485,29 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                using var scope = _scopeFactory.CreateScope();
-                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                var newControlCode = new Controlcode
+                bool check = false;
+                if (check)
                 {
-                    code = Code,
-                    activeid = _context.activeTypes.Where(x => x.name == Active).Select(x => x.activeid).FirstOrDefault(),
-                    codetypeid = _context.codetypes.Where(x => x.name == CodeType).Select(x => x.codetypeid).FirstOrDefault(),
-                    name = Name,
-                    factor = Factor,
-                    typeid = _context.sensorTypes.Where(x => x.name == Type).Select(x => x.typeid).FirstOrDefault(),
-                    high = High,
-                    low = Low,
-                    ifshow = IfShow,
-                    ifcal = IfCal
+                    MessageBox.Show("Control code exist!");
+                    return;
+                }
+                var newControlCode = new CreateControlcodeDto()
+                {
+                    CodeId = CodeId,
+                    DeviceName = SelectedDeviceName,
+                    CodeType = SelectedCodeType,
+                    Active = SelectedActiveControlcodeName,
+                    Code = Code,
+                    NameControlcode = NameControlcode,
+                    Factor = Factor,
+                    SensorType = SelectedSensorTypeControlCode,
+                    High = High,
+                    Low = Low
+
                 };
-                await _service.InsertToControlcodeAsync(newControlCode);
+                await _service.CreateControlcodeAsync(newControlCode);
+                _ = LoadControlCodeList();
                 MessageBox.Show("Control Code added successfully!");
-                LoadControlCodeList(SelectedDevice.devid);
             }
             catch (Exception ex)
             {
@@ -483,20 +524,35 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.codeid);
+                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.CodeId);
                 if (find == null)
                 {
                     MessageBox.Show("Control Code not found.");
                     return;
                 }
-                find.code = Code;
-                //find.activeid = ActiveId;
+                var dto = new EditControlcodeDto()
+                {
+                    CodeId = CodeId,
+                    DeviceName = SelectedDeviceName,
+                    CodeType = SelectedCodeType,
+                    Active = SelectedActiveControlcodeName,
+                    Code = Code,
+                    NameControlcode = NameControlcode,
+                    Factor = Factor,
+                    SensorType = SelectedSensorTypeControlCode,
+                    High = High,
+                    Low = Low
+                };
+                await _service.UpdateControlcodeAsync(dto);
+                _ = LoadControlCodeList();
+                MessageBox.Show("Edit successfully!");
             }
             catch (Exception ex)
             {
 
                 MessageBox.Show(ex.Message);
             }
+            
         }
         private bool CanExecuteEditControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
         #endregion
@@ -504,6 +560,23 @@ namespace Electric_Meter.MVVM.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteDeleteControlCode))]
         private async Task DeleteControlCode()
         {
+            try
+            {
+                if (CodeId == null)
+                {
+                    MessageBox.Show("No Device selected.");
+                    return;
+                }
+
+                
+                await _service.DeleteControlcodeAsync(CodeId);
+                _ = LoadControlCodeList();
+                MessageBox.Show("Delete successfully!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Delete error: " + ex.Message);
+            }
             // Thêm logic xóa Control Code ở đây
         }
         private bool CanExecuteDeleteControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
@@ -526,7 +599,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 return false;
             }
 
-           
+
 
             ErrorMessage = string.Empty;
             return true;

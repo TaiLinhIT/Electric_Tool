@@ -19,6 +19,7 @@ public partial class PowerTempWatchContext : DbContext
     public DbSet<Device> devices { get; set; }
     public DbSet<SensorData> sensorDatas { get; set; }
     public DbSet<SensorType> sensorTypes { get; set; }
+    public DbSet<Codetype> codetypes { get; set; }
 
     // Thêm các DbSet cho các Dto trả về từ stored procedure
     //public DbSet<LatestSensorByDeviceYear> LatestSensorByDeviceYears { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Electric_Meter_WebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class abc : Migration
+    public partial class ssdr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,11 +25,24 @@ namespace Electric_Meter_WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Codetype",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    codetypeid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Codetype", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "controlcode",
                 columns: table => new
                 {
-                    codeid = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    codeid = table.Column<int>(type: "int", nullable: false),
                     devid = table.Column<int>(type: "int", nullable: false),
                     code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     activeid = table.Column<int>(type: "int", nullable: false),
@@ -97,6 +110,9 @@ namespace Electric_Meter_WebAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ActiveType");
+
+            migrationBuilder.DropTable(
+                name: "Codetype");
 
             migrationBuilder.DropTable(
                 name: "controlcode");

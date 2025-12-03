@@ -99,7 +99,7 @@
             IsBackButtonVisible="Collapsed"
             IsPaneToggleVisible="True"
             PaneDisplayMode="Left"
-            OpenPaneLength="200"
+            OpenPaneLength="180"
             Background="#1C1C1C" />
         
     </Grid>

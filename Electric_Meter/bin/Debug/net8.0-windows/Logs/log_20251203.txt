@@ -983,3 +983,68 @@ File name: 'COM7'
 16:25:38 - Lỗi gửi request Pb_Address_5: The port is closed.
 16:25:48 - Lỗi gửi request Pc_Address_6: The port is closed.
 16:25:48 - Lỗi gửi request Pc_Address_5: The port is closed.
+21:02:30 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+21:09:01 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+21:59:59 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:04:36 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:08:31 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:14:26 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:16:58 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:22:49 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:30:03 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:30:34 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:30:58 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:34:18 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99
+22:37:41 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM7'.
+File name: 'COM7'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 99

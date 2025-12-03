@@ -26,9 +26,9 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Fields (Private data) - Observable Properties ]
 
         [ObservableProperty]
-        private IEnumerable<NavigationViewItem> _menuItems;
+        private ObservableCollection<NavigationViewItem> _menuItems = new(); // Khởi tạo rỗng để tránh null
         [ObservableProperty]
-        private IEnumerable<NavigationViewItem> _footerMenuItems;
+        private ObservableCollection<NavigationViewItem> _footerMenuItems = new(); // Khởi tạo rỗng để tránh null
         [ObservableProperty] private string _selectedLanguage;
         private readonly INavigationService _navigationService;
         [ObservableProperty]
@@ -179,37 +179,78 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Method - Menu ]
         private void InitializeMenuItems()
         {
-            MenuItems = new ObservableCollection<NavigationViewItem>
+            
+            MenuItems.Clear();
+            FooterMenuItems.Clear();
+
+            // 2a. Cài đặt Hệ thống (System Setting)
+            var systemSettingMenu = new NavigationViewItem
             {
-                new NavigationViewItem
+                Content = "Cài đặt Hệ thống",
+                Icon = new SymbolIcon(SymbolRegular.Laptop24),
+                // SỬA: Dùng Khối Khởi tạo Tập hợp để thêm items con.
+                // Đây là cách đúng cho thuộc tính MenuItems của NavigationViewItem.
+                MenuItems =
                 {
-                    Content = DashboardCommandText,
-                    Icon = new SymbolIcon(SymbolRegular.ChartMultiple24),
-                    TargetPageType = typeof(Views.DashboardView)
-                },
-                new NavigationViewItem
-                {
-                    Content = ToolCommandText,
-                    Icon = new SymbolIcon(SymbolRegular.Toolbox24),
-                    TargetPageType = typeof(Views.ToolView)
+                    new NavigationViewItem { Content = "Quản lý hoạt động", TargetPageType = typeof(Views.ActiveManagerView) },
+                    new NavigationViewItem { Content = "Quản lý kiểu cảm biến", TargetPageType = typeof(Views.SensorTypeManagerView) },
+                    new NavigationViewItem { Content = "Quản lý lệnh", TargetPageType = typeof(Views.CommandManagerView) },
+                    new NavigationViewItem { Content = "Quản lý thiết bị", TargetPageType = typeof(Views.DeviceManagerView) }
                 }
             };
 
-            FooterMenuItems = new ObservableCollection<NavigationViewItem>
+            // 2b. Cài đặt Lưu trữ (Storage Setting)
+            var storageSettingMenu = new NavigationViewItem
             {
-                new NavigationViewItem
+                Content = "Cài đặt Lưu trữ",
+                Icon = new SymbolIcon(SymbolRegular.DataArea24),
+                TargetPageType = typeof(Views.SettingView)
+            };
+
+            // 2c. Cài đặt Bảo mật (Security Setting)
+            var securitySettingMenu = new NavigationViewItem
+            {
+                Content = "Cài đặt Bảo mật",
+                Icon = new SymbolIcon(SymbolRegular.LockClosed24),
+                TargetPageType = typeof(Views.SettingView)
+            };
+
+            // 1. Tạo Menu Item Cấp 1: Cài đặt (Setting)
+            var settingMenu = new NavigationViewItem
+            {
+                Content = SettingCommandText,
+                Icon = new SymbolIcon(SymbolRegular.Settings24),
+                MenuItems =
                 {
-                    Content = SettingCommandText,
-                    Icon = new SymbolIcon(SymbolRegular.Settings24),
-                    TargetPageType = typeof(Views.SettingView)
-                },
-                new NavigationViewItem
-                {
-                    Content = HelpCommandText,
-                    Icon = new SymbolIcon(SymbolRegular.QuestionCircle24),
-                    Command = new RelayCommand(OpenHelp)
+                    systemSettingMenu,
+                    storageSettingMenu,
+                    securitySettingMenu
                 }
             };
+
+            // Khởi tạo các MenuItems chính (Sử dụng .Add() của ObservableCollection)
+            MenuItems.Add(new NavigationViewItem
+            {
+                Content = DashboardCommandText,
+                Icon = new SymbolIcon(SymbolRegular.ChartMultiple24),
+                TargetPageType = typeof(Views.DashboardView)
+            });
+            MenuItems.Add(new NavigationViewItem
+            {
+                Content = ToolCommandText,
+                Icon = new SymbolIcon(SymbolRegular.Toolbox24),
+                TargetPageType = typeof(Views.ToolView)
+            });
+            // Dòng gây lỗi đã được sửa: Giờ đây MenuItems là ObservableCollection và hỗ trợ .Add()
+            MenuItems.Add(settingMenu);
+
+            // Khởi tạo FooterMenuItems
+            FooterMenuItems.Add(new NavigationViewItem
+            {
+                Content = HelpCommandText,
+                Icon = new SymbolIcon(SymbolRegular.QuestionCircle24),
+                Command = new RelayCommand(OpenHelp)
+            });
         }
 
         #endregion

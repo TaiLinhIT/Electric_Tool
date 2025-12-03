@@ -91,6 +91,10 @@ namespace Electric_Meter
 
             // UI (ToolView)
             services.AddSingleton<ToolView>();
+            services.AddSingleton<ActiveManagerView>();
+            services.AddSingleton<CommandManagerView>();
+            services.AddSingleton<SensorTypeManagerView>();
+            services.AddSingleton<DeviceManagerView>();
         }
 
         /// <summary>
@@ -145,7 +149,7 @@ namespace Electric_Meter
                     }
 
                     // 2. Seed Data
-                    await seeder.SeedAsync();
+                    //await seeder.SeedAsync();
 
                     // 3. Create Stored Procedures
                     await EnsureStoredProceduresAsync(db);

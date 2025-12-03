@@ -28,7 +28,7 @@ namespace Electric_Meter
                     var seeder = scope.ServiceProvider.GetService<DatabaseSeeder>();
                     if (seeder != null)
                     {
-                        await seeder.SeedAsync(); // chạy seed khi khởi động app
+                       // await seeder.SeedAsync(); // chạy seed khi khởi động app
                     }
                 }
 

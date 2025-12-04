@@ -12,7 +12,6 @@ using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
-
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -512,6 +511,11 @@ namespace Electric_Meter.Services
                 Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
                 return new ControlcodeDto();
             }
+        }
+
+        public Task<ControlcodeDto> GetControlcodeByDevidAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -761,3 +761,6 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\refint\Ele
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.pdb
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.genruntimeconfig.cache
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\ref\Electric_Meter.dll
+E:\MyProject\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Extensions.Diagnostics.dll
+E:\MyProject\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Extensions.Diagnostics.Abstractions.dll
+E:\MyProject\Electric_Tool\Electric_Meter\bin\Debug\net8.0-windows\Microsoft.Extensions.Http.dll

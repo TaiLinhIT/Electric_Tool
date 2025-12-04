@@ -98,7 +98,6 @@
             FooterMenuItemsSource="{Binding FooterMenuItems}"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleVisible="True"
-            PaneDisplayMode="Left"
             OpenPaneLength="180"
             Background="#1C1C1C" />
         

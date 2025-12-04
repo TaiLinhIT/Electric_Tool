@@ -12,6 +12,7 @@ namespace Electric_Meter_WebAPI.Interfaces
 {
     public interface IService
     {
+        Task<ControlcodeDto> GetControlcodeByDevidAsync(int id);
         Task<SensorTypeDto> GetSensorTypeByIdAsync(int id);
         Task<List<CodeTypeDto>> GetCodeTypeAsync();
         Task<List<ActiveTypeDto>> GetActiveTypesAsync();

@@ -2,7 +2,9 @@ namespace Electric_Meter.Dto.ControlcodeDto
 {
     public class ControlcodeDto
     {
+
         public int CodeId { get; set; }
+        public int Devid { get; set; }
         public string DeviceName { get; set; }
         public string Active { get; set; }
         public string Code { get; set; }

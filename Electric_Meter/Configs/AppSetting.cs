@@ -17,5 +17,6 @@ namespace Electric_Meter.Configs
         public float FactorU { get; set; }
         public float FactorI { get; set; }
         public float FactorP { get; set; }
+        public string ApiBaseUrl { get; set; }
     }
 }

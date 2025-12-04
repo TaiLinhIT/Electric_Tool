@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using Electric_Meter.Configs;
+using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 using Electric_Meter.Utilities;
@@ -29,7 +30,7 @@ namespace Electric_Meter.MVVM.ViewModels
         public string Factory = string.Empty;
         private DispatcherTimer _dispatcherTimer;
         public int IdDevice;
-        private readonly Service _service;
+        private readonly IService _service;
         public MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
         private readonly PowerTempWatchContext _context;
@@ -81,7 +82,7 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
         //Constructor
-        public ToolViewModel(Service service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext, LanguageService languageService)
+        public ToolViewModel(IService service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext, LanguageService languageService)
         {
             _languageService = languageService;
             _context = powerTempWatchContext;

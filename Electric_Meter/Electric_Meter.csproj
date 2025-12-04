@@ -103,6 +103,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
         <!-- ĐÃ CẬP NHẬT: Thay 8.0.0 thành 9.0.0 để đồng bộ với các gói khác -->
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
         <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.14.40264" />

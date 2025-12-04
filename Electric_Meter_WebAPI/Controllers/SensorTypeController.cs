@@ -29,5 +29,19 @@ namespace Electric_Meter_WebAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSensorTypeById(int id)
+        {
+            try
+            {
+                var data = await _service.GetSensorTypeByIdAsync(id);
+                return Ok(data);    
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,ex.Message);
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using Electric_Meter.Dto;
+using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 
@@ -18,7 +19,7 @@ namespace Electric_Meter.MVVM.ViewModels
     public partial class DashboardViewModel : ObservableObject
     {
         #region [ Fields - Private Dependencies ]
-        private readonly Service _services;
+        private readonly IService _services;
         private readonly LanguageService _languageService;
         private readonly DispatcherTimer _updateTimer;
         #endregion
@@ -44,7 +45,7 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string[] lstChartColumnLabels;
         #endregion
         #region [ constructor ]
-        public DashboardViewModel(Service services, LanguageService languageService)
+        public DashboardViewModel(IService services, LanguageService languageService)
         {
             _services = services;
             _languageService = languageService;

@@ -1,8 +1,11 @@
+using System.Net;
+
 using Electric_Meter.Dto;
 using Electric_Meter.Dto.ActiveTypeDto;
 using Electric_Meter.Dto.CodeTypeDto;
 using Electric_Meter.Dto.ControlcodeDto;
 using Electric_Meter.Dto.DeviceDto;
+using Electric_Meter.Dto.SensorDataDto;
 using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Models;
 
@@ -10,6 +13,9 @@ namespace Electric_Meter.Interfaces
 {
     public interface IService
     {
+        byte[] ConvertHexStringToByteArray(string requestHex);
+        string ConvertToHex(int address);
+        Task<SensorTypeDto> GetSensorTypeByIdAsync(int id);
         Task<List<CodeTypeDto>> GetCodeTypeAsync();
         Task<List<ActiveTypeDto>> GetActiveTypesAsync();
         Task<List<SensorTypeDto>> GetSensorTypesAsync();
@@ -22,13 +28,10 @@ namespace Electric_Meter.Interfaces
         Task<bool> UpdateControlcodeAsync(EditControlcodeDto dto);
         Task<bool> DeleteControlcodeAsync(int codeid);
         Task<List<ControlcodeDto>> GetListControlcodeAsync();
-
-        Task<bool> InsertToSensorDataAsync(SensorData data);
+        Task<ControlcodeDto> GetControlcodeByDevidAsync();
+        Task<bool> InsertToSensorDataAsync(SensorDataDto dto);
         List<DeviceVM> GetDevicesList();
-        List<ControlcodeVM> GetControlCodeListByDevid(int devid);
-        //List<Device> GetDevicesByAssembling(string key);
-        Task<List<Device>> GetActiveDevicesAsync();
-        Task<List<Device>> GetDeviceByIdAsync(int devid);
+        
         Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid);
         Task<List<DailyConsumptionDTO>> GetDailyConsumptionDTOs(int devid);
         Task<List<LatestSensorByDeviceYear>> GetLatestSensorByDeviceYear(int year);

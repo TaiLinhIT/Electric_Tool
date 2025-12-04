@@ -3,6 +3,7 @@ using Electric_Meter_WebAPI.Dto.ActiveTypeDto;
 using Electric_Meter_WebAPI.Dto.CodeTypeDto;
 using Electric_Meter_WebAPI.Dto.ControlcodeDto;
 using Electric_Meter_WebAPI.Dto.DeviceDto;
+using Electric_Meter_WebAPI.Dto.SensorDataDto;
 using Electric_Meter_WebAPI.Dto.SensorTypeDto;
 using Electric_Meter_WebAPI.Interfaces;
 using Electric_Meter_WebAPI.Models;
@@ -50,7 +51,7 @@ namespace Electric_Meter_WebAPI.Services
             return bytes;
         }
 
-        public async Task<bool> InsertToSensorDataAsync(SensorData data)
+        public async Task<bool> InsertToSensorDataAsync(SensorDataDto dto)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -59,12 +60,18 @@ namespace Electric_Meter_WebAPI.Services
 
                 try
                 {
+                    var result = new SensorData()
+                    {
+                        devid = dto.Devid,
+                        codeid = dto.Codeid,
+                        day = dto.Day,
+                        value = dto.Value,
+                    };
+                    await dbContext.sensorDatas.AddAsync(result);
+                    var check = await dbContext.SaveChangesAsync();
 
-                    await dbContext.sensorDatas.AddAsync(data);
-                    var result = await dbContext.SaveChangesAsync();
 
-
-                    return result > 0;
+                    return check > 0;
                 }
                 catch (Exception ex)
                 {
@@ -389,6 +396,7 @@ namespace Electric_Meter_WebAPI.Services
                               select new ControlcodeDto
                               {
                                   CodeId = x.codeid,
+                                  Devid = x.devid,
                                   Code = x.code,
                                   CodeType = z.Name,
                                   DeviceName = y.name,
@@ -505,6 +513,48 @@ namespace Electric_Meter_WebAPI.Services
             }
         }
 
+        public async Task<SensorTypeDto> GetSensorTypeByIdAsync(int id)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var find = await _context.sensorTypes.FirstOrDefaultAsync(x => x.typeid == id);
+                var result = new SensorTypeDto
+                {
+                    name = find.name,
+                    typeid = find.typeid,
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new();
+            }
+        }
 
+        public async Task GetControlcodeByDevidAsync(int id)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.devid == id);
+                var result = new ControlcodeDto
+                {
+                    CodeId = find.codeid,
+                    Devid = find.devid,
+                    DeviceName = _context.devices.Where(x => x.devid == id).Select(x  => x.name).FirstOrDefault(),
+                    Active = find.ac
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new();
+            }
+        }
     }
 }

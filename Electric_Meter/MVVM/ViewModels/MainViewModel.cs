@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -76,10 +75,10 @@ namespace Electric_Meter.MVVM.ViewModels
             SettingViewModel settingViewModel,
             ToolViewModel toolViewModel,
             AppSetting appSetting,
-            PowerTempWatchContext powerTempWatchContext,
-            Service service)
+            PowerTempWatchContext powerTempWatchContext
+             )
         {
-           
+
             _languageService = languageService;
 
 
@@ -110,7 +109,7 @@ namespace Electric_Meter.MVVM.ViewModels
             SelectedLanguage = "中文";
             LstLanguage = new(["中文", "English", "Tiếng Việt", "ខ្មែរ"]);
             SelectedBaudrate = _appSetting.Baudrate;
-            LstBaurate = new([1200, 9600, 19200, 38400, 115200]);
+            LstBaurate = new([1200, 2400, 9600, 19200, 38400, 115200]);
             LstPort = new(["COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM10"]);
             LstResendData = new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
             #endregion
@@ -179,7 +178,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Method - Menu ]
         private void InitializeMenuItems()
         {
-            
+
             MenuItems.Clear();
             FooterMenuItems.Clear();
 
@@ -284,7 +283,7 @@ namespace Electric_Meter.MVVM.ViewModels
             _navigationService?.Navigate(typeof(SettingView));
         }
 
-      
+
         #endregion
 
         #region [ Methods - Language ]

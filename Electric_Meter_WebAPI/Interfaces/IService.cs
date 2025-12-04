@@ -4,6 +4,7 @@ using Electric_Meter_WebAPI.Dto.ActiveTypeDto;
 using Electric_Meter_WebAPI.Dto.CodeTypeDto;
 using Electric_Meter_WebAPI.Dto.ControlcodeDto;
 using Electric_Meter_WebAPI.Dto.DeviceDto;
+using Electric_Meter_WebAPI.Dto.SensorDataDto;
 using Electric_Meter_WebAPI.Dto.SensorTypeDto;
 using Electric_Meter_WebAPI.Models;
 
@@ -11,6 +12,7 @@ namespace Electric_Meter_WebAPI.Interfaces
 {
     public interface IService
     {
+        Task<SensorTypeDto> GetSensorTypeByIdAsync(int id);
         Task<List<CodeTypeDto>> GetCodeTypeAsync();
         Task<List<ActiveTypeDto>> GetActiveTypesAsync();
         Task<List<SensorTypeDto>> GetSensorTypesAsync();
@@ -23,7 +25,7 @@ namespace Electric_Meter_WebAPI.Interfaces
         Task<int> CreateControlcodeAsync(CreateControlcodeDto dto);
         Task<int> EditControlcodeAsync(EditControlcodeDto dto);
         Task<int> DeleteControlcodeAsync(int devid);
-        Task<bool> InsertToSensorDataAsync(SensorData data);
+        Task<bool> InsertToSensorDataAsync(SensorDataDto dto);
         List<Device> GetDevicesByAssembling(string key);
         Task<List<Device>> GetDeviceByIdAsync(int devid);
         Task<List<SensorData>> GetLatestSensorByDeviceAsync(int devid);

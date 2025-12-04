@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input; // Quan trọng: Cung cấp [RelayCommand]
 using Electric_Meter.Configs;
 using Electric_Meter.Dto.ControlcodeDto;
 using Electric_Meter.Dto.DeviceDto;
+using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 
@@ -23,7 +24,7 @@ namespace Electric_Meter.MVVM.ViewModels
     {
         #region [ Fields - Private Dependencies ]
         private readonly LanguageService _languageService;
-        private readonly Service _service;
+        private readonly IService _service;
         private readonly ToolViewModel _toolViewModel;
         private readonly AppSetting _appSetting;
         private readonly IServiceScopeFactory _scopeFactory;
@@ -36,7 +37,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Constructor ]
-        public SettingViewModel(LanguageService languageService, Service service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope, PowerTempWatchContext context)
+        public SettingViewModel(LanguageService languageService, IService service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope, PowerTempWatchContext context)
         {
             _languageService = languageService;
             _languageService.LanguageChanged += UpdateTexts;
@@ -400,6 +401,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
                 await _service.CreateDeviceAsync(newDevice);
                 LoadDeviceListAsync();
+                GetDefaultSettingAsync();
             }
             catch (Exception ex)
             {
@@ -435,6 +437,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 };
                 await _service.UpdateDeviceAsync(device);
                 LoadDeviceListAsync();
+                GetDefaultSettingAsync();
                 MessageBox.Show("Edit successfully!");
             }
             catch (Exception ex)
@@ -469,6 +472,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 await _service.DeleteDeviceAsync(devid);
                 MessageBox.Show("Delete successfully!");
                 LoadDeviceListAsync();
+                GetDefaultSettingAsync();
             }
             catch (Exception ex)
             {

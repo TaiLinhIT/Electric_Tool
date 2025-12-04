@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -19,6 +21,24 @@ namespace Electric_Meter.Utilities
         public static string pathd()
         {
             return path() + @"Resources\";
+        }
+        /// <summary>
+        /// Ghi log chi tiết cho các lỗi HttpRequestException
+        /// </summary>
+        public static void LogHttpRequestException(string endpoint, HttpRequestException httpEx)
+        {
+            Log($"❌ [HTTP Failed] Endpoint: {endpoint}. Lỗi: {httpEx.Message}");
+
+            if (httpEx.InnerException != null)
+            {
+                Log($"   → Chi tiết: Loại: {httpEx.InnerException.GetType().Name}, Message: {httpEx.InnerException.Message}");
+
+                // Xử lý lỗi SSL/Chứng chỉ cụ thể
+                if (httpEx.InnerException is AuthenticationException)
+                {
+                    Log("   → Gợi ý: Lỗi SSL. Cần kiểm tra chứng chỉ máy chủ hoặc cấu hình HttpClient để bỏ qua chứng chỉ tự ký (self-signed) nếu dùng localhost/development.");
+                }
+            }
         }
         static readonly object obj = new object();
         public static void Log(string lg)

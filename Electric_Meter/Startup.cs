@@ -1,8 +1,8 @@
 using System.IO;
 using System.IO.Ports;
-using System.Net.Http;
 
 using Electric_Meter.Configs;
+//using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;
 using Electric_Meter.MVVM.Views;
@@ -11,10 +11,12 @@ using Electric_Meter.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+// BẮT BUỘC: Cần thiết cho AddSingleton, AddHttpClient, v.v.
 using Microsoft.Extensions.DependencyInjection;
 
 using Wpf.Ui;
 using Wpf.Ui.DependencyInjection;
+
 
 namespace Electric_Meter
 {
@@ -26,7 +28,6 @@ namespace Electric_Meter
 
         public Startup()
         {
-            // Đọc file appsetting.json
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory) // an toàn hơn cho WPF khi publish
                 .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true);
@@ -39,7 +40,7 @@ namespace Electric_Meter
             ServiceProvider = services.BuildServiceProvider();
 
             // Áp dụng migration và seed (async)
-            ApplyMigrationsAndSeed();
+            //ApplyMigrationsAndSeed();
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -70,14 +71,24 @@ namespace Electric_Meter
             services.AddSingleton<SettingViewModel>();
             services.AddSingleton<ToolViewModel>();
             services.AddSingleton<DashboardViewModel>();
-            services.AddSingleton<HttpClient>();
+
+            // ĐĂNG KÝ HTTPCLIENT 
+            services.AddHttpClient<Interfaces.IService, Service>(client =>
+            {
+                client.BaseAddress = new Uri(appSetting.ApiBaseUrl);
+            });
 
             // Services
-            services.AddSingleton<Service>();
+            //services.AddSingleton<Interfaces.IService, Service>();
             services.AddSingleton<SerialPort>();//new add
             services.AddSingleton<MySerialPortService>();
+
+            // ĐĂNG KÝ WPF.UI CORE SERVICES VỚI TÊN ĐẦY ĐỦ (Wpf.Ui.Services.*)
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddNavigationViewPageProvider();            
+            services.AddSingleton<IThemeService, ThemeService>();
+            services.AddSingleton<ISnackbarService, SnackbarService>();
+            services.AddSingleton<Interfaces.IRequestQueueService, RequestQueueService>();
+            services.AddNavigationViewPageProvider();
             services.AddSingleton<LanguageService>();
 
             // UI (MainWindow)
@@ -109,9 +120,6 @@ namespace Electric_Meter
             if (!File.Exists(filePath))
             {
                 Console.WriteLine($"ERROR: SQL file not found at path: {filePath}");
-                // Vô hiệu hóa tính năng để tránh lỗi crash nếu file không tồn tại
-                // Tuy nhiên, nếu Stored Proc là bắt buộc thì nên ném ngoại lệ
-                // throw new FileNotFoundException($"SQL file not found at path: {filePath}", filePath);
                 return string.Empty; // Trả về chuỗi rỗng để tránh crash và bỏ qua việc tạo SP
             }
 

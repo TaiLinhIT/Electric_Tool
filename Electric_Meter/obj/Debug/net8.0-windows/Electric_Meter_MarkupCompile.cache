@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\MyProject\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\
+D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\
 Electric_Meter
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-E:\MyProject\Electric_Tool\Electric_Meter\App.xaml
-81670456609
+D:\Linh\Project\Electric_Tool\Electric_Meter\App.xaml
+10-2094713329
 15-1328766685
-70-342043975
-3261218337265
-MainWindow.xaml;MVVM\Views\ActiveManagerView.xaml;MVVM\Views\CommandManagerView.xaml;MVVM\Views\DashboardView.xaml;MVVM\Views\DeviceManagerView.xaml;MVVM\Views\SensorTypeManagerView.xaml;MVVM\Views\SettingView.xaml;MVVM\Views\ToolView.xaml;
+741165995407
+3261732893660
+MainWindow.xaml;MVVM\Views\ActiveManagerView.xaml;MVVM\Views\CommandManagerView.xaml;MVVM\Views\DashboardView.xaml;MVVM\Views\DeviceManagerView.xaml;MVVM\Views\HardwareSetting.xaml;MVVM\Views\ResetpasswordView.xaml;MVVM\Views\SensorTypeManagerView.xaml;MVVM\Views\SettingView.xaml;MVVM\Views\ToolView.xaml;
 
 False
 

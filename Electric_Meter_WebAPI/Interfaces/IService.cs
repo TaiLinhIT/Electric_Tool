@@ -33,5 +33,11 @@ namespace Electric_Meter_WebAPI.Interfaces
         Task<List<DailyConsumptionDTO>> GetDailyConsumptionDTOs(int devid);
         Task<List<LatestSensorByDeviceYear>> GetLatestSensorByDeviceYear(int year);
         Task<List<TotalConsumptionPercentageDeviceDTO>> GetRatioMonthlyDevice(int month, int year);
+        Task<bool> AddCodeTypeAsync(CodeTypeDto dto);
+        Task<bool> UpdateCodeTypeAsync(CodeTypeDto dto);
+        Task<bool> DeleteCodeTypeAsync(int id);
+        Task<bool> AddSensorTypeAsync(SensorTypeDto dto);
+        Task<bool> UpdateSensorTypeAsync(SensorTypeDto dto);
+        Task<bool> DeleteSensorTypeAsync(int typeId);
     }
 }

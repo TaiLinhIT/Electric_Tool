@@ -349,8 +349,8 @@ namespace Electric_Meter_WebAPI.Services
                 var results = await (_context.sensorTypes.ToListAsync());
                 var dto = results.Select(x => new SensorTypeDto
                 {
-                    typeid = x.typeid,
-                    name = x.name,
+                    TypeId = x.typeid,
+                    Name = x.name,
                 }).ToList();
                 return dto;
             }
@@ -369,6 +369,7 @@ namespace Electric_Meter_WebAPI.Services
                 var results = await (_context.codetypes.ToListAsync());
                 var dto = results.Select(x => new CodeTypeDto
                 {
+                    Id = x.id,
                     CodeTypeId = x.CodetypeId,
                     NameCodeType = x.Name,
                 }).ToList();
@@ -522,8 +523,8 @@ namespace Electric_Meter_WebAPI.Services
                 var find = await _context.sensorTypes.FirstOrDefaultAsync(x => x.typeid == id);
                 var result = new SensorTypeDto
                 {
-                    name = find.name,
-                    typeid = find.typeid,
+                    Name = find.name,
+                    TypeId = find.typeid,
                 };
                 return result;
             }
@@ -563,5 +564,136 @@ namespace Electric_Meter_WebAPI.Services
                 return new();
             }
         }
+
+        public async Task<bool> AddCodeTypeAsync(CodeTypeDto dto)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var data = new Codetype
+                {
+                    CodetypeId = dto.CodeTypeId,
+                    Name = dto.NameCodeType
+                };
+                await _context.codetypes.AddAsync(data);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateCodeTypeAsync(CodeTypeDto dto)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var find = _context.codetypes.FirstOrDefault(x => x.id == dto.Id);
+                if (find == null) return false;
+                find.CodetypeId = dto.CodeTypeId;
+                find.Name = dto.NameCodeType;
+                _context.codetypes.Update(find);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteCodeTypeAsync(int id)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var find = _context.codetypes.FirstOrDefault(x => x.id == id);
+                if (find == null) return false;
+
+                _context.codetypes.Remove(find);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> AddSensorTypeAsync(SensorTypeDto dto)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var data = new SensorType
+                {
+                    typeid = dto.TypeId,
+                    name = dto.Name,
+                };
+                await _context.sensorTypes.AddAsync(data);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateSensorTypeAsync(SensorTypeDto dto)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var find = _context.sensorTypes.FirstOrDefault(x => x.typeid == dto.TypeId);
+                if (find == null) return false;
+                find.name = dto.Name;
+                _context.sensorTypes.Update(find);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteSensorTypeAsync(int typeId)
+        {
+            try
+            {
+                var scope = _scopeFactory.CreateScope();
+                var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+                var find = _context.sensorTypes.FirstOrDefault(x => x.typeid == typeId);
+                if (find == null) return false;
+
+                _context.sensorTypes.Remove(find);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        
     }
 }

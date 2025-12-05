@@ -98,7 +98,7 @@
             FooterMenuItemsSource="{Binding FooterMenuItems}"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleVisible="True"
-            OpenPaneLength="180"
+            OpenPaneLength="190"
             Background="#1C1C1C" />
         
     </Grid>

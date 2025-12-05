@@ -410,8 +410,8 @@ namespace Electric_Meter.Services
                 var response = await _httpClient.GetAsync("api/CodeType/");
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
-                var activetypes = JsonConvert.DeserializeObject<List<CodeTypeDto>>(content);
-                return activetypes ?? new List<CodeTypeDto>();
+                var data = JsonConvert.DeserializeObject<List<CodeTypeDto>>(content);
+                return data ?? new List<CodeTypeDto>();
             }
             catch (HttpRequestException httpEx)
             {
@@ -517,5 +517,177 @@ namespace Electric_Meter.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> AddCodeTypeAsync(CodeTypeDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/CodeType/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Tool.LogHttpRequestException("api/CodeType/", httpEx);
+                // Ghi vào hàng đợi để thử lại sau
+                await _requestQueueService.EnqueueRequestAsync(HttpMethod.Post, "api/CodeType", dto);
+                return true; // Trả về true vì yêu cầu đã được lưu để đồng bộ sau
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateCodeTypeAsync(CodeTypeDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync("api/CodeType/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Tool.LogHttpRequestException("api/CodeType/", httpEx);
+                // Ghi vào hàng đợi để thử lại sau
+                await _requestQueueService.EnqueueRequestAsync(HttpMethod.Post, "api/CodeType", dto);
+                return true; // Trả về true vì yêu cầu đã được lưu để đồng bộ sau
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteCodeTypeAsync(int id)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"api/CodeType/{id}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Xóa dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Tool.LogHttpRequestException($"api/CodeType/{id}", httpEx);
+                // Ghi vào hàng đợi để thử lại sau
+                await _requestQueueService.EnqueueRequestAsync(HttpMethod.Delete, $"api/CodeType/{id}", id);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> AddSensorTypeAsync(SensorTypeDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync("api/SensorType/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Tool.LogHttpRequestException("api/SensorType/", httpEx);
+                // Ghi vào hàng đợi để thử lại sau
+                await _requestQueueService.EnqueueRequestAsync(HttpMethod.Post, "api/SensorType", dto);
+                return true; // Trả về true vì yêu cầu đã được lưu để đồng bộ sau
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateSensorTypeAsync(SensorTypeDto dto)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync("api/SensorType/", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gửi dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Tool.LogHttpRequestException("api/SensorType/", httpEx);
+                // Ghi vào hàng đợi để thử lại sau
+                await _requestQueueService.EnqueueRequestAsync(HttpMethod.Post, "api/SensorType", dto);
+                return true; // Trả về true vì yêu cầu đã được lưu để đồng bộ sau
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteSensorTypeAsync(int typeId)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"api/SensorType/{typeId}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var respContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Xóa dữ liệu thất bại. Status: {response.StatusCode}, Response: {respContent}");
+                }
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Tool.LogHttpRequestException($"api/SensorType/{typeId}", httpEx);
+                // Ghi vào hàng đợi để thử lại sau
+                await _requestQueueService.EnqueueRequestAsync(HttpMethod.Delete, $"api/SensorType/{typeId}", typeId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Sửa dữ liệu thất bại (Lỗi chung): {ex.Message}");
+                return false;
+            }
+        }
+
+        
     }
 }

@@ -1,4 +1,18 @@
 {
+    "Type id": "លេខសម្គាល់ប្រភេទ",
+    //Command manager view
+    "Code type": "ប្រភេទលេខកូដ",
+    //
+    "Add": "បន្ថែម",
+    "Edit": "កែសម្រួល",
+    "Delete": "លុប",
+    "System": "ប្រព័ន្ធ",
+    "System of parameters": "ប្រព័ន្ធប៉ារ៉ាម៉ែត្រ",
+    "Sensor type setting": "ការកំណត់ប្រភេទសេនស័រ",
+    "Type command setting": "ការកំណត់ប្រភេទបញ្ជា",
+    "Device setting": "ការកំណត់ឧបករណ៍",
+    "Hardware setting": "ការកំណត់ផ្នែករឹង",
+    "Reset password": "កំណត់ពាក្យសម្ងាត់ឡើងវិញ",
     "Sensor type": "ប្រភេទឧបករណ៍ស៊ែនស័រ",
     "Device id": "លេខសម្គាល់ឧបករណ៍",
     "Name device": "ឈ្មោះឧបករណ៍",

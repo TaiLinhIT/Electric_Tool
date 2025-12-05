@@ -1,5 +1,19 @@
 {
-    "Sensor type" : "Loại cảm biến",
+    "Type id": "Mã loại",
+    //Command manager view
+    "Code type": "Loại mã",
+    //
+    "Add": "Thêm",
+    "Edit": "Chỉnh sửa",
+    "Delete": "Xóa",
+    "System": "Hệ thống",
+    "System of parameters": "Hệ thống các thông số",
+    "Sensor type setting": "Cài đặt loại cảm biến",
+    "Type command setting": "Cài đặt loại lệnh",
+    "Device setting": "Cài đặt thiết bị",
+    "Hardware setting": "Cài đặt phần cứng",
+    "Reset password": "Đặt lại mật khẩu",
+    "Sensor type": "Loại cảm biến",
     "Device id": "Mã định danh thiết bị",
     "Name device": "Tên thiết bị",
     "Name code type": "Tên loại mã",

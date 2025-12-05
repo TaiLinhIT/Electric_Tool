@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input; // Cung cấp RelayCommand mới
+using CommunityToolkit.Mvvm.Input;
 
 using Electric_Meter.Configs;
 using Electric_Meter.Models;
@@ -23,6 +23,7 @@ namespace Electric_Meter.MVVM.ViewModels
     public partial class MainViewModel : ObservableObject
     {
         #region [ Fields (Private data) - Observable Properties ]
+
 
         [ObservableProperty]
         private ObservableCollection<NavigationViewItem> _menuItems = new(); // Khởi tạo rỗng để tránh null
@@ -50,6 +51,14 @@ namespace Electric_Meter.MVVM.ViewModels
         [ObservableProperty] private string settingCommandText;
         [ObservableProperty] private string playCommandText;
         [ObservableProperty] private string pauseCommandText;
+        // ------ system ------
+        [ObservableProperty] private string systemCommandText;
+        [ObservableProperty] private string systemOfParametersCommandText;
+        [ObservableProperty] private string sensorTypeSettingCommandText;
+        [ObservableProperty] private string typeCommandSettingCommandText;
+        [ObservableProperty] private string deviceSettingCommandText;
+        [ObservableProperty] private string hardwareSettingCommandText;
+        [ObservableProperty] private string resetPasswordCommandText;
 
 
 
@@ -178,56 +187,64 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Method - Menu ]
         private void InitializeMenuItems()
         {
-
+            // Dọn dẹp danh sách cũ
             MenuItems.Clear();
             FooterMenuItems.Clear();
 
-            // 2a. Cài đặt Hệ thống (System Setting)
-            var systemSettingMenu = new NavigationViewItem
+            var systemofparameters = new NavigationViewItem
             {
-                Content = "Cài đặt Hệ thống",
-                Icon = new SymbolIcon(SymbolRegular.Laptop24),
-                // SỬA: Dùng Khối Khởi tạo Tập hợp để thêm items con.
-                // Đây là cách đúng cho thuộc tính MenuItems của NavigationViewItem.
-                MenuItems =
-                {
-                    new NavigationViewItem { Content = "Quản lý hoạt động", TargetPageType = typeof(Views.ActiveManagerView) },
-                    new NavigationViewItem { Content = "Quản lý kiểu cảm biến", TargetPageType = typeof(Views.SensorTypeManagerView) },
-                    new NavigationViewItem { Content = "Quản lý lệnh", TargetPageType = typeof(Views.CommandManagerView) },
-                    new NavigationViewItem { Content = "Quản lý thiết bị", TargetPageType = typeof(Views.DeviceManagerView) }
-                }
+
+                Content = SystemOfParametersCommandText,
+                Icon = new SymbolIcon(SymbolRegular.Database24),
+                TargetPageType = typeof(Views.ActiveManagerView),
             };
 
-            // 2b. Cài đặt Lưu trữ (Storage Setting)
-            var storageSettingMenu = new NavigationViewItem
+            var sensortypesetting = new NavigationViewItem
             {
-                Content = "Cài đặt Lưu trữ",
-                Icon = new SymbolIcon(SymbolRegular.DataArea24),
+                Content = SensorTypeSettingCommandText,
+                Icon = new SymbolIcon(SymbolRegular.Target24),
+                TargetPageType = typeof(Views.SensorTypeManagerView)
+            };
+
+            var typecommandsetting = new NavigationViewItem
+            {
+                Content = TypeCommandSettingCommandText,
+                Icon = new SymbolIcon(SymbolRegular.KeyCommand24),
+                TargetPageType = typeof(Views.CommandManagerView)
+            };
+            var devicesetting = new NavigationViewItem
+            {
+                Content = DeviceSettingCommandText,
+                Icon = new SymbolIcon(SymbolRegular.System24),
                 TargetPageType = typeof(Views.SettingView)
             };
-
-            // 2c. Cài đặt Bảo mật (Security Setting)
-            var securitySettingMenu = new NavigationViewItem
+            var hardwaresetting = new NavigationViewItem
             {
-                Content = "Cài đặt Bảo mật",
-                Icon = new SymbolIcon(SymbolRegular.LockClosed24),
-                TargetPageType = typeof(Views.SettingView)
+                Content = HardwareSettingCommandText,
+                Icon = new SymbolIcon(SymbolRegular.Memory16),
+                TargetPageType = typeof(Views.HardwareSetting)
+            };
+            var resetpassword = new NavigationViewItem
+            {
+                Content = ResetPasswordCommandText,
+                Icon = new SymbolIcon(SymbolRegular.KeyCommand24),
+                TargetPageType = typeof(Views.ResetpasswordView)
             };
 
-            // 1. Tạo Menu Item Cấp 1: Cài đặt (Setting)
             var settingMenu = new NavigationViewItem
             {
                 Content = SettingCommandText,
                 Icon = new SymbolIcon(SymbolRegular.Settings24),
-                MenuItems =
-                {
-                    systemSettingMenu,
-                    storageSettingMenu,
-                    securitySettingMenu
-                }
             };
 
-            // Khởi tạo các MenuItems chính (Sử dụng .Add() của ObservableCollection)
+            settingMenu.MenuItems.Add(systemofparameters);
+            settingMenu.MenuItems.Add(sensortypesetting);
+            settingMenu.MenuItems.Add(typecommandsetting);
+            settingMenu.MenuItems.Add(devicesetting);
+            settingMenu.MenuItems.Add(hardwaresetting);
+            settingMenu.MenuItems.Add(resetpassword);
+
+            // Khởi tạo các MenuItems chính (Cấp 0)
             MenuItems.Add(new NavigationViewItem
             {
                 Content = DashboardCommandText,
@@ -240,7 +257,8 @@ namespace Electric_Meter.MVVM.ViewModels
                 Icon = new SymbolIcon(SymbolRegular.Toolbox24),
                 TargetPageType = typeof(Views.ToolView)
             });
-            // Dòng gây lỗi đã được sửa: Giờ đây MenuItems là ObservableCollection và hỗ trợ .Add()
+
+            // Thêm mục Cài đặt (có thể mở rộng) vào MenuItems chính
             MenuItems.Add(settingMenu);
 
             // Khởi tạo FooterMenuItems
@@ -248,6 +266,7 @@ namespace Electric_Meter.MVVM.ViewModels
             {
                 Content = HelpCommandText,
                 Icon = new SymbolIcon(SymbolRegular.QuestionCircle24),
+                // Sử dụng RelayCommand từ MVVM Toolkit
                 Command = new RelayCommand(OpenHelp)
             });
         }
@@ -289,13 +308,24 @@ namespace Electric_Meter.MVVM.ViewModels
         #region [ Methods - Language ]
         private void UpdateTexts()
         {
+            // Cập nhật các thuộc tính văn bản ObservableProperty
             HelpCommandText = _languageService.GetString("Help");
             DashboardCommandText = _languageService.GetString("Dashboard");
             ToolCommandText = _languageService.GetString("Tool");
             SettingCommandText = _languageService.GetString("Setting");
             PlayCommandText = _languageService.GetString("Play");
             PauseCommandText = _languageService.GetString("Pause");
+
+            SystemCommandText = _languageService.GetString("System");
+            SystemOfParametersCommandText = _languageService.GetString("System of parameters");
+            SensorTypeSettingCommandText = _languageService.GetString("Sensor type setting");
+            TypeCommandSettingCommandText = _languageService.GetString("Type command setting");
+            DeviceSettingCommandText = _languageService.GetString("Device setting");
+            HardwareSettingCommandText = _languageService.GetString("Hardware setting");
+            ResetPasswordCommandText = _languageService.GetString("Reset password");
             RefreshPlayPauseText();
+
+            // QUAN TRỌNG: Gọi lại InitializeMenuItems() để xây dựng lại menu với ngôn ngữ mới.
             InitializeMenuItems();
 
         }

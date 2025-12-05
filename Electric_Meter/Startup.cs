@@ -71,6 +71,12 @@ namespace Electric_Meter
             services.AddSingleton<SettingViewModel>();
             services.AddSingleton<ToolViewModel>();
             services.AddSingleton<DashboardViewModel>();
+            services.AddSingleton<ActiveManagerViewModel>();
+            services.AddSingleton<CommandManagerViewModel>();
+            services.AddSingleton<DeviceManagerViewModel>();
+            services.AddSingleton<SensorTypeManagerViewModel>();
+            services.AddSingleton<HardwareViewModel>();
+            services.AddSingleton<ResetPasswordViewModel>();
 
             // ĐĂNG KÝ HTTPCLIENT 
             services.AddHttpClient<Interfaces.IService, Service>(client =>
@@ -91,17 +97,13 @@ namespace Electric_Meter
             services.AddNavigationViewPageProvider();
             services.AddSingleton<LanguageService>();
 
-            // UI (MainWindow)
+            // UI 
             services.AddSingleton<MainWindow>();
-
-            // UI (SettingView)
             services.AddSingleton<SettingView>();
-
-            // UI (Dashboard)
             services.AddSingleton<DashboardView>();
-
-            // UI (ToolView)
             services.AddSingleton<ToolView>();
+            services.AddSingleton<ResetpasswordView>();
+            services.AddSingleton<HardwareSetting>();
             services.AddSingleton<ActiveManagerView>();
             services.AddSingleton<CommandManagerView>();
             services.AddSingleton<SensorTypeManagerView>();

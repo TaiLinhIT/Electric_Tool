@@ -534,7 +534,7 @@ namespace Electric_Meter_WebAPI.Services
             }
         }
 
-        public async Task GetControlcodeByDevidAsync(int id)
+        public async Task<ControlcodeDto> GetControlcodeByDevidAsync(int id)
         {
             try
             {
@@ -545,8 +545,15 @@ namespace Electric_Meter_WebAPI.Services
                 {
                     CodeId = find.codeid,
                     Devid = find.devid,
-                    DeviceName = _context.devices.Where(x => x.devid == id).Select(x  => x.name).FirstOrDefault(),
-                    Active = find.ac
+                    DeviceName = _context.devices.Where(x => x.devid == id).Select(x => x.name).FirstOrDefault(),
+                    Active = _context.activeTypes.Where(x => x.activeid == find.activeid).Select(x => x.name).FirstOrDefault(),
+                    Code = find.code,
+                    CodeType = _context.codetypes.Where(x => x.CodetypeId == find.codetypeid).Select(x => x.Name).FirstOrDefault(),
+                    NameControlcode = find.name,
+                    Factor = find.factor,
+                    SensorType = _context.sensorTypes.Where(x => x.typeid == find.typeid).Select(x => x.name).FirstOrDefault(),
+                    High = find.high,
+                    Low = find.low,
                 };
                 return result;
             }

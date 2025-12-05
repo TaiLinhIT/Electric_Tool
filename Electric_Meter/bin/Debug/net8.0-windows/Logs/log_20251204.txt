@@ -1382,3 +1382,92 @@ File name: 'COM7'
 15:44:41 - Unknown or unhandled SensorType for Code 03 00 12 00 02 at codeId 1. Data not processed.
 15:44:42 - Máy 1 đã phản hồi đúng hạn.
 15:44:42 - Unknown or unhandled SensorType for Code 03 00 12 00 02 at codeId 1. Data not processed.
+21:47:48 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+21:47:48 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+21:47:48 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+21:47:48 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+21:47:49 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+21:47:49 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+21:47:53 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+21:47:53 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+21:47:53 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 78
+22:01:42 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:01:42 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:01:42 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:01:42 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:01:42 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:01:42 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:01:42 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:01:42 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:01:42 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 78
+22:03:04 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:04 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:05 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:05 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:05 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:05 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:05 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:05 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:05 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 78
+22:03:31 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:31 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:31 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:31 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:31 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:31 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:31 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:31 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:31 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 78
+22:03:35 - ❌ [HTTP Failed] Endpoint: api/SensorType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:35 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:35 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:35 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:39 - ❌ [HTTP Failed] Endpoint: api/SensorType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:39 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:43 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:43 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:47 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:47 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:03:51 - ❌ [HTTP Failed] Endpoint: api/CodeType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:03:51 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:18 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:18 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:18 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:18 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:18 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:18 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:18 - ❌ [HTTP Failed] Endpoint: api/Controlcode/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:18 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:18 - 端口打开失败:System.IO.FileNotFoundException: Could not find file 'COM4'.
+File name: 'COM4'
+   at System.IO.Ports.SerialStream..ctor(String portName, Int32 baudRate, Parity parity, Int32 dataBits, StopBits stopBits, Int32 readTimeout, Int32 writeTimeout, Handshake handshake, Boolean dtrEnable, Boolean rtsEnable, Boolean discardNull, Byte parityReplace)
+   at System.IO.Ports.SerialPort.Open()
+   at Electric_Meter.Services.MySerialPortService.Conn() in E:\MyProject\Electric_Tool\Electric_Meter\Services\MySerialPortService.cs:line 78
+22:05:22 - ❌ [HTTP Failed] Endpoint: api/SensorType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:22 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:22 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:22 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:26 - ❌ [HTTP Failed] Endpoint: api/SensorType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:26 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:31 - ❌ [HTTP Failed] Endpoint: api/ActiveType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:31 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:35 - ❌ [HTTP Failed] Endpoint: api/Device/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:35 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.
+22:05:39 - ❌ [HTTP Failed] Endpoint: api/CodeType/. Lỗi: No connection could be made because the target machine actively refused it. (localhost:7099)
+22:05:39 -    → Chi tiết: Loại: SocketException, Message: No connection could be made because the target machine actively refused it.

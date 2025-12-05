@@ -76,7 +76,7 @@ namespace Electric_Meter_WebAPI.Controllers
             try
             {
                 var result = await _service.GetControlcodeByDevidAsync(id);
-                return Ok(result;
+                return Ok(result);
             }
             catch (Exception ex)
             {

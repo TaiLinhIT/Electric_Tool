@@ -1,5 +1,7 @@
+using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Windows; // Dành cho WPF MessageBox
 
 using Electric_Meter.Dto;
@@ -12,11 +14,14 @@ using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Utilities;
+
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using Newtonsoft.Json;
+
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Electric_Meter.Services
 {
@@ -25,6 +30,7 @@ namespace Electric_Meter.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IRequestQueueService _requestQueueService;
         private readonly HttpClient _httpClient;
+        private const string DbConfigFilePath = "db_config.json";
 
         // Dùng SemaphoreSlim để kiểm soát truy cập DB khi insert SensorData
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
@@ -491,32 +497,29 @@ namespace Electric_Meter.Services
             }
         }
 
-        public async Task<ControlcodeDto> GetControlcodeByDevidAsync(int id)
+        public async Task<List<ControlcodeDto>> GetControlcodeByDevidAsync(int id)
         {
             try
             {
                 var response = await _httpClient.GetAsync($"api/Controlcode/{id}");
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
-                var controlcode = JsonConvert.DeserializeObject<ControlcodeDto>(content);
-                return controlcode ?? new ControlcodeDto();
+                var controlcode = JsonConvert.DeserializeObject<List<ControlcodeDto>>(content);
+                return controlcode ?? new List<ControlcodeDto>();
             }
             catch (HttpRequestException httpEx)
             {
                 Tool.LogHttpRequestException($"api/Controlcode/{id}", httpEx);
-                return new ControlcodeDto();
+                return new List<ControlcodeDto>();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Gửi dữ liệu thất bại (Lỗi chung): {ex.Message}");
-                return new ControlcodeDto();
+                return new List<ControlcodeDto>();
             }
         }
 
-        public Task<ControlcodeDto> GetControlcodeByDevidAsync()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public async Task<bool> AddCodeTypeAsync(CodeTypeDto dto)
         {
@@ -688,6 +691,71 @@ namespace Electric_Meter.Services
             }
         }
 
-        
+        public SystemParameter LoadSystemParameters()
+        {
+            // Tải thông số từ file cấu hình cục bộ (db_config.json)
+            if (File.Exists(DbConfigFilePath))
+            {
+                try
+                {
+                    var json = File.ReadAllText(DbConfigFilePath);
+                    // Dùng System.Text.Json để Deserialize (chuyển JSON thành Object)
+                    return JsonSerializer.Deserialize<SystemParameter>(json);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading DB config file: {ex.Message}");
+                    return null;
+                }
+            }
+            // Trả về null nếu file chưa tồn tại (chưa có cấu hình nào được lưu)
+            return null;
+        }
+
+        public void SaveSystemParameters(SystemParameter parameters)
+        {
+            try
+            {
+                // Dùng System.Text.Json để Serialize (chuyển Object thành JSON)
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                var json = JsonSerializer.Serialize(parameters, options);
+
+                // Ghi đè hoặc tạo mới file db_config.json
+                File.WriteAllText(DbConfigFilePath, json);
+                Console.WriteLine($"Database configuration saved successfully to {DbConfigFilePath}");
+                MessageBox.Show("Lưu thông số kết nối thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving DB configuration: {ex.Message}");
+                MessageBox.Show($"Lỗi khi lưu cấu hình: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public bool TestConnection(SystemParameter parameters)
+        {
+            // Tạo chuỗi kết nối từ tham số người dùng nhập
+            string connectionString = $"Server={parameters.BackupDbLocation};Database={parameters.DatabaseName};User ID={parameters.Account};Password={parameters.Password};TrustServerCertificate=True;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    MessageBox.Show("Kết nối Cơ sở dữ liệu thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    connection.Close();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SQL Server Connection Test Failed: {ex.Message}");
+
+                string errorMessage = $"Kết nối Cơ sở dữ liệu thất bại. Vui lòng kiểm tra thông số:\n\n{ex.Message}";
+                MessageBox.Show(errorMessage, "Lỗi Kết nối", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return false;
+            }
+        }
     }
 }

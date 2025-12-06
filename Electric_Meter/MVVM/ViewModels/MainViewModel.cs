@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using Electric_Meter.Configs;
-using Electric_Meter.Models;
 using Electric_Meter.MVVM.Views;
 using Electric_Meter.Services;
 
@@ -66,7 +65,6 @@ namespace Electric_Meter.MVVM.ViewModels
         // --- CÁC TRƯỜNG KHÁC (Không cần chuyển đổi) ---
         private readonly MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
-        private readonly PowerTempWatchContext _context;
         private readonly LanguageService _languageService;
         private Dictionary<string, string> _currentLanguage;
 
@@ -83,8 +81,7 @@ namespace Electric_Meter.MVVM.ViewModels
             MySerialPortService mySerialPort,
             SettingViewModel settingViewModel,
             ToolViewModel toolViewModel,
-            AppSetting appSetting,
-            PowerTempWatchContext powerTempWatchContext
+            AppSetting appSetting
              )
         {
 
@@ -124,7 +121,6 @@ namespace Electric_Meter.MVVM.ViewModels
             #endregion
             // Inject các phụ thuộc
             _mySerialPort = mySerialPort;
-            _context = powerTempWatchContext;
             SettingVM = settingViewModel;
             ToolVM = toolViewModel;
             // Khởi tạo Commands thủ công, sử dụng namespace đầy đủ để giải quyết lỗi mơ hồ
@@ -196,7 +192,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
                 Content = SystemOfParametersCommandText,
                 Icon = new SymbolIcon(SymbolRegular.Database24),
-                TargetPageType = typeof(Views.ActiveManagerView),
+                TargetPageType = typeof(Views.SystemOfParameterView),
             };
 
             var sensortypesetting = new NavigationViewItem

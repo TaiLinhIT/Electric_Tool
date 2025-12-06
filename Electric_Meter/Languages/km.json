@@ -1,4 +1,14 @@
 {
+    //System of parameter
+    "System display name": "ឈ្មោះបង្ហាញប្រព័ន្ធ",
+    "Backup db location": "ទីតាំងបម្រុងទុក CSDL",
+    "Account": "គណនី",
+    "Password": "ពាក្យសម្ងាត់",
+    "Test": "សាកល្បង",
+    "Sync": "ធ្វើសមកាលកម្ម",
+    "Save": "រក្សាទុក",
+    "Database name": "ឈ្មោះមូលដ្ឋានទិន្នន័យ",
+    //
     "Type id": "លេខសម្គាល់ប្រភេទ",
     //Command manager view
     "Code type": "ប្រភេទលេខកូដ",

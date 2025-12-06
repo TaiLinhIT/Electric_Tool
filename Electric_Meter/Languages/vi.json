@@ -1,4 +1,14 @@
 {
+    //System of parameter
+    "System display name": "Tên hiển thị hệ thống",
+    "Backup db location": "Vị trí sao lưu CSDL",
+    "Account": "Tài khoản",
+    "Password": "Mật khẩu",
+    "Test": "Kiểm tra",
+    "Sync": "Đồng bộ",
+    "Save": "Lưu",
+    "Database name": "Tên cơ sở dữ liệu",
+    //
     "Type id": "Mã loại",
     //Command manager view
     "Code type": "Loại mã",

@@ -43,7 +43,7 @@ namespace Electric_Meter.MVVM.Views
         private void Vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(_vm.TypeIdText) ||
-                e.PropertyName == nameof(_vm.NameText)
+                e.PropertyName == nameof(_vm.NameText) 
                 )
 
             {
@@ -55,8 +55,8 @@ namespace Electric_Meter.MVVM.Views
         {
             if (SensorTypeGrid.Columns.Count >= 2)
             {
-                SensorTypeGrid.Columns[1].Header = _vm.TypeIdText;
-                SensorTypeGrid.Columns[2].Header = _vm.NameText;
+                SensorTypeGrid.Columns[0].Header = _vm.TypeIdText;
+                SensorTypeGrid.Columns[1].Header = _vm.NameText;
             }
         }
     }

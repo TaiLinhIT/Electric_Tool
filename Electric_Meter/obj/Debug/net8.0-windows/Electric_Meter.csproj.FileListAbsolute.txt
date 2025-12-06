@@ -742,6 +742,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\ResetpasswordView.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SensorTypeManagerView.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SettingView.g.cs
+D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SystemOfParameterView.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\ToolView.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\App.g.cs
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter_Content.g.cs
@@ -755,6 +756,7 @@ D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\ResetpasswordView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SensorTypeManagerView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SettingView.baml
+D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\SystemOfParameterView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\MVVM\Views\ToolView.baml
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.g.resources
 D:\Linh\Project\Electric_Tool\Electric_Meter\obj\Debug\net8.0-windows\Electric_Meter.GeneratedMSBuildEditorConfig.editorconfig

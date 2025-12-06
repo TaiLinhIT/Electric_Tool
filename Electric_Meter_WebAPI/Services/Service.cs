@@ -535,33 +535,67 @@ namespace Electric_Meter_WebAPI.Services
             }
         }
 
-        public async Task<ControlcodeDto> GetControlcodeByDevidAsync(int id)
+        public async Task<List<ControlcodeDto>> GetControlcodeByDevidAsync(int id)
         {
+            // Sử dụng List<ControlcodeDto> rỗng thay vì new() để rõ ràng hơn
+            var resultList = new List<ControlcodeDto>();
+
             try
             {
+                // 1. Khởi tạo scope và context như cũ
                 var scope = _scopeFactory.CreateScope();
                 var _context = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
-                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.devid == id);
-                var result = new ControlcodeDto
-                {
-                    CodeId = find.codeid,
-                    Devid = find.devid,
-                    DeviceName = _context.devices.Where(x => x.devid == id).Select(x => x.name).FirstOrDefault(),
-                    Active = _context.activeTypes.Where(x => x.activeid == find.activeid).Select(x => x.name).FirstOrDefault(),
-                    Code = find.code,
-                    CodeType = _context.codetypes.Where(x => x.CodetypeId == find.codetypeid).Select(x => x.Name).FirstOrDefault(),
-                    NameControlcode = find.name,
-                    Factor = find.factor,
-                    SensorType = _context.sensorTypes.Where(x => x.typeid == find.typeid).Select(x => x.name).FirstOrDefault(),
-                    High = find.high,
-                    Low = find.low,
-                };
-                return result;
+
+                // 2. Tối ưu hóa truy vấn bằng cách sử dụng JOINs/Include
+                // Dùng LINQ Join hoặc Eager Loading (Include) để lấy dữ liệu từ các bảng liên quan 
+                // trong MỘT truy vấn duy nhất.
+
+                var query = from cc in _context.controlcodes
+                                // Điều kiện lọc: Lấy tất cả Controlcodes có devid = id
+                            where cc.devid == id
+
+                            // LEFT JOIN các bảng liên quan để lấy tên (Name)
+                            join d in _context.devices on cc.devid equals d.devid into deviceGroup
+                            from device in deviceGroup.DefaultIfEmpty() // LEFT JOIN
+
+                            join at in _context.activeTypes on cc.activeid equals at.activeid into activeGroup
+                            from activeType in activeGroup.DefaultIfEmpty()
+
+                            join ct in _context.codetypes on cc.codetypeid equals ct.CodetypeId into codetypeGroup
+                            from codeType in codetypeGroup.DefaultIfEmpty()
+
+                            join st in _context.sensorTypes on cc.typeid equals st.typeid into sensorTypeGroup
+                            from sensorType in sensorTypeGroup.DefaultIfEmpty()
+
+                                // 3. Project kết quả sang ControlcodeDto
+                            select new ControlcodeDto
+                            {
+                                CodeId = cc.codeid,
+                                Devid = cc.devid,
+                                NameControlcode = cc.name,
+                                Code = cc.code,
+                                Factor = cc.factor,
+                                High = cc.high,
+                                Low = cc.low,
+
+                                // Lấy các trường tên từ các bảng đã join
+                                DeviceName = device.name,
+                                Active = activeType.name,
+                                CodeType = codeType.Name,
+                                SensorType = sensorType.name
+                            };
+
+                // 4. Thực thi truy vấn và trả về List
+                resultList = await query.ToListAsync();
+
+                return resultList;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return new();
+                // Ghi log lỗi ra console
+                Console.WriteLine($"Lỗi khi lấy danh sách Controlcode: {ex.Message}");
+                // Trả về danh sách rỗng nếu có lỗi xảy ra
+                return resultList;
             }
         }
 
@@ -694,6 +728,6 @@ namespace Electric_Meter_WebAPI.Services
             }
         }
 
-        
+
     }
 }

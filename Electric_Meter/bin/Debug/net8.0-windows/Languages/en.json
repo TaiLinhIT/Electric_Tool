@@ -1,4 +1,15 @@
 {
+    //System of parameter
+    "System display name": "System display name",
+    "Backup db location": "Backup db location",
+    "Account": "Account",
+    "Password": "Password",
+    "Test": "Test",
+    "Sync": "Sync",
+    "Save": "Save",
+    "Database name": "Database name",
+    //
+    "Type id": "Type Id",
     //Command manager view
     "Code type": "Code type",
     //

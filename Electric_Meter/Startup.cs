@@ -2,7 +2,6 @@ using System.IO;
 using System.IO.Ports;
 
 using Electric_Meter.Configs;
-//using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.MVVM.ViewModels;
 using Electric_Meter.MVVM.Views;
@@ -11,8 +10,7 @@ using Electric_Meter.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-// BẮT BUỘC: Cần thiết cho AddSingleton, AddHttpClient, v.v.
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection; // BẮT BUỘC
 
 using Wpf.Ui;
 using Wpf.Ui.DependencyInjection;
@@ -29,7 +27,7 @@ namespace Electric_Meter
         public Startup()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory) // an toàn hơn cho WPF khi publish
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
@@ -40,7 +38,7 @@ namespace Electric_Meter
             ServiceProvider = services.BuildServiceProvider();
 
             // Áp dụng migration và seed (async)
-            //ApplyMigrationsAndSeed();
+            //ApplyMigrationsAndSeed(); // Đảm bảo đã mở comment để chạy migration
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -51,19 +49,16 @@ namespace Electric_Meter
 
             services.AddSingleton(appSetting);
 
-            // Đăng ký DbContext
-            services.AddDbContext<PowerTempWatchContext>(options =>
-                options.UseSqlServer(
-                    appSetting.ConnectString,
-                    sqlOptions =>
-                    {
-                        sqlOptions.CommandTimeout(240); // ⏱ Timeout 240 giây
-                    }
-                )
-            );
+            services.AddSingleton<IConfiguration>(Configuration);
 
+            // 1. Đăng ký Factory để tạo DbContext với chuỗi kết nối động/mới nhất.
+            services.AddSingleton<Interfaces.IDbContextFactory, CustomDbContextFactory>();
+
+            // 2. Đăng ký DbContext với Transient/Scoped để đảm bảo nó được tạo ra qua Factory
+            // Note: Chúng ta sẽ dùng Factory để tạo thủ công ở Migration và các Repository.
 
             // Seeder (dùng DI để lấy context tự động)
+            // (Sẽ cần cập nhật DatabaseSeeder để nhận IDbContextFactory)
             services.AddTransient<DatabaseSeeder>();
 
             // ViewModels
@@ -71,6 +66,7 @@ namespace Electric_Meter
             services.AddSingleton<SettingViewModel>();
             services.AddSingleton<ToolViewModel>();
             services.AddSingleton<DashboardViewModel>();
+            services.AddSingleton<SystemOfParameterViewModel>();
             services.AddSingleton<ActiveManagerViewModel>();
             services.AddSingleton<CommandManagerViewModel>();
             services.AddSingleton<DeviceManagerViewModel>();
@@ -78,16 +74,18 @@ namespace Electric_Meter
             services.AddSingleton<HardwareViewModel>();
             services.AddSingleton<ResetPasswordViewModel>();
 
-            // ĐĂNG KÝ HTTPCLIENT 
+            // ĐĂNG KÝ HTTPCLIENT và SERVICE (Service giờ đây tự xử lý lưu/tải config DB)
             services.AddHttpClient<Interfaces.IService, Service>(client =>
             {
                 client.BaseAddress = new Uri(appSetting.ApiBaseUrl);
             });
+            // Nếu Service có logic ngoài HttpClient (như Load/Save DB), cần đăng ký thêm.
+            //services.AddSingleton<Interfaces.IService, Service>(); 
 
             // Services
-            //services.AddSingleton<Interfaces.IService, Service>();
-            services.AddSingleton<SerialPort>();//new add
+            services.AddSingleton<SerialPort>();
             services.AddSingleton<MySerialPortService>();
+            services.AddSingleton<Interfaces.IDbContextFactory, CustomDbContextFactory>();
 
             // ĐĂNG KÝ WPF.UI CORE SERVICES VỚI TÊN ĐẦY ĐỦ (Wpf.Ui.Services.*)
             services.AddSingleton<INavigationService, NavigationService>();
@@ -102,6 +100,7 @@ namespace Electric_Meter
             services.AddSingleton<SettingView>();
             services.AddSingleton<DashboardView>();
             services.AddSingleton<ToolView>();
+            services.AddSingleton<SystemOfParameterView>();
             services.AddSingleton<ResetpasswordView>();
             services.AddSingleton<HardwareSetting>();
             services.AddSingleton<ActiveManagerView>();
@@ -116,13 +115,12 @@ namespace Electric_Meter
         private static string ReadSqlFile(string fileName)
         {
             // Tạo đường dẫn tuyệt đối đến file: [AppBaseDir]/Sql/[fileName]
-            // AppContext.BaseDirectory trỏ đến thư mục bin/Debug/netcoreappX.X/
             var filePath = Path.Combine(AppContext.BaseDirectory, "Sql", fileName);
 
             if (!File.Exists(filePath))
             {
                 Console.WriteLine($"ERROR: SQL file not found at path: {filePath}");
-                return string.Empty; // Trả về chuỗi rỗng để tránh crash và bỏ qua việc tạo SP
+                return string.Empty;
             }
 
             return File.ReadAllText(filePath);
@@ -137,11 +135,17 @@ namespace Electric_Meter
             Task.Run(async () =>
             {
                 using var scope = ServiceProvider.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<PowerTempWatchContext>();
+
+                // --------------------------------------------------------------------------------
+                // THAY ĐỔI QUAN TRỌNG: LẤY DB CONTEXT QUA FACTORY
+                // --------------------------------------------------------------------------------
+                var dbFactory = scope.ServiceProvider.GetRequiredService<Interfaces.IDbContextFactory>();
+                using var db = dbFactory.CreateDbContext(); // Sử dụng chuỗi kết nối động/mới nhất
+
                 var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
                 try
                 {
-                    // 1. Apply Migrations (Tách ra để xử lý lỗi "Object already exists")
+                    // 1. Apply Migrations 
                     var pending = await db.Database.GetPendingMigrationsAsync();
                     if (pending.Any())
                     {
@@ -149,38 +153,30 @@ namespace Electric_Meter
                         {
                             await db.Database.MigrateAsync();
                         }
-                        // Bắt lỗi cụ thể "Đối tượng đã tồn tại" và bỏ qua lỗi này (chỉ trong trường hợp development)
                         catch (SqlException sqlEx)
                         {
                             Console.WriteLine("WARNING: Migration failed due to 'object already exists' error. Assuming schema is mostly correct and continuing.");
-                            // In lỗi chi tiết
                             Console.WriteLine($" Inner Exception: {sqlEx.Message}");
                         }
                     }
 
                     // 2. Seed Data
-                    //await seeder.SeedAsync();
+                    //await seeder.SeedAsync(); // Nếu Seeder đã được cập nhật để dùng IDbContextFactory
 
                     // 3. Create Stored Procedures
                     await EnsureStoredProceduresAsync(db);
                 }
                 catch (Exception ex)
                 {
-                    // Log tất cả các lỗi khác (Seeding, Stored Procedure, hoặc Migration lỗi khác)
                     Console.WriteLine("❌ Database Startup Error:");
                     Console.WriteLine($" Message: {ex.Message}");
                     if (ex.InnerException != null)
                         Console.WriteLine($" Inner Exception: {ex.InnerException.Message}");
 
-                    // Throw the exception again to signal a critical startup failure
                     throw;
                 }
             }).Wait();
         }
-
-        /// <summary>
-        /// Tạo hoặc cập nhật Stored Procedures bằng cách đọc từ các file .sql trong thư mục Sql.
-        /// </summary>
         private static async Task EnsureStoredProceduresAsync(PowerTempWatchContext db)
         {
             Console.WriteLine("Creating/Updating Stored Procedures from .sql files...");

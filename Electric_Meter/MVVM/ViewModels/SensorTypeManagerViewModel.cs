@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using Electric_Meter.Dto.SensorDataDto;
 using Electric_Meter.Dto.SensorTypeDto;
 using Electric_Meter.Interfaces;
 using Electric_Meter.Services;
@@ -18,8 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Electric_Meter.MVVM.ViewModels
 {
-    
-    public partial class SensorTypeManagerViewModel :ObservableObject
+
+    public partial class SensorTypeManagerViewModel : ObservableObject
     {
         #region [ Fields - Private Dependencies ]
         private readonly LanguageService _languageService;
@@ -76,7 +70,7 @@ namespace Electric_Meter.MVVM.ViewModels
             }
             Name = value.Name;
             TypeId = value.TypeId;
-           
+
             IsEnabledBtnEdit = true;
             AddSensorTypeCommand.NotifyCanExecuteChanged();
             EditSensorTypeCommand.NotifyCanExecuteChanged();
@@ -145,7 +139,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 MessageBox.Show(ex.Message);
             }
         }
-        private bool CanExecuteEditSensorType() => TypeId == 0;
+        private bool CanExecuteEditSensorType() => TypeId != 0;
         [RelayCommand(CanExecute = nameof(CanExecuteDeleteSensorType))]
         private async Task DeleteSensorType()
         {
@@ -167,7 +161,7 @@ namespace Electric_Meter.MVVM.ViewModels
                 MessageBox.Show(ex.Message);
             }
         }
-        private bool CanExecuteDeleteSensorType() => TypeId == 0;
+        private bool CanExecuteDeleteSensorType() => TypeId != 0;
         #endregion
     }
 }

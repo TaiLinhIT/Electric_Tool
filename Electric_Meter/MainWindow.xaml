@@ -94,6 +94,7 @@
         <ui:NavigationView
             x:Name="RootNavigationView"
             Grid.Row="1"
+            VerticalContentAlignment="Top"
             MenuItemsSource="{Binding MenuItems}"
             FooterMenuItemsSource="{Binding FooterMenuItems}"
             IsBackButtonVisible="Collapsed"

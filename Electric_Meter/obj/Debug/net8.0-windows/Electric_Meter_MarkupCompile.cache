@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 D:\Linh\Project\Electric_Tool\Electric_Meter\App.xaml
-10-2094713329
+11-1479943890
 15-1328766685
-741165995407
+79-2005366439
 3261732893660
-MainWindow.xaml;MVVM\Views\ActiveManagerView.xaml;MVVM\Views\CommandManagerView.xaml;MVVM\Views\DashboardView.xaml;MVVM\Views\DeviceManagerView.xaml;MVVM\Views\HardwareSetting.xaml;MVVM\Views\ResetpasswordView.xaml;MVVM\Views\SensorTypeManagerView.xaml;MVVM\Views\SettingView.xaml;MVVM\Views\ToolView.xaml;
+MainWindow.xaml;MVVM\Views\ActiveManagerView.xaml;MVVM\Views\CommandManagerView.xaml;MVVM\Views\DashboardView.xaml;MVVM\Views\DeviceManagerView.xaml;MVVM\Views\HardwareSetting.xaml;MVVM\Views\ResetpasswordView.xaml;MVVM\Views\SensorTypeManagerView.xaml;MVVM\Views\SettingView.xaml;MVVM\Views\SystemOfParameterView.xaml;MVVM\Views\ToolView.xaml;
 
 False
 

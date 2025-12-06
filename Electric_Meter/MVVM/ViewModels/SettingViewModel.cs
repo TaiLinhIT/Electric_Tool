@@ -13,7 +13,6 @@ using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 // Lưu ý: Đảm bảo rằng lớp RelayCommand cũ trong Electric_Meter.Core đã được loại bỏ 
 // hoặc bạn đã xóa using Electric_Meter.Core; để tránh xung đột.
@@ -28,7 +27,6 @@ namespace Electric_Meter.MVVM.ViewModels
         private readonly ToolViewModel _toolViewModel;
         private readonly AppSetting _appSetting;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly PowerTempWatchContext _context;
         #endregion
 
         #region [ Events ]
@@ -37,7 +35,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Constructor ]
-        public SettingViewModel(LanguageService languageService, IService service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope, PowerTempWatchContext context)
+        public SettingViewModel(LanguageService languageService, IService service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope)
         {
             _languageService = languageService;
             _languageService.LanguageChanged += UpdateTexts;
@@ -46,7 +44,6 @@ namespace Electric_Meter.MVVM.ViewModels
             _service = service;
             _toolViewModel = toolViewModel;
             _appSetting = appSetting;
-            _context = context;
 
             // Khởi tạo trạng thái ban đầu
             // Các thuộc tính [ObservableProperty] có giá trị mặc định là true/false
@@ -496,7 +493,9 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.CodeId);
+                //var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.CodeId);
+                var find = 9;
+                //var find = await _service.
                 if (find == null)
                 {
                     MessageBox.Show("Control Code not found.");

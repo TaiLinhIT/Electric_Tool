@@ -1,4 +1,15 @@
 {
+    //System of parameter
+    "System display name": "系统显示名称",
+    "Backup db location": "数据库备份位置",
+    "Account": "帐户",
+    "Password": "密码",
+    "Test": "测试",
+    "Sync": "同步",
+    "Save": "保存",
+    "Database name": "数据库名称",
+    //
+    "Type id": "类型ID",
     //Command manager view
     "Code type": "代码类型",
     //

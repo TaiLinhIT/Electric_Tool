@@ -33,7 +33,6 @@ namespace Electric_Meter.MVVM.ViewModels
         private readonly IService _service;
         public MySerialPortService _mySerialPort;
         private readonly AppSetting _appSetting;
-        private readonly PowerTempWatchContext _context;
 
         private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
 
@@ -82,10 +81,9 @@ namespace Electric_Meter.MVVM.ViewModels
         }
 
         //Constructor
-        public ToolViewModel(IService service, AppSetting appSetting, MySerialPortService mySerialPortService, PowerTempWatchContext powerTempWatchContext, LanguageService languageService)
+        public ToolViewModel(IService service, AppSetting appSetting, MySerialPortService mySerialPortService, LanguageService languageService)
         {
             _languageService = languageService;
-            _context = powerTempWatchContext;
             _service = service;
             _appSetting = appSetting;
             _mySerialPort = mySerialPortService;
@@ -357,13 +355,13 @@ namespace Electric_Meter.MVVM.ViewModels
                 }
                 else
                 {
-                    latestDict = latestSensorData
-                       .Join(_context.controlcodes,
-                             s => s.codeid,
-                             c => c.codeid,
-                             (s, c) => new { c.name, s.value })
-                       // Sử dụng ToList() HOẶC ToDictionary() trên luồng nền là OK.
-                       .ToDictionary(x => x.name, x => (double?)x.value);
+                    //latestDict = latestSensorData
+                    //   .Join(_context.controlcodes,
+                    //         s => s.codeid,
+                    //         c => c.codeid,
+                    //         (s, c) => new { c.name, s.value })
+                    //   // Sử dụng ToList() HOẶC ToDictionary() trên luồng nền là OK.
+                    //   .ToDictionary(x => x.name, x => (double?)x.value);
                 }
 
                 // 3. Cập nhật UI: Bắt buộc phải quay lại UI Thread để tương tác với Properties/Control.

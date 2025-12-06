@@ -11,6 +11,9 @@ namespace Electric_Meter.Interfaces
 {
     public interface IService
     {
+        SystemParameter LoadSystemParameters();
+        void SaveSystemParameters(SystemParameter parameters);
+        bool TestConnection(SystemParameter parameters);
         byte[] ConvertHexStringToByteArray(string requestHex);
         string ConvertToHex(int address);
         Task<SensorTypeDto> GetSensorTypeByIdAsync(int id);
@@ -26,7 +29,7 @@ namespace Electric_Meter.Interfaces
         Task<bool> UpdateControlcodeAsync(EditControlcodeDto dto);
         Task<bool> DeleteControlcodeAsync(int codeid);
         Task<List<ControlcodeDto>> GetListControlcodeAsync();
-        Task<ControlcodeDto> GetControlcodeByDevidAsync();
+        Task<List<ControlcodeDto>> GetControlcodeByDevidAsync(int devid);
         Task<bool> InsertToSensorDataAsync(SensorDataDto dto);
         List<DeviceVM> GetDevicesList();
 

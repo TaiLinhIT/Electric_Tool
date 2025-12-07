@@ -13,7 +13,6 @@ using Electric_Meter.Interfaces;
 using Electric_Meter.Models;
 using Electric_Meter.Services;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 // Lưu ý: Đảm bảo rằng lớp RelayCommand cũ trong Electric_Meter.Core đã được loại bỏ 
 // hoặc bạn đã xóa using Electric_Meter.Core; để tránh xung đột.
@@ -28,7 +27,6 @@ namespace Electric_Meter.MVVM.ViewModels
         private readonly ToolViewModel _toolViewModel;
         private readonly AppSetting _appSetting;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly PowerTempWatchContext _context;
         #endregion
 
         #region [ Events ]
@@ -37,7 +35,7 @@ namespace Electric_Meter.MVVM.ViewModels
         #endregion
 
         #region [ Constructor ]
-        public SettingViewModel(LanguageService languageService, IService service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope, PowerTempWatchContext context)
+        public SettingViewModel(LanguageService languageService, IService service, ToolViewModel toolViewModel, AppSetting appSetting, IServiceScopeFactory serviceScope)
         {
             _languageService = languageService;
             _languageService.LanguageChanged += UpdateTexts;
@@ -46,7 +44,6 @@ namespace Electric_Meter.MVVM.ViewModels
             _service = service;
             _toolViewModel = toolViewModel;
             _appSetting = appSetting;
-            _context = context;
 
             // Khởi tạo trạng thái ban đầu
             // Các thuộc tính [ObservableProperty] có giá trị mặc định là true/false
@@ -134,10 +131,10 @@ namespace Electric_Meter.MVVM.ViewModels
                 (await _service.GetActiveTypesAsync()).Select(x => x.name)
                 );
             LstSensorType = new(
-                (await _service.GetSensorTypesAsync()).Select(x => x.name)
+                (await _service.GetSensorTypesAsync()).Select(x => x.Name)
                 );
             LstSensorTypeControlCode = new(
-                (await _service.GetSensorTypesAsync()).Select(x => x.name)
+                (await _service.GetSensorTypesAsync()).Select(x => x.Name)
                 );
             LstActiveControlcode = new(
                 (await _service.GetActiveTypesAsync()).Select(x => x.name)
@@ -146,39 +143,7 @@ namespace Electric_Meter.MVVM.ViewModels
             LstCodeType = new((await _service.GetCodeTypeAsync()).Select(x => x.NameCodeType));
 
         }
-        //private void SetupAssemblingList()
-        //{
-        //    // Bao bọc toàn bộ logic trong Dispatcher.Invoke() để đảm bảo an toàn luồng
-        //    Application.Current.Dispatcher.Invoke(() =>
-        //    {
-        //        // Cập nhật lại danh sách LstAssembling
-        //        LstAssembling = new()
-        //        {
-        //            new KeyValue { key = "A", value = $"{AssemblingText} A" },
-        //            new KeyValue { key = "B", value = $"{AssemblingText} B" },
-        //            new KeyValue { key = "C", value = $"{AssemblingText} C" },
-        //            new KeyValue { key = "D", value = $"{AssemblingText} D" }
-        //        };
 
-        //        // Đảm bảo giữ lại KeyValue đã chọn
-        //        if (SelectedAssembling != null)
-        //        {
-        //            var newSelected = LstAssembling.FirstOrDefault(x => x.key == SelectedAssembling.key);
-
-        //            if (newSelected != null)
-        //            {
-        //                // Gán trực tiếp vì đây là ObservableProperty (sẽ kích hoạt OnSelectedAssemblingChanged)
-        //                SelectedAssembling = newSelected;
-        //            }
-        //        }
-        //        // Nếu SelectedAssembling là null (lần chạy đầu), gán lại phần tử đầu tiên
-        //        else
-        //        {
-        //            SelectedAssembling = LstAssembling.FirstOrDefault();
-        //        }
-        //    });
-
-        //}
         #endregion
         #region [ Methods - Language ]
         public void UpdateTexts()
@@ -528,7 +493,9 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
-                var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.CodeId);
+                //var find = await _context.controlcodes.FirstOrDefaultAsync(x => x.codeid == SelectedControlCode.CodeId);
+                var find = 9;
+                //var find = await _service.
                 if (find == null)
                 {
                     MessageBox.Show("Control Code not found.");
@@ -556,7 +523,7 @@ namespace Electric_Meter.MVVM.ViewModels
 
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
         private bool CanExecuteEditControlCode() => SelectedControlCode != null; // Chỉ bật khi có Control Code được chọn
         #endregion
@@ -572,7 +539,7 @@ namespace Electric_Meter.MVVM.ViewModels
                     return;
                 }
 
-                
+
                 await _service.DeleteControlcodeAsync(CodeId);
                 _ = LoadControlCodeList();
                 MessageBox.Show("Delete successfully!");

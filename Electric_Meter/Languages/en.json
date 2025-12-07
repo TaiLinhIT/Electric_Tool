@@ -1,4 +1,28 @@
 {
+    //System of parameter
+    "System display name": "System display name",
+    "Backup db location": "Backup db location",
+    "Account": "Account",
+    "Password": "Password",
+    "Test": "Test",
+    "Sync": "Sync",
+    "Save": "Save",
+    "Database name": "Database name",
+    //
+    "Type id": "Type Id",
+    //Command manager view
+    "Code type": "Code type",
+    //
+    "Add": "Add",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "System": "System",
+    "System of parameters": "System of parameters",
+    "Sensor type setting": "Sensor type setting",
+    "Type command setting": "Type command setting",
+    "Device setting": "Device setting",
+    "Hardware setting": "Hardware setting",
+    "Reset password": "Reset password",
     "Sensor type": "Sensor type",
     "Device id": "Device Id",
     "Name device": "Name device",

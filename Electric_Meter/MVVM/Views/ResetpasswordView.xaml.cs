@@ -18,12 +18,12 @@ using Electric_Meter.MVVM.ViewModels;
 namespace Electric_Meter.MVVM.Views
 {
     /// <summary>
-    /// Interaction logic for ActiveManagerView.xaml
+    /// Interaction logic for ResetpasswordView.xaml
     /// </summary>
-    public partial class ActiveManagerView : UserControl
+    public partial class ResetpasswordView : UserControl
     {
-        private readonly ActiveManagerViewModel _vm;
-        public ActiveManagerView(ActiveManagerViewModel vm)
+        private readonly ResetPasswordViewModel _vm;
+        public ResetpasswordView(ResetPasswordViewModel vm)
         {
             InitializeComponent();
             DataContext = _vm = vm;

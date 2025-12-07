@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+using Electric_Meter.MVVM.ViewModels;
+using Electric_Meter.Services;
 
 namespace Electric_Meter.MVVM.Views
 {
@@ -20,9 +11,53 @@ namespace Electric_Meter.MVVM.Views
     /// </summary>
     public partial class CommandManagerView : UserControl
     {
-        public CommandManagerView()
+        private readonly CommandManagerViewModel _vm;
+        public CommandManagerView(CommandManagerViewModel vm)
         {
             InitializeComponent();
+            DataContext = _vm = vm;
+            Loaded += (s, e) =>
+            {
+                UpdateGridHeaders();
+
+                // Khi có thay đổi text trong ViewModel (sau khi đổi ngôn ngữ)
+                _vm.PropertyChanged += Vm_PropertyChanged;
+
+                // Nếu có LanguageService, lắng nghe sự kiện đổi ngôn ngữ
+                var langField = typeof(CommandManagerViewModel)
+                    .GetField("_languageService", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                if (langField?.GetValue(_vm) is LanguageService langService)
+                {
+                    langService.LanguageChanged += () =>
+                    {
+                        // Khi ngôn ngữ đổi, cập nhật text trong ViewModel
+                        _vm.UpdateTexts();
+
+                        // Cập nhật lại header trong DataGrid
+                        UpdateGridHeaders();
+                    };
+                }
+            };
+        }
+        private void Vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_vm.CodeTypeText) ||
+                e.PropertyName == nameof(_vm.NameText)
+                )
+
+            {
+                UpdateGridHeaders();
+            }
+        }
+
+        private void UpdateGridHeaders()
+        {
+            if (CodeTypeGrid.Columns.Count >= 3)
+            {
+                CodeTypeGrid.Columns[1].Header = _vm.CodeTypeText;
+                CodeTypeGrid.Columns[2].Header = _vm.NameText;
+            }
         }
     }
 }

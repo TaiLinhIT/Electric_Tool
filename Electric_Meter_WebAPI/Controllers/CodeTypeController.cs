@@ -1,3 +1,4 @@
+using Electric_Meter_WebAPI.Dto.CodeTypeDto;
 using Electric_Meter_WebAPI.Services;
 
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,45 @@ namespace Electric_Meter_WebAPI.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> PostCodeType(CodeTypeDto dto) {
+            try
+            {
+                var result = await _service.AddCodeTypeAsync(dto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,ex.Message);
+            }
+        }
+        [HttpPut]
+        public async Task<IActionResult> PutCodeType(CodeTypeDto dto) {
+            try
+            {
+                var result = await _service.UpdateCodeTypeAsync(dto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,ex.Message);
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCodeType(int id) {
+            try
+            {
+                var result = await _service.DeleteCodeTypeAsync(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
                 return StatusCode(500, ex.Message);
             }
         }

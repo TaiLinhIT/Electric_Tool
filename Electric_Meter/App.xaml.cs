@@ -1,7 +1,5 @@
 using System.Windows;
 
-using Electric_Meter.Services;
-
 using Microsoft.Extensions.DependencyInjection;
 
 using Wpf.Ui.Appearance;
@@ -23,14 +21,14 @@ namespace Electric_Meter
                 _serviceProvider = startup.ServiceProvider;
 
                 // 2️⃣ Tạo scope và chạy DatabaseSeeder
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var seeder = scope.ServiceProvider.GetService<DatabaseSeeder>();
-                    if (seeder != null)
-                    {
-                       // await seeder.SeedAsync(); // chạy seed khi khởi động app
-                    }
-                }
+                //using (var scope = _serviceProvider.CreateScope())
+                //{
+                //    var seeder = scope.ServiceProvider.GetService<DatabaseSeeder>();
+                //    if (seeder != null)
+                //    {
+                //       // await seeder.SeedAsync(); // chạy seed khi khởi động app
+                //    }
+                //}
 
                 // 3️⃣ Mở MainWindow sau khi seed xong
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();

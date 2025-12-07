@@ -32,13 +32,11 @@ namespace Electric_Meter.Services
         bool _continue;
         Thread readThread;
         private AppSetting _appSetting;
-        private readonly PowerTempWatchContext _context;
         #endregion
-        public MySerialPortService(IService service, PowerTempWatchContext powerTempWatchContext, AppSetting appSetting, SerialPort serialPort)
+        public MySerialPortService(IService service,  AppSetting appSetting, SerialPort serialPort)
         {
 
             _serialPort = serialPort;
-            _context = powerTempWatchContext;
             _appSetting = appSetting;
             _service = service;
 
@@ -470,8 +468,7 @@ namespace Electric_Meter.Services
             try
             {
 
-                var device = await _context.devices
-                .FirstOrDefaultAsync(m => m.devid == devid);
+                var device = await _service.GetDeviceByDevidAsync(devid);
 
                 if (device == null)
                 {
@@ -482,9 +479,7 @@ namespace Electric_Meter.Services
                 var now = DateTime.Now;
 
                 // B2: Lấy danh sách ControlCode liên quan đến Devid này
-                var controlCodes = await _context.controlcodes
-                    .Where(c => c.devid == Devid)
-                    .ToListAsync();
+                var controlCodes = await _service.GetControlcodeByDevidAsync(devid);
 
                 // --------------------------------------------------------------------------
                 // B3: Chuẩn bị giá trị cần lưu và Kích hoạt Event (MAPPING ĐỘNG)
@@ -493,22 +488,25 @@ namespace Electric_Meter.Services
                 var valuesForDisplay = new Dictionary<string, double?>();
                 int savedCount = 0;
 
+
                 foreach (var code in controlCodes)
                 {
-                    string dbCode = code.code; // Code Modbus/OPC trong DB
+                    // code là ControlcodeDto
+                    string dbCode = code.Code; // Sử dụng code.Code thay vì code.code
 
                     // Tìm giá trị trong Dictionary dữ liệu đã nhận
                     if (dataForAddress.TryGetValue(dbCode, out double actualValue))
                     {
-                        // **Gửi cho ViewModel (Sử dụng Name/Description nếu cần hiển thị)**
-                        valuesForDisplay.Add(code.name, actualValue);
+                        // **Gửi cho ViewModel (Sử dụng NameControlcode)**
+                        valuesForDisplay.Add(code.NameControlcode, actualValue); // <--- SỬA Ở ĐÂY
 
                         // **Kiểm tra và Lưu DB**
 
                         // 1. Kiểm tra giá trị âm cho Imp/Exp
-                        if ((code.name == "Imp" && actualValue < 0) || (code.name == "Exp" && actualValue < 0))
+                        // So sánh với NameControlcode
+                        if ((code.NameControlcode == "Imp" && actualValue < 0) || (code.NameControlcode == "Exp" && actualValue < 0)) // <--- SỬA Ở ĐÂY
                         {
-                            Tool.Log($"⚠ Giá trị {code.name} không hợp lệ (âm) cho Code {dbCode}. Bỏ qua lưu trữ.");
+                            Tool.Log($"⚠ Giá trị {code.NameControlcode} không hợp lệ (âm) cho Code {dbCode}. Bỏ qua lưu trữ."); // <--- SỬA Ở ĐÂY
                             continue;
                         }
 
@@ -516,7 +514,9 @@ namespace Electric_Meter.Services
                         var sensorData = new SensorDataDto
                         {
                             Devid = Devid,
-                            Codeid = code.devid, // Hoặc code.id tùy thuộc vào thiết kế DB
+                            // Cần kiểm tra lại: Codeid trong DTO là CodeId. Nếu muốn lấy ID của Controlcode, 
+                            // bạn nên dùng code.CodeId.
+                            Codeid = code.CodeId, // <--- SỬA Ở ĐÂY
                             Value = actualValue,
                             Day = now
                         };
@@ -561,10 +561,10 @@ namespace Electric_Meter.Services
         #endregion
 
         #region [ Function Device ]
-        private List<Device> GetDevices()
-        {
-            return _context.devices.Where(d => d.ifshow == 1 && d.typeid == 7).ToList();
-        }
+        //private List<Device> GetDevices()
+        //{
+        //    return _context.devices.Where(d => d.ifshow == 1 && d.typeid == 7).ToList();
+        //}
         #endregion
     }
 }

@@ -6,17 +6,17 @@
 			 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:conv="clr-namespace:Electric_Meter.Converters"
 			 mc:Ignorable="d"
-			 d:DesignWidth="900" Height="900"
+			 d:DesignWidth="900" Height="700"
 			 Background="#FFF">
     
 
 
 
-    <Grid Margin="10">
+    <Grid Margin="5">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="400"/>
-            <RowDefinition Height="500"/>
+            <RowDefinition Height="320"/>
+            <RowDefinition Height="380"/>
         </Grid.RowDefinitions>
         <Border  Grid.Row="0" Style="{StaticResource BorderContent}">
             <Grid>
@@ -29,9 +29,9 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="2*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Text="{Binding DetailDeviceText}"
@@ -42,8 +42,7 @@
                         <Grid Margin="0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0">
@@ -52,14 +51,14 @@
                                     <RowDefinition Height="35"/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding DevidCommandText}" Style="{StaticResource  Content Textblock}"/>
-                                    <TextBox Width="150" Text="{Binding Devid,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="{Binding DevidCommandText}" Style="{StaticResource  Content Textblock}"/>
+                                    <TextBox  Text="{Binding Devid,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource Content TextBox}"
                                 />
                                  </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Width="120" Text="{Binding NameDeviceCommandText}" Style="{StaticResource  Content Textblock}"/>
-                                    <TextBox Width="150" Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBlock Text="{Binding NameDeviceCommandText}" Style="{StaticResource  Content Textblock}"/>
+                                    <TextBox  Text="{Binding NameDevice, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource Content TextBox}"
                                     />
                                 </StackPanel>
@@ -70,16 +69,16 @@
                                     <RowDefinition Height="35"/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding ActiveCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
-                                    <ComboBox Width="150"
+                                    <TextBlock Text="{Binding ActiveCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox 
 	                                    ItemsSource="{Binding LstActive}"
 	                                    SelectedItem="{Binding SelectedActive,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Style="{StaticResource Content Combobox}"
 	                                    />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Text="{Binding SenSorTypeCommandText}" Width="120" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
-                                    <ComboBox Width="150"
+                                    <TextBlock Text="{Binding SenSorTypeCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox 
                                         ItemsSource="{Binding LstSensorType}"
                                         SelectedItem="{Binding SelectedSensorType,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource Content Combobox}"
@@ -154,15 +153,15 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="2" Text="{Binding DetailControlCodeText}"
                     Style="{StaticResource H3}"
                     />
                     <Border Grid.Row="3" Style="{StaticResource BorderContent}">
-                        <Grid Margin="10">
+                        <Grid Margin="5">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -181,14 +180,14 @@
 
                                 <!-- CodeId -->
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding CodeIdCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding CodeId}"/>
+                                    <TextBlock Text="{Binding CodeIdCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox  Text="{Binding CodeId}" Style="{StaticResource Content TextBox}" TextChanged="TextBox_TextChanged"/>
                                 </StackPanel>
 
                                 <!-- DevId -->
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Width="120" Text="Devie Name" VerticalAlignment="Center"/>
-                                    <ComboBox Width="150"
+                                    <TextBlock Text="{Binding NameDeviceCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox 
                                         ItemsSource="{Binding LstDeviceControlcode}"
                                         SelectedItem="{Binding SelectedDeviceName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Style="{StaticResource Content Combobox}"
@@ -197,14 +196,14 @@
 
                                 <!-- Code -->
                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
-                                    <TextBlock Width="120" Text="{Binding CodeCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding Code}"/>
+                                    <TextBlock Text="{Binding CodeCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox  Text="{Binding Code}" Style="{StaticResource Content TextBox}"/>
                                 </StackPanel>
 
                                 <!-- ActiveId -->
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
-                                    <TextBlock Width="120" Text="{Binding ActiveIdCommandText}" VerticalAlignment="Center"/>
-                                    <ComboBox Width="150"
+                                    <TextBlock Text="{Binding ActiveCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox 
                                         ItemsSource="{Binding LstActiveControlcode}"
                                         SelectedItem="{Binding SelectedActiveControlcodeName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Style="{StaticResource Content Combobox}"
@@ -222,8 +221,8 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding CodeTypeIdCommandText}" VerticalAlignment="Center"/>
-                                    <ComboBox Width="150"
+                                    <TextBlock Text="{Binding SenSorTypeCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox 
                                         ItemsSource="{Binding LstCodeType}"
                                         SelectedItem="{Binding SelectedCodeType,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Style="{StaticResource Content Combobox}"
@@ -231,18 +230,18 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Width="120" Text="{Binding NameCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding NameControlcode}"/>
+                                    <TextBlock Text="{Binding NameCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox  Text="{Binding NameControlcode}" Style="{StaticResource Content TextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
-                                    <TextBlock Width="120" Text="{Binding FactorCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding Factor}"/>
+                                    <TextBlock Text="{Binding FactorCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox  Text="{Binding Factor}" Style="{StaticResource Content TextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
-                                    <TextBlock Width="120" Text="{Binding TypeIdCommandText}" VerticalAlignment="Center"/>
-                                    <ComboBox Width="150"
+                                    <TextBlock Text="{Binding NameCodeTypeCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <ComboBox 
                                         ItemsSource="{Binding LstSensorTypeControlCode}"
                                         SelectedItem="{Binding SelectedSensorTypeControlCode,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource Content Combobox}"
@@ -260,13 +259,13 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Width="120" Text="{Binding HighCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding High}"/>
+                                    <TextBlock Text="{Binding HighCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox  Text="{Binding High}" Style="{StaticResource Content TextBox}"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                    <TextBlock Width="120" Text="{Binding LowCommandText}" VerticalAlignment="Center"/>
-                                    <TextBox Width="150" Text="{Binding Low}"/>
+                                    <TextBlock Text="{Binding LowCommandText}" VerticalAlignment="Center" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox  Text="{Binding Low}" Style="{StaticResource Content TextBox}"/>
                                 </StackPanel>
                                 
                             </Grid>

@@ -552,7 +552,7 @@ namespace Electric_Meter_WebAPI.Services
 
                 var query = from cc in _context.controlcodes
                                 // Điều kiện lọc: Lấy tất cả Controlcodes có devid = id
-                            where cc.devid == id
+                            where cc.devid == id && cc.ifshow == 1
 
                             // LEFT JOIN các bảng liên quan để lấy tên (Name)
                             join d in _context.devices on cc.devid equals d.devid into deviceGroup

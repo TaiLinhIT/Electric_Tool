@@ -37,7 +37,7 @@ namespace Electric_Meter
                 RootNavigationView.SetPageProviderService(_pageProvider);
             };
         }
-        
+
 
     }
 }

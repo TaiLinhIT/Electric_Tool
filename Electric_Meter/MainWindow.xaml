@@ -9,9 +9,9 @@
     mc:Ignorable="d"
     Title="Electric Meter Interface"
     MinWidth="1200" 
-    MinHeight="1000"
+    MinHeight="800"
     Width="1150" 
-    Height="1000"
+    Height="800"
     WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <tb:TaskbarIcon x:Key="ElectricMeterTrayIcon"
@@ -50,7 +50,7 @@
                     Margin="0,0,10,0"
                     DockPanel.Dock="Left"
                     ItemsSource="{Binding LstLanguage}"
-                    SelectedItem="{Binding SelectedLanguage}">
+                    SelectedItem="{Binding SelectedLanguage}" >
                     <ComboBox.ToolTip>Language</ComboBox.ToolTip>
                 </ComboBox>
 

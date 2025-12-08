@@ -249,9 +249,17 @@ namespace Electric_Meter.MVVM.ViewModels
         {
             try
             {
+                if (devid == null)
+                {
+                    var lstcontrolcode = await _service.GetListControlcodeAsync();
+                    ControlCodeList = new(lstcontrolcode);
 
-                var lstcontrolcode = await _service.GetListControlcodeAsync();
-                ControlCodeList = new(lstcontrolcode);
+                }
+                else
+                {
+                    var lstcontrolcode = await _service.GetControlcodeByDevidAsync(devid);
+                    ControlCodeList = new(lstcontrolcode);
+                }
 
 
             }

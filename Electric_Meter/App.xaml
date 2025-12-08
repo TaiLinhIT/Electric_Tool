@@ -37,6 +37,7 @@
             <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
             <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Border}"/>
 
+            
             <!-- Effects -->
             <DropShadowEffect x:Key="WindowDropShadow"
                               ShadowDepth="5"
@@ -61,37 +62,87 @@
             <!-- H1-->
             <Style x:Key="H1" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
                 <Setter Property="FontSize" Value="32"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
             </Style>
             <!-- H2-->
             <Style x:Key="H2" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
                 <Setter Property="FontSize" Value="24"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+
             </Style>
             <!-- H3-->
             <Style x:Key="H3" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
                 <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+
             </Style>
             <!-- Content-->
             <Style x:Key="Content Textblock" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontWeight" Value="Normal"/>
                 <Setter Property="Margin" Value="5"/>
+                <Setter Property="Width" Value="120"/>
             </Style>
 
-            <Style x:Key="BaseTextBoxStyle" TargetType="TextBox">
+            <Style x:Key="BaseTextBoxStyle" TargetType="TextBox" x:Shared="False">
                 <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Width" Value="120"/>
+
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border x:Name="border"
+                    CornerRadius="6"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                        Focusable="False" 
+                        HorizontalScrollBarVisibility="Hidden" 
+                        VerticalScrollBarVisibility="Hidden"/>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BackgroundBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                    <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style x:Key="Content TextBox" TargetType="TextBox" BasedOn="{StaticResource BaseTextBoxStyle}">
                 <Setter Property="Height" Value="28"/>
+                <Setter Property="Width" Value="100"/>
                 <Setter Property="Padding" Value="2"/>
+                
             </Style>
 
             <Style x:Key="BaseComboboxStyle" TargetType="ComboBox">
+
                 <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="5,2,0,2"/>
+
             </Style>
+
             <Style x:Key="Content Combobox" TargetType="ComboBox" BasedOn="{StaticResource BaseComboboxStyle}">
-                <Setter Property="Height" Value="28"/>
-                <Setter Property="Padding" Value="2"/>
+
+                <Setter Property="Background" Value="#fff"/>
             </Style>
+
             <!-- Global Button Style (Không phá UI.Button của Lepoco) -->
             <Style TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>

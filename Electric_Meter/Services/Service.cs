@@ -30,16 +30,18 @@ namespace Electric_Meter.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IRequestQueueService _requestQueueService;
         private readonly HttpClient _httpClient;
+        private readonly IDbContextFactory _dbFactory;
         private const string DbConfigFilePath = "db_config.json";
 
         // Dùng SemaphoreSlim để kiểm soát truy cập DB khi insert SensorData
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        public Service(IServiceScopeFactory serviceScope, HttpClient httpClient, IRequestQueueService requestQueueService)
+        public Service(IServiceScopeFactory serviceScope, HttpClient httpClient, IRequestQueueService requestQueueService, IDbContextFactory dbFactory)
         {
             _httpClient = httpClient;
             _scopeFactory = serviceScope;
             _requestQueueService = requestQueueService;
+            _dbFactory = dbFactory;
         }
 
         // --- Các hàm tiện ích (Utilities) ---
@@ -519,7 +521,7 @@ namespace Electric_Meter.Services
             }
         }
 
-        
+
 
         public async Task<bool> AddCodeTypeAsync(CodeTypeDto dto)
         {

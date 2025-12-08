@@ -27,13 +27,13 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <TextBlock Width="120"  Text="{Binding TypeIdText}" Style="{StaticResource Content Textblock}"/>
-                                    <TextBox Width="120"  Text="{Binding TypeId}" Style="{StaticResource Content TextBox}" />
+                                    <TextBlock   Text="{Binding TypeIdText}" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox   Text="{Binding TypeId}" Style="{StaticResource Content TextBox}" />
                                 </StackPanel>
                                 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                    <TextBlock Width="120"  Text="{Binding NameText}" Style="{StaticResource Content Textblock}"/>
-                                    <TextBox Width="120"  Text="{Binding Name}" Style="{StaticResource Content TextBox}"/>
+                                    <TextBlock   Text="{Binding NameText}" Style="{StaticResource Content Textblock}"/>
+                                    <TextBox   Text="{Binding Name}" Style="{StaticResource Content TextBox}"/>
                                 </StackPanel>
 
                             </Grid>

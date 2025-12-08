@@ -91,5 +91,10 @@ namespace Electric_Meter.MVVM.Views
 
             }
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

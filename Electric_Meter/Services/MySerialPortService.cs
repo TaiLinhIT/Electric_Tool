@@ -5,10 +5,7 @@ using System.Windows;
 using Electric_Meter.Configs;
 using Electric_Meter.Dto.SensorDataDto;
 using Electric_Meter.Interfaces;
-using Electric_Meter.Models;
 using Electric_Meter.Utilities;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Electric_Meter.Services
 {
@@ -21,7 +18,8 @@ namespace Electric_Meter.Services
         private readonly IService _service;
         private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
         private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
-        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();
+        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();//
+        private Dictionary<int, TaskCompletionSource<bool>> responseWaiters = new Dictionary<int, TaskCompletionSource<bool>>();
         private HashSet<string> processedRequests = new HashSet<string>();
         private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
         private static readonly object lockObject = new object();
@@ -33,7 +31,7 @@ namespace Electric_Meter.Services
         Thread readThread;
         private AppSetting _appSetting;
         #endregion
-        public MySerialPortService(IService service,  AppSetting appSetting, SerialPort serialPort)
+        public MySerialPortService(IService service, AppSetting appSetting, SerialPort serialPort)
         {
 
             _serialPort = serialPort;
@@ -50,7 +48,7 @@ namespace Electric_Meter.Services
 
             // Tính toán và cache tổng số request cho mỗi devid
             _totalExpectedRequests = allCodes
-                .GroupBy(c => c.CodeId)
+                .GroupBy(c => c.Devid)
                 .ToDictionary(g => g.Key, g => g.Count());
         }
 
@@ -212,57 +210,53 @@ namespace Electric_Meter.Services
 
                     string hexString = BitConverter.ToString(buffer).Replace("-", " ");
 
-                    // Kiểm tra CRC
-                    if (!Tool.CRC_PD(buffer))
+                    // 1. Kiểm tra CRC
+                    if (!Tool.CRC_PD(buffer))
                     {
                         Tool.Log($"CRC check failed for data: {hexString}");
                         return;
                     }
 
-                    int devid = buffer[0];
+                    // 2. Lấy devid và Tìm matchedRequest một cách an toàn
+                    int devid = buffer[0];
+                    string requestKey = null;
+                    string requestCode = null;
 
-                    // Lặp qua các activeRequests để tìm đúng request
-                    var matchedRequest = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_"));
-
-                    if (activeRequests.Count == 0)
+                    // --- START LOCKING VÀ LẤY REQUEST ---
+                    lock (lockObject)
                     {
-                        //Tool.Log("ActiveRequests hiện đang trống.");
-                    }
+                        // Tìm Request gần nhất đang được gửi cho devid này.
+                        // Trong mô hình mới, activeRequests chỉ chứa request VỪA MỚI GỬI
+                        var matchedRequest = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_"));
+                        requestKey = matchedRequest.Key;
+                        requestCode = matchedRequest.Value;
+
+                        // LOẠI BỎ: tcs và responseWaiters
+                        // LOẠI BỎ: Logic processedRequests cũ, vì activeRequests chỉ chứa request đang chờ
+                    }
+                    // --- END LOCKING ---
 
 
-                    if (!string.IsNullOrEmpty(matchedRequest.Key))
+                    if (!string.IsNullOrEmpty(requestKey))
                     {
-                        string requestCode = matchedRequest.Value;
-                        string requestKey = matchedRequest.Key;
+                        Tool.Log($"Data received for {requestCode} at devid {devid}.");
 
-                        // Tránh xử lý trùng trong cùng một lần nhận
-                        if (processedRequests.Contains(requestKey))
+                        // 3. Xử lý và lưu dữ liệu
+                        // Chạy ParseAndStoreReceivedData để xử lý và lưu data (không cần lock)
+                        await ParseAndStoreReceivedData(buffer, requestCode, devid);
+
+                        // 4. Xóa request khỏi activeRequests ngay sau khi xử lý thành công
+                        lock (lockObject)
                         {
-                            Tool.Log($"Data for {requestCode} at devid {devid} already processed. Skipping...");
-                            return;
+                            // Chỉ xóa requestkey đang match
+                            activeRequests.Remove(requestKey);
                         }
+                        // LOẠI BỎ: tcs?.TrySetResult(true);
 
-                        // Đánh dấu là đã xử lý
-                        processedRequests.Add(requestKey);
-
-                        // Hủy timeout nếu có
-                        if (responseTimeouts.ContainsKey(devid.ToString()))
-                        {
-                            responseTimeouts[devid.ToString()].Cancel();
-                            responseTimeouts.Remove(devid.ToString());
-                        }
-
-                        activeRequests.Remove(requestKey);
-
-                        // Gọi hàm xử lý
-                        await ParseAndStoreReceivedData(buffer, requestCode, devid);
-
-                        // XÓA KEY để lần sau vẫn xử lý được
-                        processedRequests.Remove(requestKey);
-                    }
+                    }
                     else
                     {
-                        Tool.Log($"Received data from devid {devid} does not match any active request.");
+                        Tool.Log($"Received data from devid {devid} does not match any active request. Data: {hexString}");
                     }
                 }
             }
@@ -275,86 +269,163 @@ namespace Electric_Meter.Services
             }
         }
 
-
         #endregion
         #region [ Function Translate Data ]
         public async Task SendRequestsToAllAddressesAsync()
         {
-            foreach (var item in await _service.GetListDeviceAsync())
+            // [BỎ StartScanningLoop()] và KHÔI PHỤC LOGIC MULTI-TASK
+            foreach (var item in await _service.GetListDeviceAsync())
             {
                 int capturedAddress = item.devid;
-                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
-            }
-
-        }
-        private async Task LoopRequestsForMachineAsync(int devid)
-        {
-            // Lấy ControlCode cho Devid/devid này
-            var controlCodes = await _service.GetListControlcodeAsync();
-
-            // Lọc chỉ những lệnh thuộc về devid hiện tại
-            var machineControlCodes = controlCodes.Where(c => c.Devid == devid).ToList();
-
-            while (true)
-            {
-                Stopwatch sw = Stopwatch.StartNew();
-
-                // --- Vòng lặp gửi yêu cầu ---
-                foreach (var request in machineControlCodes)
-                {
-                    long startTime = sw.ElapsedMilliseconds;
-
-                    string requestCode = request.Code;
-
-                    await SendRequestAsync(requestCode, devid);
-
-                    long endTime = sw.ElapsedMilliseconds;
-                    long elapsed = endTime - startTime;
-                    int remainingDelay = 1000 - (int)elapsed;
-
-                    if (remainingDelay > 0)
-                    {
-                        await Task.Delay(remainingDelay);
-                    }
-                }
-
-                await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
+                // Tạo Task cho mỗi Devid để chúng chạy độc lập
+                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
             }
         }
-
-        private async Task SendRequestAsync(string requestCode,  int devid)
+        public async Task StartScanningLoop()
         {
             try
             {
-                await _serialLock.WaitAsync(); //Chỉ 1 máy được gửi tại 1 thời điểm
+                var allControlCodes = (await _service.GetListControlcodeAsync()).ToList();
 
-                // B1: Thêm vào activeRequests
-                string requestKey = $"{devid}_{requestCode}";
-                if (!activeRequests.ContainsKey(requestKey))
+                while (true)
                 {
-                    activeRequests[requestKey] = requestCode;
+                    Stopwatch sw = Stopwatch.StartNew();
 
-                    //Thiết lập timeout nếu cần
-                    var cts = new CancellationTokenSource();
-                    responseTimeouts[devid.ToString()] = cts;
-                    _ = StartResponseTimeoutAsync(devid.ToString(), cts.Token);
+                    // Lặp qua tất cả request, xen kẽ giữa các Devid
+                    foreach (var request in allControlCodes)
+                    {
+                        string requestCode = request.Code;
+                        int devid = request.Devid;
+
+                        await SendRequestAsync(requestCode, devid);
+                    }
+
+                    sw.Stop();
+                    Tool.Log($"Hoàn tất chu kỳ quét toàn bộ ({allControlCodes.Count} requests) trong {sw.ElapsedMilliseconds} ms.");
+
+                    // Đợi theo TimeSendRequest (Độ trễ giữa các chu kỳ quét toàn bộ)
+                    await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
+                }
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi trong vòng lặp quét tổng thể: {ex.Message}");
+            }
+        }
+        private async Task LoopRequestsForMachineAsync(int devid)
+        {
+            var controlCodes = (await _service.GetListControlcodeAsync())
+              .Where(c => c.Devid == devid).ToList();
+
+            if (!controlCodes.Any()) return;
+
+            while (true)
+            {
+                // Vòng lặp quét các request của riêng Devid này
+                foreach (var request in controlCodes)
+                {
+                    // CHỈ GỬI REQUEST, KHÔNG CHỜ PHẢN HỒI Ở ĐÂY
+                    await SendRequestOnlyAsync(request.Code, devid);
                 }
 
-                // B2: Xử lý dữ liệu hex
+                // Sau khi quét hết các request, Devid này chờ hết chu kỳ
+                // Đây là CHU KỲ CẬP NHẬT CỐ ĐỊNH cho riêng Devid này
+                await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
+            }
+        }
+        // Thay thế SendRequestAsync cũ bằng hàm mới này
+        private async Task SendRequestOnlyAsync(string requestCode, int devid)
+        {
+            string requestKey = $"{devid}_{requestCode}";
+
+            // KHÓA COM CHỈ ĐỂ GỬI (WRITE)
+            await _serialLock.WaitAsync();
+
+            try
+            {
+                // B1: Thêm vào activeRequests (Dùng LOCK)
+                lock (lockObject)
+                {
+                    // Cần reset dữ liệu cũ
+                    //activeRequests.Clear();
+                    activeRequests[requestKey] = requestCode;
+                }
+
+                // B2 & B3: Xử lý CRC và Gửi
+                byte[] requestBytes = _service.ConvertHexStringToByteArray(requestCode);
+                string addressHex = _service.ConvertToHex(devid).PadLeft(2, '0');
+                string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
+                string CRCString = CRC.CalculateCRC(requestString);
+                requestString += " " + CRCString;
+
+                Tool.Log($"Đang gửi {requestKey}...");
+                Write(requestString);
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi khi gửi request {requestKey}: {ex.Message}");
+            }
+            finally
+            {
+                // GIẢI PHÓNG COM NGAY LẬP TỨC
+                _serialLock.Release();
+
+                // Chờ một khoảng thời gian nhỏ (ví dụ 100-200ms) để thiết bị phản hồi
+                // và tránh việc gửi request quá nhanh làm nghẽn bộ đệm.
+                await Task.Delay(200);
+            }
+        }
+        private async Task SendRequestAsync(string requestCode, int devid)
+        {
+            TaskCompletionSource<bool> tcs = null;
+            string requestKey = $"{devid}_{requestCode}";
+            int timeoutMs = _appSetting.TimeOutReceive;
+
+            await _serialLock.WaitAsync(); // KHÓA CẢ CHU TRÌNH GỬI + CHỜ
+
+            try
+            {
+                lock (lockObject)
+                {
+                    // B1: Thêm vào activeRequests và khởi tạo TCS
+                    activeRequests[requestKey] = requestCode;
+                    tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously); // Tùy chọn tốt hơn cho hiệu suất
+                    responseWaiters[devid] = tcs;
+                }
+
+                // B2 & B3: Xử lý CRC và Gửi
                 byte[] requestBytes = _service.ConvertHexStringToByteArray(requestCode);
                 string addressHex = _service.ConvertToHex(devid).PadLeft(2, '0');
                 string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
                 string CRCString = CRC.CalculateCRC(requestString);
                 requestString += " " + CRCString;
 
-                // B3: Gửi
                 Write(requestString);
 
-                await Task.Delay(300); // Chờ thiết bị phản hồi
+                // B4: CHỜ PHẢN HỒI (HOẶC TIMEOUT)
+                var delayTask = Task.Delay(TimeSpan.FromSeconds(timeoutMs));
+                var completedTask = await Task.WhenAny(tcs.Task, delayTask);
+
+                if (completedTask == delayTask)
+                {
+                    Tool.Log($"Timeout: Không nhận được phản hồi từ máy có địa chỉ {devid} cho request {requestCode}.");
+                    // SetResult để đảm bảo TCS không bị treo nếu không có phản hồi
+                    tcs.TrySetResult(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Tool.Log($"Lỗi khi gửi/chờ request {requestKey}: {ex.Message}");
             }
             finally
             {
-                _serialLock.Release(); //Giải phóng cho máy khác gửi
+                // B5: ĐẢM BẢO XÓA activeRequests và responseWaiters BẰNG LOCK
+                lock (lockObject)
+                {
+                    activeRequests.Remove(requestKey);
+                    responseWaiters.Remove(devid);
+                }
+                _serialLock.Release(); // GIẢI PHÓNG COM
             }
         }
         private async Task StartResponseTimeoutAsync(string addressKey, CancellationToken cancellationToken)
@@ -443,7 +514,7 @@ namespace Electric_Meter.Services
                         receivedDataByAddress[devid][requestCode] = actualValue;
 
                         // B5: Logic kiểm tra đủ request và kích hoạt lưu DB
-                        if (_totalExpectedRequests.ContainsKey(devid) && receivedDataByAddress[devid].Count == _totalExpectedRequests[devid])
+                        if (_totalExpectedRequests.ContainsKey(devid) && receivedDataByAddress[devid].Count == _totalExpectedRequests[devid])// _totalExpectedRequests[devid])
                         {
                             var dataToSave = new Dictionary<string, double>(receivedDataByAddress[devid]);
                             receivedDataByAddress[devid].Clear();
@@ -472,10 +543,9 @@ namespace Electric_Meter.Services
 
                 if (device == null)
                 {
-                    Tool.Log($"Không tìm thấy IdMachine với địa chỉ {devid}");
+                    Tool.Log($"Không tìm thấy Id device với địa chỉ {devid}");
                     return;
                 }
-                int Devid = device.devid;
                 var now = DateTime.Now;
 
                 // B2: Lấy danh sách ControlCode liên quan đến Devid này
@@ -513,7 +583,7 @@ namespace Electric_Meter.Services
                         // 2. Tạo SensorData
                         var sensorData = new SensorDataDto
                         {
-                            Devid = Devid,
+                            Devid = devid,
                             // Cần kiểm tra lại: Codeid trong DTO là CodeId. Nếu muốn lấy ID của Controlcode, 
                             // bạn nên dùng code.CodeId.
                             Codeid = code.CodeId, // <--- SỬA Ở ĐÂY

@@ -419,7 +419,7 @@ namespace Electric_Meter.Services
             }
             finally
             {
-                await Task.Delay(100);
+                await Task.Delay(300);
                 _serialLock.Release();
 
             }

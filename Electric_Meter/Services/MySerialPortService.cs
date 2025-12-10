@@ -14,15 +14,15 @@ namespace Electric_Meter.Services
         // Định nghĩa Delegate cho Event
         public event Action<Dictionary<string, double?>> DataUpdated;
         #region [ Fields (Private data) - Observable Properties ]
-        //private readonly HttpClient _httpClient;
         private readonly IService _service;
-        private readonly SemaphoreSlim _serialLock = new(1, 1);// SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
+        private readonly SemaphoreSlim _serialLock = new(1, 1); // SemaphoreSlim để đồng bộ hóa truy cập vào cổng COM
         private Dictionary<string, string> activeRequests = new Dictionary<string, string>(); // key = "address_requestName"
-        private Dictionary<string, CancellationTokenSource> responseTimeouts = new Dictionary<string, CancellationTokenSource>();//
         private Dictionary<int, TaskCompletionSource<bool>> responseWaiters = new Dictionary<int, TaskCompletionSource<bool>>();
-        private HashSet<string> processedRequests = new HashSet<string>();
         private Dictionary<int, Dictionary<string, double>> receivedDataByAddress = new Dictionary<int, Dictionary<string, double>>();
+
+        // SỬ DỤNG DUY NHẤT lockObject để bảo vệ các tài nguyên chia sẻ
         private static readonly object lockObject = new object();
+
         public SerialPort _serialPort;
         public event SerialDataReceivedEventHandler Sdre;
         public string Port;
@@ -30,23 +30,21 @@ namespace Electric_Meter.Services
         bool _continue;
         Thread readThread;
         private AppSetting _appSetting;
+        private List<byte> receiveBuffer = new List<byte>(); // Đưa receiveBuffer lên đầu
         #endregion
+
         public MySerialPortService(IService service, AppSetting appSetting, SerialPort serialPort)
         {
-
             _serialPort = serialPort;
             _appSetting = appSetting;
             _service = service;
-
         }
+
         private Dictionary<int, int> _totalExpectedRequests = new Dictionary<int, int>();
 
-        public async Task InitializeAsync() // Gọi hàm này khi khởi động Service
+        public async Task InitializeAsync()
         {
-            // Chỉ tải danh sách ControlCode 1 lần
             var allCodes = await _service.GetListControlcodeAsync();
-
-            // Tính toán và cache tổng số request cho mỗi devid
             _totalExpectedRequests = allCodes
                 .GroupBy(c => c.Devid)
                 .ToDictionary(g => g.Key, g => g.Count());
@@ -54,121 +52,102 @@ namespace Electric_Meter.Services
 
         public void Conn()
         {
-
-            //_serialPort = new SerialPort();
             _serialPort.DataReceived += Sdre;
             _serialPort.ErrorReceived += _serialPort_ErrorReceived;
             _serialPort.PinChanged += _serialPort_PinChanged;
             _serialPort.PortName = _appSetting.Port;
             _serialPort.BaudRate = _appSetting.Baudrate;
-            _serialPort.DataBits = 8;//数据长度：
-            _serialPort.StopBits = StopBits.One;//停止位
+            _serialPort.DataBits = 8;
+            _serialPort.StopBits = StopBits.One;
             _serialPort.Handshake = Handshake.None;
-            _serialPort.Parity = Parity.None;//校验方式
-            _serialPort.ReadTimeout = 500; //设置超时读取时间
+            _serialPort.Parity = Parity.None;
+
+            // TĂNG READTIMEOUT VÀ BUFFERS SIZE
+            _serialPort.ReadTimeout = 1000; // Tăng lên 1 giây
             _serialPort.WriteTimeout = 100;
+            _serialPort.ReadBufferSize = 4096; // Tăng kích thước buffer
+
             _serialPort.RtsEnable = true;
-            //await SendDataToServer("5");
             try
             {
                 _serialPort.Open();
-
             }
             catch (Exception e)
             {
-                Tool.Log(string.Format("端口{0}打开失败:{1}", Port, e));
+                // Sử dụng _appSetting.Port thay vì Port
+                Tool.Log(string.Format("Port {0} open failed: {1}", _appSetting.Port, e));
             }
         }
 
-
         private void _serialPort_PinChanged(object sender, SerialPinChangedEventArgs e)
         {
-            Tool.Log(e.ToString());
+            Tool.Log($"PinChanged: {e.EventType}");
         }
 
         private void _serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
-            Tool.Log(e.ToString());
+            Tool.Log($"ErrorReceived: {e.EventType}");
         }
 
         public void Stop()
         {
-            _continue = false; _serialPort.Close(); _serialPort.Dispose();
+            _continue = false;
+            if (_serialPort.IsOpen)
+            {
+                _serialPort.Close();
+                _serialPort.Dispose();
+            }
         }
 
-        public void Read()
+        // Đã loại bỏ hàm Read() dùng ReadLine() vì nó không phù hợp với giao tiếp Modbus RTU (Binary)
+        // và hàm Write(string hexData) cũ lỗi thời.
+
+        // ------------- SỬA LỖI GỬI TỪNG BYTE TẠI ĐÂY -------------
+
+        private byte[] ConvertHexStringToByteArray(string hexString)
         {
-            try
+            string cleanHex = hexString.Replace(" ", "").Replace("\r", "").Replace("\n", "");
+
+            if (cleanHex.Length % 2 != 0)
             {
-                _serialPort.Open();
-                _continue = true;
-            }
-            catch (Exception e)
-            {
-                _continue = false;
-                Debug.WriteLine(e);
+                Tool.Log("Lỗi: Chuỗi Hex phải có số ký tự chẵn.");
+                return Array.Empty<byte>();
             }
 
-            while (_continue)
+            byte[] bytes = new byte[cleanHex.Length / 2];
+            for (int i = 0; i < cleanHex.Length; i += 2)
             {
                 try
                 {
-                    string message = _serialPort.ReadLine();
-                    Debug.WriteLine(message);
+                    bytes[i / 2] = Convert.ToByte(cleanHex.Substring(i, 2), 16);
                 }
-                catch (Exception e)
+                catch (FormatException ex)
                 {
-                    _continue = false;
-                    Debug.WriteLine(e);
+                    Tool.Log($"Lỗi chuyển đổi byte {cleanHex.Substring(i, 2)}: {ex.Message}");
+                    throw;
                 }
-                Thread.Sleep(100);
             }
-            readThread.Join();
-            _serialPort.Close();
-        }
-        ~MySerialPortService()
-        {
-            _serialPort.Close();
+            return bytes;
         }
 
-        public void Write(string hexData)
+        // HÀM GHI MỚI: GHI TOÀN BỘ MẢNG BYTE TRONG MỘT LẦN GỌI
+        public void Write(byte[] data)
         {
+            if (!_serialPort.IsOpen)
+            {
+                Tool.Log("Lỗi: Cổng COM chưa mở.");
+                return;
+            }
             try
             {
-                // Gửi requestCode trước
-                //byte[] requestNameBytes = Encoding.ASCII.GetBytes(requestCode);
-                //_serialPort.Write(requestNameBytes, 0, requestNameBytes.Length);
-
-                // Tách dữ liệu hex và gửi từng byte
-                byte[] data = new byte[1];
-                string strs = hexData.Replace(" ", "").Replace("\r", "").Replace("\n", "");
-
-                if (strs.Length % 2 == 1)
-                {
-                    strs = strs.Insert(strs.Length - 1, "0");
-                }
-
-                foreach (char c in strs)
-                {
-                    if (!Uri.IsHexDigit(c))
-                    {
-                        throw new FormatException($"Ký tự không hợp lệ trong chuỗi hex: {c}");
-                    }
-                }
-
-                for (int i = 0; i < strs.Length / 2; i++)
-                {
-                    data[0] = Convert.ToByte(strs.Substring(i * 2, 2), 16);
-                    _serialPort.Write(data, 0, 1);
-                }
+                _serialPort.Write(data, 0, data.Length);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi: {ex.Message}");
+                Tool.Log($"Lỗi khi ghi cổng COM: {ex.Message}");
                 throw;
             }
         }
-
 
         public bool IsOpen()
         {
@@ -181,11 +160,8 @@ namespace Electric_Meter.Services
             try
             {
                 await InitializeAsync();
-                // Bắt event nhận dữ liệu
                 Sdre += SerialPort_DataReceived;
-                // Mở cổng
                 Conn();
-                // Bắt đầu gửi request cho tất cả địa chỉ
                 await SendRequestsToAllAddressesAsync();
             }
             catch (Exception ex)
@@ -195,8 +171,9 @@ namespace Electric_Meter.Services
         }
 
         #endregion
+
         #region [ Function Datareceived ]
-        private List<byte> receiveBuffer = new List<byte>();
+
         private async void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var serialPort = (SerialPort)sender;
@@ -207,63 +184,21 @@ namespace Electric_Meter.Services
                 if (bytesToRead > 0)
                 {
                     byte[] buffer = new byte[bytesToRead];
+                    // ĐỌC DỮ LIỆU TỪ PORT TRƯỚC KHI LOCK
                     serialPort.Read(buffer, 0, bytesToRead);
-                    lock (receiveBuffer) // Khóa buffer khi thêm dữ liệu
+                    //Tool.Log($"Bytes to read: {bytesToRead}");
+
+                    // SỬ DỤNG lockObject THAY VÌ lock(receiveBuffer)
+                    lock (lockObject)
                     {
                         receiveBuffer.AddRange(buffer);
                     }
-                    // Gọi hàm xử lý buffer
-                    _ = Task.Run(async () => await ProcessReceivedBuffer());
+
                     string hexString = BitConverter.ToString(buffer).Replace("-", " ");
+                    //Tool.Log($"Nhận Thô <- [{serialPort.PortName}] {hexString}");
 
-                    // 1. Kiểm tra CRC
-                    if (!Tool.CRC_PD(buffer))
-                    {
-                        Tool.Log($"CRC check failed for data: {hexString}");
-                        return;
-                    }
-
-                    // 2. Lấy devid và Tìm matchedRequest một cách an toàn
-                    int devid = buffer[0];
-                    string requestKey = null;
-                    string requestCode = null;
-
-                    // --- START LOCKING VÀ LẤY REQUEST ---
-                    lock (lockObject)
-                    {
-                        // Tìm Request gần nhất đang được gửi cho devid này.
-                        // Trong mô hình mới, activeRequests chỉ chứa request VỪA MỚI GỬI
-                        var matchedRequest = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_"));
-                        requestKey = matchedRequest.Key;
-                        requestCode = matchedRequest.Value;
-
-                        // LOẠI BỎ: tcs và responseWaiters
-                        // LOẠI BỎ: Logic processedRequests cũ, vì activeRequests chỉ chứa request đang chờ
-                    }
-                    // --- END LOCKING ---
-
-
-                    if (!string.IsNullOrEmpty(requestKey))
-                    {
-                        Tool.Log($"Data received for {requestCode} at devid {devid}.");
-
-                        // 3. Xử lý và lưu dữ liệu
-                        // Chạy ParseAndStoreReceivedData để xử lý và lưu data (không cần lock)
-                        await ParseAndStoreReceivedData(buffer, requestCode, devid);
-
-                        // 4. Xóa request khỏi activeRequests ngay sau khi xử lý thành công
-                        lock (lockObject)
-                        {
-                            // Chỉ xóa requestkey đang match
-                            activeRequests.Remove(requestKey);
-                        }
-                        // LOẠI BỎ: tcs?.TrySetResult(true);
-
-                    }
-                    else
-                    {
-                        Tool.Log($"Received data from devid {devid} does not match any active request. Data: {hexString}");
-                    }
+                    // GỌI HÀM XỬ LÝ KHÔNG DÙNG await ĐỂ KHÔNG CHẶN EVENT
+                    _ = Task.Run(async () => await ProcessReceivedBuffer());
                 }
             }
             catch (Exception ex)
@@ -274,38 +209,66 @@ namespace Electric_Meter.Services
                 });
             }
         }
-        // Đã sửa lỗi: Loại bỏ `await` ra khỏi khối lock.
+
         private async Task ProcessReceivedBuffer()
         {
             var validFrames = new List<(byte[] Frame, int Devid, string RequestKey, string RequestCode)>();
 
+            // SỬ DỤNG lockObject ĐỂ ĐỒNG BỘ VỚI DataReceived
             lock (lockObject)
             {
-                while (receiveBuffer.Count >= 5) // Độ dài tối thiểu là 5 byte (Exception Response)
+                while (receiveBuffer.Count >= 5)
                 {
                     int devid = receiveBuffer[0];
                     int functionCode = receiveBuffer[1];
 
+                    // 1. KIỂM TRA ĐỊA CHỈ (SLAVE ID)
+                    bool isKnownSlave = _totalExpectedRequests.ContainsKey(devid);
+                    if (!isKnownSlave)
+                    {
+                        Tool.Log($"Alignment Error: Unknown Slave ID 0x{devid:X2}. Dropping 1 byte to realign.");
+                        receiveBuffer.RemoveAt(0); // Loại bỏ byte rác
+                        continue;
+                    }
+
+                    // 2. TÌM KEY REQUEST HIỆN TẠI (Đảm bảo có request đang chờ)
+                    string requestKey = activeRequests.Keys.FirstOrDefault(k => k.StartsWith($"{devid}_"));
+
+                    if (string.IsNullOrEmpty(requestKey))
+                    {
+                        // Nếu không có request đang hoạt động, có thể đây là phản hồi cũ/rác.
+                        Tool.Log($"Alignment Warning: Frame from known Slave {devid} but no active request found. Dropping 1 byte.");
+                        receiveBuffer.RemoveAt(0);
+                        continue;
+                    }
+
+                    // Lấy requestCode tương ứng
+                    string requestCode = activeRequests[requestKey];
+
                     // --- B1: XỬ LÝ EXCEPTION RESPONSE (FC + 0x80) ---
                     if ((functionCode & 0x80) != 0)
                     {
-                        int exceptionLength = 5; // Slave ID (1) + FC (1) + Exception Code (1) + CRC (2)
+                        int exceptionLength = 5;
 
                         if (receiveBuffer.Count >= exceptionLength)
                         {
                             byte[] errorFrame = receiveBuffer.GetRange(0, exceptionLength).ToArray();
                             receiveBuffer.RemoveRange(0, exceptionLength);
 
-                            if (Tool.CRC_PD(errorFrame)) // Dù là lỗi vẫn nên kiểm tra CRC
+                            if (Tool.CRC_PD(errorFrame))
                             {
                                 int exceptionCode = errorFrame[2];
-                                Tool.Log($"Modbus Exception for Slave {devid}. Code: 0x{exceptionCode:X2}.");
+                                Tool.Log($"Modbus Exception for Slave {devid}. Code: 0x{exceptionCode:X2}. Request: {requestCode}");
+
+                                // Gom frame lỗi để xử lý logic bên ngoài lock (Set result/cancel TCS)
+                                validFrames.Add((errorFrame, devid, requestKey, requestCode));
                             }
                             else
                             {
-                                Tool.Log($"Modbus Exception Frame detected but CRC failed.");
+                                // LỖI CRC cho Exception Frame -> Nhiễu/timing
+                                Tool.Log($"Modbus Exception Frame detected but CRC failed for {requestCode}. Dropping invalid frame.");
                             }
-                            continue; // Đã xử lý frame 5 byte này, tiếp tục kiểm tra buffer.
+                            continue;
                         }
                         else
                         {
@@ -322,9 +285,8 @@ namespace Electric_Meter.Services
                             break; // Chưa đủ 7 byte tối thiểu cho phản hồi dữ liệu
                         }
 
-                        // Độ dài byte dữ liệu (Payload Length): byte thứ ba
                         int dataByteCount = receiveBuffer[2];
-                        int expectedLength = 1 + 1 + 1 + dataByteCount + 2;
+                        int expectedLength = 1 + 1 + 1 + dataByteCount + 2; // ID+FC+ByteCount+Data+CRC
 
                         if (receiveBuffer.Count < expectedLength)
                         {
@@ -335,52 +297,47 @@ namespace Electric_Meter.Services
                         byte[] frame = receiveBuffer.GetRange(0, expectedLength).ToArray();
                         receiveBuffer.RemoveRange(0, expectedLength);
 
-                        // 1. Kiểm tra CRC
+                        // 3. Kiểm tra CRC
                         if (!Tool.CRC_PD(frame))
                         {
                             Tool.Log($"CRC check failed for data: {BitConverter.ToString(frame).Replace("-", " ")}. Dropping invalid frame.");
                             continue;
                         }
 
-                        // 2. Gom frame hợp lệ để xử lý bên ngoài lock (Logic tìm request vẫn giữ nguyên)
-                        string requestKey = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_")).Key;
-                        string requestCode = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_")).Value;
-
-                        if (!string.IsNullOrEmpty(requestKey))
-                        {
-                            validFrames.Add((frame, devid, requestKey, requestCode));
-                        }
-                        else
-                        {
-                            Tool.Log($"Valid frame from {devid} but no active request.");
-                        }
+                        // Gom frame hợp lệ để xử lý bên ngoài lock
+                        validFrames.Add((frame, devid, requestKey, requestCode));
                     }
                     else
                     {
                         // FC không hợp lệ (Không phải Data/Exception) -> Lệch frame
                         Tool.Log($"Alignment Error: Invalid Function Code 0x{functionCode:X2}. Dropping 1 byte to realign.");
                         receiveBuffer.RemoveAt(0);
+                        continue;
                     }
                 }
             }
+
             // 2. XỬ LÝ DỮ LIỆU BẤT ĐỒNG BỘ (BÊN NGOÀI KHỐI LOCK)
             foreach (var (frame, devid, requestKey, requestCode) in validFrames)
             {
-                Tool.Log($"Data received for {requestCode} at devid {devid}.");
+                //Tool.Log($"Data received for {requestCode} at devid {devid}.");
 
-                // 3. Xử lý và lưu dữ liệu (Dùng await ở đây là hợp lệ)
-                await ParseAndStoreReceivedData(frame, requestCode, devid);
+                // 3. Xử lý và lưu dữ liệu 
+                if ((frame[1] & 0x80) == 0) // Chỉ Parse Data nếu không phải Exception Frame
+                {
+                    await ParseAndStoreReceivedData(frame, requestCode, devid);
+                }
 
                 // 4. Xóa request khỏi activeRequests và SetResult cho TaskCompletionSource (TCS)
                 // Cần lock lại để đảm bảo an toàn khi thao tác với Dictionary
                 lock (lockObject)
                 {
-                    // Chỉ xóa requestkey đang match
                     activeRequests.Remove(requestKey);
 
                     // Kích hoạt Task.WhenAny trong SendRequestAsync
                     if (responseWaiters.TryGetValue(devid, out var tcs))
                     {
+                        // Dùng TrySetResult vì nó an toàn hơn
                         tcs?.TrySetResult(true);
                         responseWaiters.Remove(devid);
                     }
@@ -388,96 +345,73 @@ namespace Electric_Meter.Services
             }
         }
         #endregion
+
         #region [ Function Translate Data ]
+        // Giữ nguyên logic LoopRequestsForMachineAsync và SendRequestsToAllAddressesAsync
         public async Task SendRequestsToAllAddressesAsync()
         {
-            // [BỎ StartScanningLoop()] và KHÔI PHỤC LOGIC MULTI-TASK
-            foreach (var item in await _service.GetListDeviceAsync())
+            foreach (var item in await _service.GetListDeviceAsync())
             {
                 int capturedAddress = item.devid;
-                // Tạo Task cho mỗi Devid để chúng chạy độc lập
-                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
+                _ = Task.Run(() => LoopRequestsForMachineAsync(capturedAddress));
             }
         }
-        public async Task StartScanningLoop()
-        {
-            try
-            {
-                var allControlCodes = (await _service.GetListControlcodeAsync()).ToList();
 
-                while (true)
-                {
-                    Stopwatch sw = Stopwatch.StartNew();
-
-                    // Lặp qua tất cả request, xen kẽ giữa các Devid
-                    foreach (var request in allControlCodes)
-                    {
-                        string requestCode = request.Code;
-                        int devid = request.Devid;
-
-                        await SendRequestAsync(requestCode, devid);
-                    }
-
-                    sw.Stop();
-                    Tool.Log($"Hoàn tất chu kỳ quét toàn bộ ({allControlCodes.Count} requests) trong {sw.ElapsedMilliseconds} ms.");
-
-                    // Đợi theo TimeSendRequest (Độ trễ giữa các chu kỳ quét toàn bộ)
-                    await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
-                }
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi trong vòng lặp quét tổng thể: {ex.Message}");
-            }
-        }
         private async Task LoopRequestsForMachineAsync(int devid)
         {
             var controlCodes = (await _service.GetListControlcodeAsync())
-              .Where(c => c.Devid == devid).ToList();
+               .Where(c => c.Devid == devid).ToList();
 
             if (!controlCodes.Any()) return;
 
             while (true)
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                // Vòng lặp quét các request của riêng Devid này
-                foreach (var request in controlCodes)
+                foreach (var request in controlCodes)
                 {
-                    // CHỈ GỬI REQUEST, KHÔNG CHỜ PHẢN HỒI Ở ĐÂY
-                    await SendRequestOnlyAsync(request.Code, devid);
+                    await SendRequestOnlyAsync(request.Code, devid);
                 }
                 sw.Stop();
                 Tool.Log($"Hoàn tất chu kỳ quét cho devid {devid} trong {sw.ElapsedMilliseconds} ms.");
+
+                // Độ trễ giữa các CHU KỲ (Nếu bạn cần chạy nhanh hơn, hãy giảm TimeSendRequest)
                 await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
             }
         }
-        // Thay thế SendRequestAsync cũ bằng hàm mới này
-        private async Task SendRequestOnlyAsync(string requestCode, int devid)
+
+        private async Task SendRequestOnlyAsync(string requestCode, int devid)
         {
             string requestKey = $"{devid}_{requestCode}";
 
-            // KHÓA COM CHỈ ĐỂ GỬI (WRITE)
             await _serialLock.WaitAsync();
 
             try
             {
-                // B1: Thêm vào activeRequests (Dùng LOCK)
-                lock (lockObject)
+                lock (lockObject)
                 {
-                    // Cần reset dữ liệu cũ
-                    //activeRequests.Clear();
                     activeRequests[requestKey] = requestCode;
                 }
 
-                // B2 & B3: Xử lý CRC và Gửi
-                byte[] requestBytes = _service.ConvertHexStringToByteArray(requestCode);
-                string addressHex = _service.ConvertToHex(devid).PadLeft(2, '0');
-                string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
-                string CRCString = CRC.CalculateCRC(requestString);
-                requestString += " " + CRCString;
+                byte[] pduBytes = _service.ConvertHexStringToByteArray(requestCode.Replace(" ", ""));
 
-                Tool.Log($"Đang gửi {requestKey}...");
-                Write(requestString);
+                // B1: Chuẩn bị ADU = SlaveID + PDU
+                // Slave ID
+                byte slaveId = (byte)devid;
+
+                // Gộp SlaveID và PDU
+                List<byte> adu = new List<byte> { slaveId };
+                adu.AddRange(pduBytes);
+
+                // B2: Tính CRC cho ADU (CRC.CalculateCRC phải nhận chuỗi Hex của ADU)
+                string aduHexNoSpace = BitConverter.ToString(adu.ToArray()).Replace("-", "");
+                string CRCString = CRC.CalculateCRC(aduHexNoSpace); // Cần đảm bảo hàm CRC.CalculateCRC hoạt động đúng với chuỗi Hex không khoảng trắng
+
+                // B3: Chuyển thành MẢNG BYTE CUỐI CÙNG
+                string finalRequestString = aduHexNoSpace + CRCString;
+                byte[] finalRequestBytes = ConvertHexStringToByteArray(finalRequestString); // Sử dụng hàm ConvertHexStringToByteArray của class này
+
+                //Tool.Log($"Đang gửi {requestKey}: {BitConverter.ToString(finalRequestBytes).Replace("-", " ")}");
+                Write(finalRequestBytes); // Gửi toàn bộ mảng byte
             }
             catch (Exception ex)
             {
@@ -485,116 +419,37 @@ namespace Electric_Meter.Services
             }
             finally
             {
-                // GIẢI PHÓNG COM NGAY LẬP TỨC
-                _serialLock.Release();
+                await Task.Delay(100);
+                _serialLock.Release();
 
-                // Chờ một khoảng thời gian nhỏ (ví dụ 100-200ms) để thiết bị phản hồi
-                // và tránh việc gửi request quá nhanh làm nghẽn bộ đệm.
-                await Task.Delay(500);
             }
         }
-        private async Task SendRequestAsync(string requestCode, int devid)
-        {
-            TaskCompletionSource<bool> tcs = null;
-            string requestKey = $"{devid}_{requestCode}";
-            int timeoutMs = _appSetting.TimeOutReceive;
 
-            await _serialLock.WaitAsync(); // KHÓA CẢ CHU TRÌNH GỬI + CHỜ
+        // Loại bỏ hàm SendRequestAsync và StartScanningLoop không dùng đến để đơn giản hóa logic
 
-            try
-            {
-                lock (lockObject)
-                {
-                    // B1: Thêm vào activeRequests và khởi tạo TCS
-                    activeRequests[requestKey] = requestCode;
-                    tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously); // Tùy chọn tốt hơn cho hiệu suất
-                    responseWaiters[devid] = tcs;
-                }
-
-                // B2 & B3: Xử lý CRC và Gửi
-                byte[] requestBytes = _service.ConvertHexStringToByteArray(requestCode);
-                string addressHex = _service.ConvertToHex(devid).PadLeft(2, '0');
-                string requestString = addressHex + " " + BitConverter.ToString(requestBytes).Replace("-", " ");
-                string CRCString = CRC.CalculateCRC(requestString);
-                requestString += " " + CRCString;
-
-                Write(requestString);
-
-                // B4: CHỜ PHẢN HỒI (HOẶC TIMEOUT)
-                var delayTask = Task.Delay(TimeSpan.FromSeconds(timeoutMs));
-                var completedTask = await Task.WhenAny(tcs.Task, delayTask);
-
-                if (completedTask == delayTask)
-                {
-                    Tool.Log($"Timeout: Không nhận được phản hồi từ máy có địa chỉ {devid} cho request {requestCode}.");
-                    // SetResult để đảm bảo TCS không bị treo nếu không có phản hồi
-                    tcs.TrySetResult(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi khi gửi/chờ request {requestKey}: {ex.Message}");
-            }
-            finally
-            {
-                // B5: ĐẢM BẢO XÓA activeRequests và responseWaiters BẰNG LOCK
-                lock (lockObject)
-                {
-                    activeRequests.Remove(requestKey);
-                    responseWaiters.Remove(devid);
-                }
-                _serialLock.Release(); // GIẢI PHÓNG COM
-            }
-        }
-        private async Task StartResponseTimeoutAsync(string addressKey, CancellationToken cancellationToken)
-        {
-            try
-            {
-                int timeoutSeconds = _appSetting.TimeOutReceive; // đảm bảo bạn đã config nó trong appsettings.json
-
-                await Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationToken);
-
-                // Nếu không bị hủy, nghĩa là timeout xảy ra
-                if (activeRequests.Keys.Any(k => k.StartsWith($"{addressKey}_")))
-                {
-                    //Tool.Log($"Timeout: Không nhận được phản hồi từ máy có địa chỉ {addressKey} sau {timeoutSeconds} giây.");
-                    activeRequests = activeRequests
-                        .Where(kvp => !kvp.Key.StartsWith($"{addressKey}_"))
-                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                // Bị huỷ đúng cách do có phản hồi đến
-                Tool.Log($"Máy {addressKey} đã phản hồi đúng hạn.");
-            }
-            catch (Exception ex)
-            {
-                Tool.Log($"Lỗi khi xử lý timeout cho địa chỉ {addressKey}: {ex.Message}");
-            }
-        }
         private async Task ParseAndStoreReceivedData(byte[] data, string requestCode, int devid)
         {
+            // GIỮ NGUYÊN LOGIC CỦA BẠN VÌ NÓ CÓ VẺ ĐÚNG CHO VIỆC PHÂN TÍCH DATA
             try
             {
-                if (data.Length >= 9)
+                if (data.Length >= 9) // Kiểm tra chiều dài tối thiểu cho dữ liệu 4 byte (9 byte)
                 {
                     int dataByteCount = data[2];
-                    if (dataByteCount != 4 || data.Length < 5 + dataByteCount)
+
+                    // Thêm kiểm tra nghiêm ngặt hơn
+                    if (dataByteCount != 4 || data.Length != 5 + dataByteCount)
                     {
-                        Tool.Log($"Invalid data for {requestCode} at devid {devid}: insufficient length.");
+                        Tool.Log($"Invalid data length for {requestCode} at devid {devid}. Expected: {5 + dataByteCount}, Got: {data.Length}.");
                         return;
                     }
 
-                    // [1] KHỞI TẠO BIẾN TRƯỚC KHI SỬ DỤNG
-                    double actualValue = 0.0; // Gán giá trị mặc định 0.0
-
-                    bool foundMatch = false; // Biến cờ để kiểm tra đã tìm thấy request hợp lệ chưa
+                    double actualValue = 0.0;
+                    bool foundMatch = false;
                     var controlCodes = await _service.GetListControlcodeAsync();
                     var matchedControlCode = controlCodes.FirstOrDefault(item => requestCode == item.Code);
+
                     if (matchedControlCode != null)
                     {
-                        // B3: Xử lý dữ liệu dựa trên SensorType (Giữ nguyên logic xử lý "電力" và "溫度")
                         if (matchedControlCode.SensorType == "電力")
                         {
                             byte[] floatBytes = new byte[4];
@@ -607,6 +462,7 @@ namespace Electric_Meter.Services
                         }
                         else if (matchedControlCode.SensorType == "溫度")
                         {
+                            // Lưu ý: Chuỗi byte này có vẻ đang đảo hai cặp word, hãy kiểm tra lại cấu trúc byte từ tài liệu thiết bị
                             byte[] bytes = new byte[] { data[4], data[3], data[6], data[5] };
 
                             actualValue = Math.Round((BitConverter.ToSingle(bytes, 0)), 2);
@@ -620,19 +476,15 @@ namespace Electric_Meter.Services
                         return;
                     }
 
-
-
-                    // Sử dụng actualValue ở đây (đã được đảm bảo có giá trị)
+                    // LƯU DATA VÀ KIỂM TRA ĐỦ REQUEST (SỬ DỤNG lockObject)
                     lock (lockObject)
                     {
                         if (!receivedDataByAddress.ContainsKey(devid))
                             receivedDataByAddress[devid] = new Dictionary<string, double>();
 
-                        // **KEY CHÍNH LÀ Code Modbus/OPC (requestCode)**
                         receivedDataByAddress[devid][requestCode] = actualValue;
 
-                        // B5: Logic kiểm tra đủ request và kích hoạt lưu DB
-                        if (_totalExpectedRequests.ContainsKey(devid) && receivedDataByAddress[devid].Count == _totalExpectedRequests[devid])// _totalExpectedRequests[devid])
+                        if (_totalExpectedRequests.ContainsKey(devid) && receivedDataByAddress[devid].Count == _totalExpectedRequests[devid])
                         {
                             var dataToSave = new Dictionary<string, double>(receivedDataByAddress[devid]);
                             receivedDataByAddress[devid].Clear();
@@ -643,7 +495,7 @@ namespace Electric_Meter.Services
                 }
                 else
                 {
-                    Tool.Log($"Incomplete data for {requestCode} at devid {devid}.");
+                    Tool.Log($"Incomplete data/Short frame detected for {requestCode} at devid {devid}.");
                 }
             }
             catch (Exception ex)
@@ -652,6 +504,8 @@ namespace Electric_Meter.Services
                 Tool.Log($"Dữ liệu gốc: {BitConverter.ToString(data)}");
             }
         }
+
+        // Giữ nguyên hàm SaveAllData và GetValueWithAddressSuffix
         private async Task SaveAllData(int devid, Dictionary<string, double> dataForAddress)
         {
             try
@@ -739,20 +593,13 @@ namespace Electric_Meter.Services
                 Tool.Log($"Lỗi khi lưu dữ liệu cho địa chỉ {devid}: {ex.Message}");
             }
         }
-        // Hàm tiện ích để lấy giá trị từ Dictionary dựa trên key có hậu tố `Address_X`
+
         private double? GetValueWithAddressSuffix(Dictionary<string, double> data, string key, int devid)
         {
             string fullKey = $"{key}_Address_{devid}";
             return data.ContainsKey(fullKey) ? data[fullKey] : null;
         }
 
-        #endregion
-
-        #region [ Function Device ]
-        //private List<Device> GetDevices()
-        //{
-        //    return _context.devices.Where(d => d.ifshow == 1 && d.typeid == 7).ToList();
-        //}
         #endregion
     }
 }

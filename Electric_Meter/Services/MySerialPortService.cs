@@ -196,18 +196,24 @@ namespace Electric_Meter.Services
 
         #endregion
         #region [ Function Datareceived ]
+        private List<byte> receiveBuffer = new List<byte>();
         private async void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            var serialPort = (SerialPort)sender;
             try
             {
-                var serialPort = (SerialPort)sender;
                 int bytesToRead = serialPort.BytesToRead;
 
                 if (bytesToRead > 0)
                 {
                     byte[] buffer = new byte[bytesToRead];
                     serialPort.Read(buffer, 0, bytesToRead);
-
+                    lock (receiveBuffer) // Khóa buffer khi thêm dữ liệu
+                    {
+                        receiveBuffer.AddRange(buffer);
+                    }
+                    // Gọi hàm xử lý buffer
+                    _ = Task.Run(async () => await ProcessReceivedBuffer());
                     string hexString = BitConverter.ToString(buffer).Replace("-", " ");
 
                     // 1. Kiểm tra CRC
@@ -268,7 +274,119 @@ namespace Electric_Meter.Services
                 });
             }
         }
+        // Đã sửa lỗi: Loại bỏ `await` ra khỏi khối lock.
+        private async Task ProcessReceivedBuffer()
+        {
+            var validFrames = new List<(byte[] Frame, int Devid, string RequestKey, string RequestCode)>();
 
+            lock (lockObject)
+            {
+                while (receiveBuffer.Count >= 5) // Độ dài tối thiểu là 5 byte (Exception Response)
+                {
+                    int devid = receiveBuffer[0];
+                    int functionCode = receiveBuffer[1];
+
+                    // --- B1: XỬ LÝ EXCEPTION RESPONSE (FC + 0x80) ---
+                    if ((functionCode & 0x80) != 0)
+                    {
+                        int exceptionLength = 5; // Slave ID (1) + FC (1) + Exception Code (1) + CRC (2)
+
+                        if (receiveBuffer.Count >= exceptionLength)
+                        {
+                            byte[] errorFrame = receiveBuffer.GetRange(0, exceptionLength).ToArray();
+                            receiveBuffer.RemoveRange(0, exceptionLength);
+
+                            if (Tool.CRC_PD(errorFrame)) // Dù là lỗi vẫn nên kiểm tra CRC
+                            {
+                                int exceptionCode = errorFrame[2];
+                                Tool.Log($"Modbus Exception for Slave {devid}. Code: 0x{exceptionCode:X2}.");
+                            }
+                            else
+                            {
+                                Tool.Log($"Modbus Exception Frame detected but CRC failed.");
+                            }
+                            continue; // Đã xử lý frame 5 byte này, tiếp tục kiểm tra buffer.
+                        }
+                        else
+                        {
+                            // Chưa đủ 5 byte cho Exception Frame, chờ thêm
+                            break;
+                        }
+                    }
+
+                    // --- B2: XỬ LÝ PHẢN HỒI DỮ LIỆU BÌNH THƯỜNG (FC = 0x03/0x04) ---
+                    if (functionCode == 0x03 || functionCode == 0x04)
+                    {
+                        if (receiveBuffer.Count < 7)
+                        {
+                            break; // Chưa đủ 7 byte tối thiểu cho phản hồi dữ liệu
+                        }
+
+                        // Độ dài byte dữ liệu (Payload Length): byte thứ ba
+                        int dataByteCount = receiveBuffer[2];
+                        int expectedLength = 1 + 1 + 1 + dataByteCount + 2;
+
+                        if (receiveBuffer.Count < expectedLength)
+                        {
+                            break; // Chưa đủ dữ liệu cho frame này, chờ thêm
+                        }
+
+                        // Đã đủ frame, cắt frame ra khỏi buffer
+                        byte[] frame = receiveBuffer.GetRange(0, expectedLength).ToArray();
+                        receiveBuffer.RemoveRange(0, expectedLength);
+
+                        // 1. Kiểm tra CRC
+                        if (!Tool.CRC_PD(frame))
+                        {
+                            Tool.Log($"CRC check failed for data: {BitConverter.ToString(frame).Replace("-", " ")}. Dropping invalid frame.");
+                            continue;
+                        }
+
+                        // 2. Gom frame hợp lệ để xử lý bên ngoài lock (Logic tìm request vẫn giữ nguyên)
+                        string requestKey = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_")).Key;
+                        string requestCode = activeRequests.FirstOrDefault(kvp => kvp.Key.StartsWith($"{devid}_")).Value;
+
+                        if (!string.IsNullOrEmpty(requestKey))
+                        {
+                            validFrames.Add((frame, devid, requestKey, requestCode));
+                        }
+                        else
+                        {
+                            Tool.Log($"Valid frame from {devid} but no active request.");
+                        }
+                    }
+                    else
+                    {
+                        // FC không hợp lệ (Không phải Data/Exception) -> Lệch frame
+                        Tool.Log($"Alignment Error: Invalid Function Code 0x{functionCode:X2}. Dropping 1 byte to realign.");
+                        receiveBuffer.RemoveAt(0);
+                    }
+                }
+            }
+            // 2. XỬ LÝ DỮ LIỆU BẤT ĐỒNG BỘ (BÊN NGOÀI KHỐI LOCK)
+            foreach (var (frame, devid, requestKey, requestCode) in validFrames)
+            {
+                Tool.Log($"Data received for {requestCode} at devid {devid}.");
+
+                // 3. Xử lý và lưu dữ liệu (Dùng await ở đây là hợp lệ)
+                await ParseAndStoreReceivedData(frame, requestCode, devid);
+
+                // 4. Xóa request khỏi activeRequests và SetResult cho TaskCompletionSource (TCS)
+                // Cần lock lại để đảm bảo an toàn khi thao tác với Dictionary
+                lock (lockObject)
+                {
+                    // Chỉ xóa requestkey đang match
+                    activeRequests.Remove(requestKey);
+
+                    // Kích hoạt Task.WhenAny trong SendRequestAsync
+                    if (responseWaiters.TryGetValue(devid, out var tcs))
+                    {
+                        tcs?.TrySetResult(true);
+                        responseWaiters.Remove(devid);
+                    }
+                }
+            }
+        }
         #endregion
         #region [ Function Translate Data ]
         public async Task SendRequestsToAllAddressesAsync()
@@ -321,16 +439,16 @@ namespace Electric_Meter.Services
 
             while (true)
             {
+                Stopwatch sw = Stopwatch.StartNew();
                 // Vòng lặp quét các request của riêng Devid này
                 foreach (var request in controlCodes)
                 {
                     // CHỈ GỬI REQUEST, KHÔNG CHỜ PHẢN HỒI Ở ĐÂY
                     await SendRequestOnlyAsync(request.Code, devid);
                 }
-
-                // Sau khi quét hết các request, Devid này chờ hết chu kỳ
-                // Đây là CHU KỲ CẬP NHẬT CỐ ĐỊNH cho riêng Devid này
-                await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
+                sw.Stop();
+                Tool.Log($"Hoàn tất chu kỳ quét cho devid {devid} trong {sw.ElapsedMilliseconds} ms.");
+                await Task.Delay(TimeSpan.FromSeconds(_appSetting.TimeSendRequest));
             }
         }
         // Thay thế SendRequestAsync cũ bằng hàm mới này
@@ -372,7 +490,7 @@ namespace Electric_Meter.Services
 
                 // Chờ một khoảng thời gian nhỏ (ví dụ 100-200ms) để thiết bị phản hồi
                 // và tránh việc gửi request quá nhanh làm nghẽn bộ đệm.
-                await Task.Delay(200);
+                await Task.Delay(500);
             }
         }
         private async Task SendRequestAsync(string requestCode, int devid)
